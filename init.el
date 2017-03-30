@@ -119,13 +119,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
     'firebelly
     '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
 
-(use-package clues-theme
+(use-package powerline
   :ensure nil
   :defer)
 
 (defun my-make-frame-function(frame)
-  (if (require 'clues-theme nil t)
-      (enable-theme 'clues)))
+  (when (not (custom-theme-p 'tango-dark))
+    (load-theme 'tango-dark)
+    (if (require 'powerline nil t)
+	(powerline-center-theme))))
 
 (when window-system
   (my-make-frame-function (selected-frame)))

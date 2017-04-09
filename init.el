@@ -124,10 +124,26 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :defer)
 
 (defun my-make-frame-function(frame)
-  (when (not (custom-theme-p 'tango-dark))
-    (load-theme 'tango-dark)
-    (if (require 'powerline nil t)
-	(powerline-center-theme))))
+  (with-selected-frame frame ;; needed for spacemacs powerline colors to be applied properly
+    (when (not (featurep 'spacemacs-dark-theme))
+      (require 'spacemacs-dark-theme nil t)
+      (when (require 'powerline nil t)
+	(powerline-center-theme)))))
+
+(defun my-light-theme ()
+  "Switch to Spacemacs light theme."
+  (interactive)
+  (when (require 'spacemacs-light-theme nil t)
+    (enable-theme 'spacemacs-light)
+    (disable-theme 'spacemacs-dark)))
+
+(defun my-dark-theme ()
+  "Switch to Spacemacs dark theme."
+  (interactive)
+  (when (require 'spacemacs-dark-theme nil t)
+    (enable-theme 'spacemacs-dark)
+    (disable-theme 'spacemacs-light)))
+
 
 (when window-system
   (my-make-frame-function (selected-frame)))

@@ -392,6 +392,22 @@ inserted between the braces between the braces."
 
 (add-hook 'php-mode-hook 'my-php-mode-hook-fn)
 
+;;; web-mode
+
+(defun my-web-mode-hook-fn()
+  (cond
+   ((string= web-mode-engine "php")
+    (my-php-mode-hook-fn))))
+
+(use-package web-mode
+  :ensure nil
+  :init
+  (add-hook 'web-mode-hook 'my-web-mode-hook-fn)
+  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+  :bind
+  (:map web-mode-map
+	("C-i" . my-indent-or-complete)))
+
 ;;; Org mode
 
 (use-package org-bullets

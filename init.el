@@ -375,6 +375,23 @@ inserted between the braces between the braces."
 	("C-c & t" . yas-describe-tables)
 	("C-c & &" . org-mark-ring-goto)))
 
+;;; PHP
+
+(use-package php-mode
+  :ensure nil
+  :defer)
+
+(use-package company-php
+  :ensure nil
+  :defer)
+
+(defun my-php-mode-hook-fn()
+  (when (require 'company-php nil t)
+    (set (make-local-variable 'company-backends) '(company-ac-php-backend))
+    (company-mode t)))
+
+(add-hook 'php-mode-hook 'my-php-mode-hook-fn)
+
 ;;; Org mode
 
 (use-package org-bullets

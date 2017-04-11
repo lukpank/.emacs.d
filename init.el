@@ -219,10 +219,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
 (global-set-key (kbd "C-c e l") 'find-library)
 
-;; see https://common-lisp.net/project/slime/doc/html/Loading-Swank-faster.html
-;; for how to prepare the core
-(setq slime-lisp-implementations `((sbcl ("sbcl" "--core" ,(expand-file-name "~/local/lisp/sbcl.core-for-slime"))))
-      slime-default-lisp 'sbcl)
+(setq slime-default-lisp 'sbcl)
 
 (use-package paredit
   :ensure nil

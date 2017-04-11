@@ -290,11 +290,9 @@ inserted between the braces between the braces."
   (interactive)
     (godoc (ivy-read "Godoc package: " (my-go-list-packages))))
 
-(use-package flymake-go
+(use-package flycheck
   :ensure nil
-  :after go-mode
-  :init
-  (setq flymake-no-changes-timeout 30))
+  :defer)
 
 (use-package go-eldoc
   :ensure nil
@@ -334,6 +332,7 @@ inserted between the braces between the braces."
     (set (make-local-variable 'company-backends) '(company-go))
     (company-mode)
     (smartparens-mode 1)
+    (flycheck-mode 1)
     (setq imenu-generic-expression
 	  '(("type" "^type *\\([^ \t\n\r\f]*\\)" 1)
 	    ("func" "^func *\\(.*\\) {" 1))))

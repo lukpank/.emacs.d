@@ -52,23 +52,26 @@
   :bind
   ("C-x o" . ace-window))
 
-(use-package window-jump
+(use-package windmove
   :ensure nil
+  :demand
   :bind
-  (("s-<down>" . window-jump-down)
-   ("s-<up>" . window-jump-up)
-   ("s-<left>" . window-jump-left)
-   ("s-<right>" . window-jump-right)
-   ("s-J" . window-jump-down)
-   ("s-K" . window-jump-up)
-   ("s-H" . window-jump-left)
-   ("s-L" . window-jump-right)))
+  (("s-J" . windmove-down)
+   ("s-K" . windmove-up)
+   ("s-H" . windmove-left)
+   ("s-L" . windmove-right))
+  :config
+  (windmove-default-keybindings))
 
 (use-package spaces
   :ensure nil
   ;; customize mode-line-format to add: "(" sp-current-space ")"
   :bind
   ("C-c b" . sp-switch-space))
+
+;;; Allow for Undo/Redo of window manipulations (such as C-x 1)
+
+(winner-mode 1)
 
 ;;; Remind of keys than can follow in a key sequence
 
@@ -80,9 +83,8 @@
 ;;; Context aware insertion of pairs of parenthesis
 
 (use-package smartparens
-  :ensure nil
-  :config
-  (smartparens-global-mode 1))
+    :ensure nil
+    :defer)
 
 ;;; Edit with multiple cursors
 
@@ -117,9 +119,13 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
     'firebelly
     '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
 
+(use-package clues-theme
+  :ensure nil
+  :defer)
+
 (defun my-make-frame-function(frame)
-  (if (require 'firebelly-theme nil t)
-      (enable-theme 'firebelly-lupan)))
+  (if (require 'clues-theme nil t)
+      (enable-theme 'clues)))
 
 (when window-system
   (my-make-frame-function (selected-frame)))
@@ -190,10 +196,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'c-mode-hook 'my-c-c++-mode-hook-fn)
 (add-hook 'c++-mode-hook 'my-c-c++-mode-hook-fn)
 
-;;; Emacs lisp mode
+;;; Lisp and Emacs lisp modes
 
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
 (global-set-key (kbd "C-c e l") 'find-library)
+
+;; see https://common-lisp.net/project/slime/doc/html/Loading-Swank-faster.html
+;; for how to prepare the core
+(setq slime-lisp-implementations `((sbcl ("sbcl" "--core" ,(expand-file-name "~/local/lisp/sbcl.core-for-slime"))))
+      slime-default-lisp 'sbcl)
 
 (use-package paredit
   :ensure nil
@@ -203,12 +214,20 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
-(defun my-elisp-mode-hook-fn ()
+(defun my-emacs-lisp-mode-hook-fn ()
+  (set (make-local-variable 'lisp-indent-function) 'lisp-indent-function)
   (paredit-mode 1)
   (show-paren-mode 1)
   (rainbow-delimiters-mode 1))
 
-(add-hook 'emacs-lisp-mode-hook 'my-elisp-mode-hook-fn)
+(defun my-lisp-mode-hook-fn ()
+  (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
+  (paredit-mode 1)
+  (show-paren-mode 1)
+  (rainbow-delimiters-mode 1))
+
+(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook-fn)
+(add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)
 
 ;;; JS mode
 
@@ -259,6 +278,18 @@ inserted between the braces between the braces."
   :init
   (setq flymake-no-changes-timeout 30))
 
+(use-package go-eldoc
+  :ensure nil
+  :defer)
+
+(use-package company-go
+  :ensure nil
+  :defer)
+
+(use-package go-guru
+  :ensure nil
+  :defer)
+
 (use-package go-mode
   :ensure nil
   :init
@@ -284,6 +315,7 @@ inserted between the braces between the braces."
     (go-eldoc-setup)
     (set (make-local-variable 'company-backends) '(company-go))
     (company-mode)
+    (smartparens-mode 1)
     (setq imenu-generic-expression
 	  '(("type" "^type *\\([^ \t\n\r\f]*\\)" 1)
 	    ("func" "^func *\\(.*\\) {" 1))))
@@ -304,6 +336,7 @@ inserted between the braces between the braces."
 (defun my-python-mode-hook-fn ()
   (set (make-local-variable 'company-backends) '(company-jedi))
   (company-mode)
+  (smartparens-mode 1)
   (local-set-key (kbd "M-.") 'jedi:goto-definition)
   (local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
   (local-set-key (kbd "M-*") 'jedi:goto-definition-pop-marker)
@@ -325,12 +358,6 @@ inserted between the braces between the braces."
 	("C-c & &" . org-mark-ring-goto)))
 
 ;;; Org mode
-
-(use-package ox
-  :ensure nil
-  :after org
-  :config
-  (require 'ox-beamer))
 
 (use-package org-bullets
   :ensure nil
@@ -354,7 +381,8 @@ inserted between the braces between the braces."
    ("C-c l" . org-store-link))
   :config
   (add-hook 'org-timer-done-hook 'my-org-timer-done)
-  (add-hook 'org-mode-hook 'org-bullets-mode))
+  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (require 'ox-beamer))
 
 ;;; Set keys from H-a to H-z to switch to buffers from a register from a to z
 
@@ -373,6 +401,20 @@ inserted between the braces between the braces."
 					 (switch-to-buffer (marker-buffer r))
 				       (jump-to-register ,character)))))))
     (incf character)))
+
+;;; Rest
+
+(defun my-eww-scale-adjust ()
+  "Slightly bigger font but text shorter than text."
+  (interactive)
+  (text-scale-adjust 0)
+  (text-scale-adjust 1)
+  (eww-toggle-fonts)
+  (split-window-right)
+  (eww-toggle-fonts)
+  (other-window 1)
+  (sleep-for 1)
+  (delete-window))
 
 ;;; Use separate custom file
 

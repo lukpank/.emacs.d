@@ -404,6 +404,14 @@ inserted between the braces between the braces."
   (:map web-mode-map
 	("C-i" . my-indent-or-complete)))
 
+;;; css-mode
+
+(use-package rainbow-mode
+  :ensure nil
+  :defer)
+
+(add-hook 'css-mode-hook 'rainbow-mode)
+
 ;;; Org mode
 
 (use-package org-bullets

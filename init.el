@@ -677,7 +677,7 @@ inserted between the braces between the braces."
 (let ((character ?a))
   (while (<= character ?z)
     (let ((func-name-symbol (make-symbol (format "my-switch-to-register-%c" character))))
-      (global-set-key (kbd (format "H-%c" character))
+      (global-set-key (kbd (format "s-%c" character))
 		      (eval (list 'defun func-name-symbol '()
 				  (format "switch to buffer of register %c" character)
 				  '(interactive)

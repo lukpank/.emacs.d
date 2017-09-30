@@ -688,6 +688,16 @@ inserted between the braces between the braces."
     (incf character)))
 
 
+;;; Workaround for security vulnerability in Emacs >= 21.1 and < 25.3
+;;; -----------------------------------------------------------------
+;;;
+;;;  See [Changes in Emacs 25.3](https://www.gnu.org/software/emacs/news/NEWS.25.3)
+
+(eval-after-load "enriched"
+    '(defun enriched-decode-display-prop (start end &optional param)
+       (list start end)))
+
+
 ;;; Rest
 ;;; ----
 

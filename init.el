@@ -1,19 +1,48 @@
-;;; Local changes
-;; TODO remove go helm integration?
+;;; Emacs configuration
+;;; ===================
 
-(setq markdown-command "webpage")
+;;; I recommend watching the following video by BuildFunThings called
+;;; [My GNU Emacs configuration for programming](https://www.youtube.com/watch?v=I28jFkpN5Zk).
 
-;;; Add local lisp directory to search path
+;;; Below are fragments from my Emacs configuration file
+;;; (`~/.emacs.d/init.el`).
+
+;;; I use `:ensure nil` argument of the `use-package` macro below for
+;;; the packages I use because I do not want them to be upgraded on
+;;; every Emacs start, actually `:ensure nil` is the default so it has
+;;; no effect, but if I copy my Emacs configuration file to a new
+;;; computer I can simply replace all occurrences of `:ensure nil` to
+;;; `:ensure t` and install all used packages after restarting Emacs,
+;;; and then replace it back to `:ensure nil` to avoid auto upgrading
+;;; next time.
+
+
+;;; Directory with local Emacs lisp files
+;;; -------------------------------------
+
+;;; I add a directory to the lisp search path where I can add my own
+;;; lisp code and (now less often) downloaded lisp code which is not
+;;; available through [MELPA](https://melpa.org). Then I initialize
+;;; secure downloading from GNU and MELPA archives of Emacs packages.
+
 
 (let ((path (expand-file-name "~/.emacs.d/lisp")))
   (if (file-accessible-directory-p path)
       (add-to-list 'load-path path t)))
 
-;;; Initialize external packages including the melpa repository
+
+;;; Add MELPA package list
+;;; ----------------------
+
+;;; You can install many Emacs packages from [MELPA](https://melpa.org)
+;;; repository. To add MELPA to the package list add the following to your
+;;; `~/.emacs.d/init.el` file
+
 
 (require 'package)
 (setq package-archives
       '(("gnu" . "https://elpa.gnu.org/packages/")
+	("melpa-stb" . "https://stable.melpa.org/packages/")
 	("melpa" . "https://melpa.org/packages/"))
       tls-checktrust t
       tls-program '("gnutls-cli --x509cafile %t -p %p %h")
@@ -22,6 +51,23 @@
 (package-initialize)
 
 (require 'use-package)
+
+
+;;; This also turns on checking TLS certificates (in both possible modes)
+;;; with `tls-program` set to only the first value from the default value
+;;; (for more info
+;;; see
+;;; [Your Text Editor Is Malware](https://glyph.twistedmatrix.com/2015/11/editor-malware.html)).
+
+;;; Now you can list available packages by running `M-x list-packages`.
+;;; Mark packages you want to install by pressing `i` and later press `x`
+;;; to install all marked packages (the necessary dependencies will be
+;;; installed automatically).
+
+
+;;; Buffer, file, and window selection enhancements
+;;; ----------------------------------------------
+
 
 ;;; Use more efficient buffer/file selection
 
@@ -80,6 +126,16 @@
   :config
   (which-key-mode))
 
+(use-package avy
+  :ensure nil
+  :bind
+  ("C-:" . avy-goto-char-timer))
+
+
+;;; Editing enhancements
+;;; ---------------------
+
+
 ;;; Context aware insertion of pairs of parenthesis
 
 (use-package smartparens
@@ -94,13 +150,15 @@
   (("C-c n" . mc/mark-next-like-this)
    ("C-c p" . mc/mark-previous-like-this)))
 
+
 ;;; Appearance
+;;; ----------
+
 
 (setq inhibit-startup-screen t)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
-(tooltip-mode 0)
 
 (defun set-frame-font-inconsolata (size &optional frames)
   "Set font to Inconsolata:pixelsize=SIZE:antialias=true:autohint=false.
@@ -125,25 +183,24 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (defun my-make-frame-function(frame)
   (with-selected-frame frame ;; needed for spacemacs powerline colors to be applied properly
-    (when (not (featurep 'spacemacs-dark-theme))
-      (require 'spacemacs-dark-theme nil t)
+    (when (not (featurep 'apropospriate-light-theme))
+      (load-theme 'apropospriate-light)
       (when (require 'powerline nil t)
 	(powerline-center-theme)))))
 
 (defun my-light-theme ()
-  "Switch to Spacemacs light theme."
+  "Switch to apropospriate-light theme."
   (interactive)
-  (when (require 'spacemacs-light-theme nil t)
-    (enable-theme 'spacemacs-light)
-    (disable-theme 'spacemacs-dark)))
+  (when (load-theme 'apropospriate-light)
+    (enable-theme 'apropospriate-light)
+    (disable-theme 'sanityinc-tomorrow-night)))
 
 (defun my-dark-theme ()
-  "Switch to Spacemacs dark theme."
+  "Switch to apropospriate-dark dark theme."
   (interactive)
-  (when (require 'spacemacs-dark-theme nil t)
-    (enable-theme 'spacemacs-dark)
-    (disable-theme 'spacemacs-light)))
-
+  (when (load-theme 'sanityinc-tomorrow-night)
+    (enable-theme 'sanityinc-tomorrow-night)
+    (disable-theme 'apropospriate-light)))
 
 (when window-system
   (my-make-frame-function (selected-frame)))
@@ -151,7 +208,12 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'after-make-frame-functions
 	  'my-make-frame-function)
 
-;;; Convenience functions and aliases
+
+;;; Convenience functions, aliases, and key bindings
+;;; ---------------------------------
+
+
+;; Convenience functions and aliases
 
 (defun am ()
   "Change dictionary to american."
@@ -169,7 +231,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (defalias 'ir 'ispell-region)
 (defalias 'md 'markdown-mode)
 
-;;; Bind keys
+;; Bind keys
 
 (global-set-key "\C-ck" 'compile)
 (global-set-key "\C-cq" 'bury-buffer)
@@ -179,7 +241,17 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :bind ("C-c m" . magit-status))
 
-;;; C mode
+
+;;; Using C/C++ under Emacs
+;;; -----------------------
+
+;;; The following Emacs packages [from MELPA](#add-melpa-package-list)
+;;; need to be installed: [cmake-ide](https://melpa.org/#/cmake-ide),
+;;; [company](https://melpa.org/#/company), and
+;;; [rtags](https://melpa.org/#/rtags).  Package `cmake-ide`
+;;; automatically configures other C++ Emacs packages (here `company`
+;;; and `rtags`) when you open a C/C++ file from a project which uses
+;;; [cmake](https://cmake.org) to build.
 
 (setq-default c-basic-offset 8)
 (setq c-default-style '((java-mode . "java")
@@ -214,7 +286,54 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'c-mode-hook 'my-c-c++-mode-hook-fn)
 (add-hook 'c++-mode-hook 'my-c-c++-mode-hook-fn)
 
+;;; Function `my-indent-or-complete` is defined above in section
+;;; [Using Go under Emacs](#using-go-under-emacs).
+
+;;; Now:
+
+;;; 1. Install [clang](http://clang.llvm.org/) compiler or more accurately
+;;;    `libclang` library (package `libclang-dev` or may be newer
+;;;    `libclang-X.Y-dev` under Debian) which is required by `rtags`.
+
+;;; 2. Install `rtags` server with (it assumes first that you do have
+;;;    `llvm-config-3.8` instead of `llvm-config` thus the extra option is
+;;;    needed and second that you want to install it in `/opt/rtags`
+;;;    instead of default `/usr/local`):
+
+;;;    ```
+;;;    $ git clone --recursive https://github.com/Andersbakken/rtags.git
+;;;    $ cd rtags
+;;;    $ mkdir build
+;;;    $ cd build
+;;;    $ cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config-3.8 -DCMAKE_INSTALL_PREFIX=/opt/rtags ..
+;;;    $ make
+;;;    ```
+
+;;;    And as root
+
+;;;    ```
+;;;    # make install
+;;;    # ln -s /opt/rtags/bin/rc /usr/local/bin/rc
+;;;    # ln -s /opt/rtags/bin/rdm /usr/local/bin/rdm
+;;;    ```
+
+;;; 3. Usefull `rtags` functions (use `C-c r C-h` to see these and other key bindings)
+
+;;;    | Key       | Function
+;;;    |-----------|----------
+;;;    | `C-c r .` | `rtags-find-symbol-at-point`
+;;;    | `C-c r [` | `rtags-location-stack-back`
+;;;    | `C-c r ,` | `rtags-find-references-at-point`
+;;;    | `C-c r /` | `rtags-find-all-references-at-point`
+;;;    |           | `rtags-find-references-current-file`
+;;;    |           | `rtags-find-references-current-dir`
+;;;    | `C-c r v` | `rtags-find-virtuals-at-point`
+;;;    | `C-c r ;` | `rtags-find-file` (in the current project no metter in which directory)
+
+
 ;;; Lisp and Emacs lisp modes
+;;; -------------------------
+
 
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
 (global-set-key (kbd "C-c e l") 'find-library)
@@ -244,11 +363,39 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook-fn)
 (add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)
 
+
 ;;; JS mode
+;;; -------
+
 
 (setq js-indent-level 8)
 
-;;; Go mode
+
+;;; Using Go under Emacs
+;;; --------------------
+
+;;; I use the following setup for the [go-mode] in my `~/.emacs.d/init.el`. This
+;;; adds syntax highlighting but without fontifing names of called
+;;; functions, autocompletion and [eldoc] support, auto formatting of the
+;;; code on save with adding of missing imports ([goimports]).
+
+;;; It is quite long as I define three interactive functions:
+
+;;; 1. `my-indent-or-complete` which is bind to `TAB` key and
+;;; (contextually) either completes the symbol at point or indents the
+;;; line,
+
+;;; 2. `my-go-electric-brace` which is bind to `{` key and inserts an
+;;; indented pair of braces (if previous character is a space,
+;;; otherwise it inserts single opening brace),
+
+;;; 3. `my-godoc-package` which is bind to `C-c P` key and display
+;;; documentation for a package choosen from a list of installed
+;;; packages.
+
+;;; [go-mode]: https://github.com/dominikh/go-mode.el
+;;; [eldoc]: http://emacswiki.org/emacs/ElDoc
+;;; [goimports]: https://godoc.org/golang.org/x/tools/cmd/goimports
 
 (defun my-indent-or-complete ()
   "Complete or indent if nothing to complete."
@@ -312,7 +459,6 @@ inserted between the braces between the braces."
   :bind
   (:map go-mode-map
    ("M-." . go-guru-definition)
-   ("M-*" . xref-pop-marker-stack) ; it is already bound to M-, in emacs 25.1
    ("C-c d" . godoc-at-point)
    ("C-c g" . godoc)
    ("C-c h" . go-guru-hl-identifier)
@@ -341,7 +487,69 @@ inserted between the braces between the braces."
 (eval-after-load 'speedbar
   '(speedbar-add-supported-extension ".go"))
 
-;;; Python
+
+;;; Now, in go buffers you can use `M-.` to jump to the definition of
+;;; the identifier at point (use `M-,` to jump back as for normal tags
+;;; in Emacs 25.1) and you can also use `C-c C-d` for a short
+;;; description of the identifier at point (actually it is constantly
+;;; displayed in the mode line by enabled Go [eldoc] support). You can
+;;; use `C-c d` for a longer description of the identifier at point.
+
+;;; For this to work you have to
+
+;;; 1. Install [from MELPA](#add-melpa-package-list) the following Emacs
+;;;    packages: [go-mode], [company-go], [go-eldoc], and [go-guru].
+
+;;; 2. Install Go compiler. Under Debian you install `golang-go` package
+;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
+;;;    1.3.3 compared to the current 1.9, so you may
+;;;    consider
+;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
+;;;    search for the package for your system or otherwise
+;;;    see [Getting started](https://golang.org/doc/install).
+
+;;; 3. Install [godef](https://godoc.org/github.com/rogpeppe/godef)
+;;;    can be installed with
+
+;;;    ```
+;;;    $ go get github.com/rogpeppe/godef
+;;;    ```
+
+;;; 4. Install [goimports] which can be installed from Debian package
+;;;    `golang-go.tools` or with
+
+;;;    ```
+;;;    $ go get golang.org/x/tools/cmd/goimports
+;;;    ```
+
+;;; 5. Install [gocode](https://github.com/nsf/gocode) which can be
+;;;    installed from Debian package `gocode` or with
+
+;;;    ```
+;;;    $ go get -u github.com/nsf/gocode
+;;;    ```
+
+;;; 5. Install [go guru] with
+
+;;;    ```
+;;;    $ go get golang.org/x/tools/cmd/guru
+;;;    ```
+
+;;; 6. Add your `$GOPATH/bin` to your `PATH` environment variable (or copy
+;;;    the `godef`, `goimports`, `gocode`, and `guru` executables from
+;;;    `$GOPATH/bin` to some directory which is in your `PATH`).
+
+;;; See also
+;;; [Writing Go in Emacs](http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/)
+;;; for more info.
+
+;;; [company-go]: https://melpa.org/#/company-go
+;;; [go-eldoc]: https://melpa.org/#/go-eldoc
+;;; [go-guru]: https://melpa.org/#/go-guru
+
+
+;;; Using Python under Emacs
+;;; ------------------------
 
 (use-package company-jedi
   :ensure nil
@@ -353,12 +561,17 @@ inserted between the braces between the braces."
   (smartparens-mode 1)
   (local-set-key (kbd "M-.") 'jedi:goto-definition)
   (local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
-  (local-set-key (kbd "M-*") 'jedi:goto-definition-pop-marker)
   (local-set-key "\C-i" 'my-indent-or-complete))
 
 (add-hook 'python-mode-hook 'my-python-mode-hook-fn)
 
+;;; Function `my-indent-or-complete` is defined above in section
+;;; [Using Go under Emacs](#using-go-under-emacs).
+
+
 ;;; Yasnippet and abbrev mode
+;;; -------------------------
+
 
 (setq-default abbrev-mode 1)
 
@@ -371,7 +584,10 @@ inserted between the braces between the braces."
 	("C-c & t" . yas-describe-tables)
 	("C-c & &" . org-mark-ring-goto)))
 
+
 ;;; PHP
+;;; ---
+
 
 (use-package php-mode
   :ensure nil
@@ -388,7 +604,10 @@ inserted between the braces between the braces."
 
 (add-hook 'php-mode-hook 'my-php-mode-hook-fn)
 
+
 ;;; web-mode
+;;; --------
+
 
 (defun my-web-mode-hook-fn()
   (cond
@@ -404,7 +623,10 @@ inserted between the braces between the braces."
   (:map web-mode-map
 	("C-i" . my-indent-or-complete)))
 
+
 ;;; css-mode
+;;; --------
+
 
 (use-package rainbow-mode
   :ensure nil
@@ -412,7 +634,10 @@ inserted between the braces between the braces."
 
 (add-hook 'css-mode-hook 'rainbow-mode)
 
+
 ;;; Org mode
+;;; --------
+
 
 (use-package org-bullets
   :ensure nil
@@ -439,6 +664,11 @@ inserted between the braces between the braces."
   (add-hook 'org-mode-hook 'org-bullets-mode)
   (require 'ox-beamer))
 
+
+;;; Switching buffers
+;;; -----------------
+
+
 ;;; Set keys from H-a to H-z to switch to buffers from a register from a to z
 
 (defalias 'pr 'point-to-register)
@@ -457,7 +687,10 @@ inserted between the braces between the braces."
 				       (jump-to-register ,character)))))))
     (incf character)))
 
+
 ;;; Rest
+;;; ----
+
 
 (defun my-eww-scale-adjust ()
   "Slightly bigger font but text shorter than text."
@@ -471,7 +704,10 @@ inserted between the braces between the braces."
   (sleep-for 1)
   (delete-window))
 
+
 ;;; Use separate custom file
+;;; ------------------------
+
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)

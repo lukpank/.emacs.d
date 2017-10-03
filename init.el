@@ -64,6 +64,9 @@
 ;;; to install all marked packages (the necessary dependencies will be
 ;;; installed automatically).
 
+;;; Note: The last line above requires installing package named
+;;; `use-package` to work.
+
 
 ;;; Buffer, file, and window selection enhancements
 ;;; ----------------------------------------------
@@ -130,6 +133,11 @@
   :ensure nil
   :bind
   ("C-:" . avy-goto-char-timer))
+
+(use-package treemacs
+  :ensure nil
+  :bind
+  ("C-c t" . treemacs-toggle))
 
 
 ;;; Editing enhancements

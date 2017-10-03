@@ -105,10 +105,10 @@
   :ensure nil
   :demand
   :bind
-  (("s-J" . windmove-down)
-   ("s-K" . windmove-up)
-   ("s-H" . windmove-left)
-   ("s-L" . windmove-right))
+  (("H-J" . windmove-down)
+   ("H-K" . windmove-up)
+   ("H-H" . windmove-left)
+   ("H-L" . windmove-right))
   :config
   (windmove-default-keybindings))
 
@@ -685,7 +685,7 @@ inserted between the braces between the braces."
 (let ((character ?a))
   (while (<= character ?z)
     (let ((func-name-symbol (make-symbol (format "my-switch-to-register-%c" character))))
-      (global-set-key (kbd (format "s-%c" character))
+      (global-set-key (kbd (format "H-%c" character))
 		      (eval (list 'defun func-name-symbol '()
 				  (format "switch to buffer of register %c" character)
 				  '(interactive)

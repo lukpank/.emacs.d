@@ -189,26 +189,29 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
+(use-package color-theme-sanityinc-tomorrow
+  :ensure nil
+  :defer)
+
 (defun my-make-frame-function(frame)
-  (with-selected-frame frame ;; needed for spacemacs powerline colors to be applied properly
-    (when (not (featurep 'apropospriate-light-theme))
-      (load-theme 'apropospriate-light)
-      (when (require 'powerline nil t)
-	(powerline-center-theme)))))
+  (if (not (featurep 'powerline))
+      (powerline-center-theme)))
 
 (defun my-light-theme ()
-  "Switch to apropospriate-light theme."
+  "Switch to sanityinc-tomorrow-day theme."
   (interactive)
-  (when (load-theme 'apropospriate-light)
-    (enable-theme 'apropospriate-light)
-    (disable-theme 'sanityinc-tomorrow-night)))
+  (when (load-theme 'sanityinc-tomorrow-day)
+    (enable-theme 'sanityinc-tomorrow-day)
+    (disable-theme 'sanityinc-tomorrow-night)
+    (powerline-reset)))
 
 (defun my-dark-theme ()
-  "Switch to apropospriate-dark dark theme."
+  "Switch to sanityinc-tomorrow-night dark theme."
   (interactive)
   (when (load-theme 'sanityinc-tomorrow-night)
     (enable-theme 'sanityinc-tomorrow-night)
-    (disable-theme 'apropospriate-light)))
+    (disable-theme 'sanityinc-tomorrow-day)
+    (powerline-reset)))
 
 (when window-system
   (my-make-frame-function (selected-frame)))

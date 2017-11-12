@@ -190,7 +190,11 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
-(use-package color-theme-sanityinc-tomorrow
+(use-package nimbus-theme
+  :ensure nil
+  :defer)
+
+(use-package leuven-theme
   :ensure nil
   :defer)
 

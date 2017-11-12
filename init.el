@@ -197,20 +197,23 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (if (not (featurep 'powerline))
       (powerline-center-theme)))
 
+(setq my-dark-theme 'nimbus
+      my-light-theme 'leuven)
+
 (defun my-light-theme ()
-  "Switch to sanityinc-tomorrow-day theme."
+  "Switch to my light theme."
   (interactive)
-  (when (load-theme 'sanityinc-tomorrow-day)
-    (enable-theme 'sanityinc-tomorrow-day)
-    (disable-theme 'sanityinc-tomorrow-night)
+  (when (load-theme my-light-theme)
+    (enable-theme my-light-theme)
+    (disable-theme my-dark-theme)
     (powerline-reset)))
 
 (defun my-dark-theme ()
-  "Switch to sanityinc-tomorrow-night dark theme."
+  "Switch to my dark theme."
   (interactive)
-  (when (load-theme 'sanityinc-tomorrow-night)
-    (enable-theme 'sanityinc-tomorrow-night)
-    (disable-theme 'sanityinc-tomorrow-day)
+  (when (load-theme my-dark-theme)
+    (enable-theme my-dark-theme)
+    (disable-theme my-light-theme)
     (powerline-reset)))
 
 (when window-system

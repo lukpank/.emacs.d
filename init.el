@@ -357,7 +357,12 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
 (global-set-key (kbd "C-c e l") 'find-library)
 
-(setq slime-default-lisp 'sbcl)
+(setq slime-lisp-implementations '((sbcl ("sbcl")))
+      slime-default-lisp 'sbcl)
+
+(let ((path (expand-file-name "/usr/local/share/doc/HyperSpec/")))
+  (if (file-accessible-directory-p path)
+      (setq common-lisp-hyperspec-root (concat "file://" path))))
 
 (use-package paredit
   :ensure nil
@@ -382,6 +387,17 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook-fn)
 (add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)
 
+(defun slime-qlot-exec (directory)
+  "from https://github.com/fukamachi/qlot/blob/master/README.markdown"
+  (interactive (list (read-directory-name "Project directory: ")))
+  (slime-start :program "qlot"
+               :program-args '("exec" "ros" "-S" "." "run")
+               :directory directory
+               :name 'qlot
+               :env (list (concat "PATH="
+                                  (mapconcat 'identity exec-path ":"))
+                          (concat "QUICKLISP_HOME="
+                                  (file-name-as-directory directory) "quicklisp/"))))
 
 ;;; JS mode
 ;;; -------

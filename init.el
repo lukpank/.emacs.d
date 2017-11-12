@@ -358,7 +358,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
-(use-package rainbow-delimiters
+(use-package paren-face
   :ensure nil
   :defer)
 
@@ -366,13 +366,13 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (set (make-local-variable 'lisp-indent-function) 'lisp-indent-function)
   (paredit-mode 1)
   (show-paren-mode 1)
-  (rainbow-delimiters-mode 1))
+  (paren-face-mode))
 
 (defun my-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
   (paredit-mode 1)
   (show-paren-mode 1)
-  (rainbow-delimiters-mode 1))
+  (paren-face-mode))
 
 (add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook-fn)
 (add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)

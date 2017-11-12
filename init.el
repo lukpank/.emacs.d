@@ -604,6 +604,37 @@ inserted between the braces between the braces."
 	("C-c & &" . org-mark-ring-goto)))
 
 
+;;; Dart
+;;; ----
+
+
+(defun my-dart-goto ()
+  (interactive)
+  (xref-push-marker-stack)
+  (dart-goto))
+
+(use-package dart-mode
+  :ensure nil
+  :init
+  (let ((path (expand-file-name "~/local/src/flutter/bin/cache/dart-sdk/")))
+    (if (file-accessible-directory-p path)
+	(setq dart-sdk-path path)))
+  (setq dart-enable-analysis-server t)
+  :bind
+  (:map dart-mode-map
+   ("M-." . my-dart-goto)
+   ("M-/" . dabbrev-expand)
+   ("C-i" . my-indent-or-complete)
+   ("C-M-i" . my-indent-or-complete))
+  :config
+
+  (defun my-dart-mode-hook-fn ()
+    (smartparens-mode 1)
+    (flycheck-mode 1))
+
+  (add-hook 'dart-mode-hook 'my-dart-mode-hook-fn))
+
+
 ;;; PHP
 ;;; ---
 

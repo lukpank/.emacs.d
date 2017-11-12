@@ -163,7 +163,8 @@
 ;;; ----------
 
 
-(setq inhibit-startup-screen t)
+(setq inhibit-startup-screen t
+      ediff-window-setup-function 'ediff-setup-windows-plain)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)

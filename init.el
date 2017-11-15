@@ -358,7 +358,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (global-set-key (kbd "C-c e l") 'find-library)
 
 (setq slime-lisp-implementations '((sbcl ("sbcl")))
-      slime-default-lisp 'sbcl)
+      slime-default-lisp 'sbcl
+      slime-contribs '(slime-fancy))
 
 (let ((path (expand-file-name "/usr/local/share/doc/HyperSpec/")))
   (if (file-accessible-directory-p path)

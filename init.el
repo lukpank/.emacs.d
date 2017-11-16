@@ -74,25 +74,34 @@
 
 ;;; Use more efficient buffer/file selection
 
-(use-package counsel
+(use-package helm
   :ensure nil
   :init
-  (setq ivy-use-virtual-buffers t
-	ivy-magic-tilde nil)
-  (recentf-mode 1)
+  (setq helm-split-window-default-side 'other)
+  (helm-mode 1)
   :bind
-  (("C-c r" . ivy-resume)
-   ("C-c i" . counsel-imenu)
-   ("C-c g" . counsel-git)
-   ("C-c j" . counsel-git-grep)
-   ("C-c L" . counsel-locate)
-   ("M-x" . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)
-   ("C-x b" . ivy-switch-buffer)
-   ("C-s" . swiper))
-  :config
-  (ivy-mode 1)
-  (counsel-mode 1))
+  (("M-x" . helm-M-x)
+   ("M-y" . helm-show-kill-ring)
+   ("C-x C-f" . helm-find-files)
+   ("C-s" . helm-occur)
+   ("C-x b" . helm-mini)
+   ("C-x r b" . helm-bookmarks)
+   ("C-h a" . helm-apropos)
+   ("C-h d" . helm-info-at-point)
+   ("C-c L" . helm-locate)
+   ("C-c r" . helm-resume)
+   ("C-c i" . helm-imenu)))
+
+(use-package helm-git-grep
+  :ensure nil
+  :bind
+  (("C-c j" . helm-git-grep)
+   ("C-c J" . helm-git-grep-at-point)))
+
+(use-package helm-ls-git
+  :ensure nil
+  :bind
+  (("C-c g" . helm-ls-git-ls)))
 
 ;;; Use more more efficient changing windows
 
@@ -112,11 +121,12 @@
   :config
   (windmove-default-keybindings))
 
-(use-package spaces
+(use-package helm-spaces
   :ensure nil
   ;; customize mode-line-format to add: "(" sp-current-space ")"
+  ;; or in powerline theme add: (powerline-raw (if (and (boundp 'sp-current-space) sp-current-space) (concat " (" sp-current-space ")") "") face2)
   :bind
-  ("C-c b" . sp-switch-space))
+  ("C-c b" . helm-spaces))
 
 ;;; Allow for Undo/Redo of window manipulations (such as C-x 1)
 
@@ -254,7 +264,10 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key "\C-ck" 'compile)
 (global-set-key "\C-cq" 'bury-buffer)
-(global-set-key "\C-cs" 'shell)
+
+(use-package helm-mt
+  :ensure nil
+  :bind (("C-c s" . helm-mt)))
 
 (use-package magit
   :ensure nil

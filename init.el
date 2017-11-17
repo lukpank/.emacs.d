@@ -114,10 +114,10 @@
   :ensure nil
   :demand
   :bind
-  (("H-J" . windmove-down)
-   ("H-K" . windmove-up)
-   ("H-H" . windmove-left)
-   ("H-L" . windmove-right))
+  (("C-s-n" . windmove-down)
+   ("C-s-p" . windmove-up)
+   ("C-s-b" . windmove-left)
+   ("C-s-f" . windmove-right))
   :config
   (windmove-default-keybindings))
 

@@ -92,6 +92,11 @@
    ("C-c r" . helm-resume)
    ("C-c i" . helm-imenu)))
 
+(use-package helm-descbinds
+  :ensure nil
+  :init
+  (helm-descbinds-mode))
+
 (use-package helm-git-grep
   :ensure nil
   :bind

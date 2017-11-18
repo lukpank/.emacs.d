@@ -232,17 +232,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (defun my-light-theme ()
   "Switch to my light theme."
   (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
   (when (load-theme my-light-theme)
-    (enable-theme my-light-theme)
-    (disable-theme my-dark-theme)
     (powerline-reset)))
 
 (defun my-dark-theme ()
   "Switch to my dark theme."
   (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
   (when (load-theme my-dark-theme)
-    (enable-theme my-dark-theme)
-    (disable-theme my-light-theme)
     (powerline-reset)))
 
 (when window-system

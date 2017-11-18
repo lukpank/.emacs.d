@@ -213,6 +213,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
+;; easy switching between themes
+(use-package helm-themes
+  :ensure nil
+  :bind
+  (("C-c T" . helm-themes))
+  :config
+  ;; need to update powerline after changing theme
+  (advice-add 'helm-themes :after #'powerline-reset))
+
 (defun my-make-frame-function(frame)
   (if (not (featurep 'powerline))
       (powerline-center-theme)))

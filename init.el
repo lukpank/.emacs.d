@@ -174,7 +174,7 @@
 
 
 (setq inhibit-startup-screen t
-      ediff-window-setup-function 'ediff-setup-windows-plain)
+      ediff-window-setup-function #'ediff-setup-windows-plain)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
@@ -235,7 +235,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (my-make-frame-function (selected-frame)))
 
 (add-hook 'after-make-frame-functions
-	  'my-make-frame-function)
+	  #'my-make-frame-function)
 
 
 ;;; Convenience functions, aliases, and key bindings
@@ -254,16 +254,16 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive)
   (setq ispell-local-dictionary "polish"))
 
-(defalias 'fi 'set-frame-font-inconsolata)
-(defalias 'fm 'set-frame-font-go-mono)
-(defalias 'st 'magit-status)
-(defalias 'ir 'ispell-region)
-(defalias 'md 'markdown-mode)
+(defalias 'fi #'set-frame-font-inconsolata)
+(defalias 'fm #'set-frame-font-go-mono)
+(defalias 'st #'magit-status)
+(defalias 'ir #'ispell-region)
+(defalias 'md #'markdown-mode)
 
 ;; Bind keys
 
-(global-set-key "\C-ck" 'compile)
-(global-set-key "\C-cq" 'bury-buffer)
+(global-set-key "\C-ck" #'compile)
+(global-set-key "\C-cq" #'bury-buffer)
 
 (use-package helm-mt
   :ensure nil
@@ -309,14 +309,14 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (defun my-c-c++-mode-hook-fn ()
   (set (make-local-variable 'company-backends) '(company-rtags))
   (company-mode)
-  (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
-  (local-set-key (kbd "M-,") 'rtags-location-stack-back)
-  (local-set-key "\C-i" 'my-indent-or-complete)
-  (local-set-key (kbd "<tab>") 'my-indent-or-complete)
-  (local-set-key "\C-\M-i" 'my-indent-or-complete))
+  (local-set-key (kbd "M-.") #'rtags-find-symbol-at-point)
+  (local-set-key (kbd "M-,") #'rtags-location-stack-back)
+  (local-set-key "\C-i" #'my-indent-or-complete)
+  (local-set-key (kbd "<tab>") #'my-indent-or-complete)
+  (local-set-key "\C-\M-i" #'my-indent-or-complete))
 
-(add-hook 'c-mode-hook 'my-c-c++-mode-hook-fn)
-(add-hook 'c++-mode-hook 'my-c-c++-mode-hook-fn)
+(add-hook 'c-mode-hook #'my-c-c++-mode-hook-fn)
+(add-hook 'c++-mode-hook #'my-c-c++-mode-hook-fn)
 
 ;;; Function `my-indent-or-complete` is defined above in section
 ;;; [Using Go under Emacs](#using-go-under-emacs).
@@ -368,7 +368,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
-(global-set-key (kbd "C-c e l") 'find-library)
+(global-set-key (kbd "C-c e l") #'find-library)
 
 (setq slime-lisp-implementations '((sbcl ("sbcl")))
       slime-default-lisp 'sbcl
@@ -381,7 +381,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (use-package paredit
   :ensure nil
   :init
-  (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode)
+  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
   :defer)
 
 (use-package paren-face
@@ -389,19 +389,21 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :defer)
 
 (defun my-emacs-lisp-mode-hook-fn ()
-  (set (make-local-variable 'lisp-indent-function) 'lisp-indent-function)
+  (set (make-local-variable 'lisp-indent-function) #'lisp-indent-function)
   (paredit-mode 1)
+  (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (show-paren-mode 1)
   (paren-face-mode))
 
 (defun my-lisp-mode-hook-fn ()
-  (set (make-local-variable 'lisp-indent-function) 'common-lisp-indent-function)
+  (set (make-local-variable 'lisp-indent-function) #'common-lisp-indent-function)
   (paredit-mode 1)
+  (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (show-paren-mode 1)
   (paren-face-mode))
 
-(add-hook 'emacs-lisp-mode-hook 'my-emacs-lisp-mode-hook-fn)
-(add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)
+(add-hook 'emacs-lisp-mode-hook #'my-emacs-lisp-mode-hook-fn)
+(add-hook 'lisp-mode-hook #'my-lisp-mode-hook-fn)
 
 (defun slime-qlot-exec (directory)
   "from https://github.com/fukamachi/qlot/blob/master/README.markdown"
@@ -411,7 +413,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
                :directory directory
                :name 'qlot
                :env (list (concat "PATH="
-                                  (mapconcat 'identity exec-path ":"))
+                                  (mapconcat #'identity exec-path ":"))
                           (concat "QUICKLISP_HOME="
                                   (file-name-as-directory directory) "quicklisp/"))))
 
@@ -521,7 +523,7 @@ inserted between the braces between the braces."
    ("C-M-i" . my-indent-or-complete))
   :config
   ;; run gofmt/goimports when saving the file
-  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-hook 'before-save-hook #'gofmt-before-save)
 
   (defun my-go-mode-hook-fn ()
     (go-eldoc-setup)
@@ -533,7 +535,7 @@ inserted between the braces between the braces."
 	  '(("type" "^type *\\([^ \t\n\r\f]*\\)" 1)
 	    ("func" "^func *\\(.*\\) {" 1))))
 
-  (add-hook 'go-mode-hook 'my-go-mode-hook-fn))
+  (add-hook 'go-mode-hook #'my-go-mode-hook-fn))
 
 ;; Go/speedbar integration
 
@@ -612,11 +614,11 @@ inserted between the braces between the braces."
   (set (make-local-variable 'company-backends) '(company-jedi))
   (company-mode)
   (smartparens-mode 1)
-  (local-set-key (kbd "M-.") 'jedi:goto-definition)
-  (local-set-key (kbd "M-,") 'jedi:goto-definition-pop-marker)
-  (local-set-key "\C-i" 'my-indent-or-complete))
+  (local-set-key (kbd "M-.") #'jedi:goto-definition)
+  (local-set-key (kbd "M-,") #'jedi:goto-definition-pop-marker)
+  (local-set-key "\C-i" #'my-indent-or-complete))
 
-(add-hook 'python-mode-hook 'my-python-mode-hook-fn)
+(add-hook 'python-mode-hook #'my-python-mode-hook-fn)
 
 ;;; Function `my-indent-or-complete` is defined above in section
 ;;; [Using Go under Emacs](#using-go-under-emacs).
@@ -666,7 +668,7 @@ inserted between the braces between the braces."
     (smartparens-mode 1)
     (flycheck-mode 1))
 
-  (add-hook 'dart-mode-hook 'my-dart-mode-hook-fn))
+  (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn))
 
 
 ;;; PHP
@@ -686,7 +688,7 @@ inserted between the braces between the braces."
     (set (make-local-variable 'company-backends) '(company-ac-php-backend))
     (company-mode t)))
 
-(add-hook 'php-mode-hook 'my-php-mode-hook-fn)
+(add-hook 'php-mode-hook #'my-php-mode-hook-fn)
 
 
 ;;; web-mode
@@ -701,7 +703,7 @@ inserted between the braces between the braces."
 (use-package web-mode
   :ensure nil
   :init
-  (add-hook 'web-mode-hook 'my-web-mode-hook-fn)
+  (add-hook 'web-mode-hook #'my-web-mode-hook-fn)
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   :bind
   (:map web-mode-map
@@ -716,7 +718,7 @@ inserted between the braces between the braces."
   :ensure nil
   :defer)
 
-(add-hook 'css-mode-hook 'rainbow-mode)
+(add-hook 'css-mode-hook #'rainbow-mode)
 
 
 ;;; Org mode
@@ -744,8 +746,8 @@ inserted between the braces between the braces."
    ("C-c c" . org-capture)
    ("C-c l" . org-store-link))
   :config
-  (add-hook 'org-timer-done-hook 'my-org-timer-done)
-  (add-hook 'org-mode-hook 'org-bullets-mode)
+  (add-hook 'org-timer-done-hook #'my-org-timer-done)
+  (add-hook 'org-mode-hook #'org-bullets-mode)
   (require 'ox-beamer))
 
 
@@ -755,7 +757,7 @@ inserted between the braces between the braces."
 
 ;;; Set keys from H-a to H-z to switch to buffers from a register from a to z
 
-(defalias 'pr 'point-to-register)
+(defalias 'pr #'point-to-register)
 
 (require 'cl)
 (let ((character ?a))

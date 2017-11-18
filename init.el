@@ -380,6 +380,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (use-package paredit
   :ensure nil
+  :init
+  (add-hook 'eval-expression-minibuffer-setup-hook 'paredit-mode)
   :defer)
 
 (use-package paren-face

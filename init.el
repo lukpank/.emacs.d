@@ -483,7 +483,9 @@ inserted between the braces between the braces."
 (defun my-godoc-package ()
   "Display godoc for given package (with completion)."
   (interactive)
-    (godoc (ivy-read "Godoc package: " (my-go-list-packages))))
+  (godoc (helm :sources (helm-build-sync-source "Go packages"
+			  :candidates (my-go-list-packages))
+	       :buffer "*godoc packages*")))
 
 (use-package flycheck
   :ensure nil

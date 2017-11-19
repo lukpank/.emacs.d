@@ -108,6 +108,11 @@
   :bind
   (("C-c g" . helm-ls-git-ls)))
 
+(use-package helm-c-yasnippet
+  :ensure nil
+  :bind
+  (("C-c y" . helm-yas-complete)))
+
 ;;; Use more more efficient changing windows
 
 (use-package ace-window

@@ -196,10 +196,17 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive "n[Go mono] size: ")
   (set-frame-font (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
 
+;; my customization of used themes
+
 (eval-after-load 'firebelly-theme
   '(custom-theme-set-faces
     'firebelly
     '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
+
+(eval-after-load 'nimbus-theme
+  '(custom-theme-set-faces
+    'nimbus
+    '(region ((t (:background "#505050"))))))
 
 (use-package powerline
   :ensure nil

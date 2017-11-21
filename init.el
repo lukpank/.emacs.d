@@ -422,6 +422,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (set (make-local-variable 'lisp-indent-function) #'lisp-indent-function)
   (paredit-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
+  (local-set-key (kbd "C-c C-z")
+		 (lambda () (interactive) (switch-to-buffer "*scratch*")))
   (show-paren-mode 1)
   (paren-face-mode))
 

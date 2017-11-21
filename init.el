@@ -289,9 +289,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (global-set-key "\C-ck" #'compile)
 (global-set-key "\C-cq" #'bury-buffer)
 
+(use-package shell-pop
+  :ensure nil
+  :init
+  (setq shell-pop-full-span t)
+  :bind (("C-c s" . shell-pop)))
+
 (use-package helm-mt
   :ensure nil
-  :bind (("C-c s" . helm-mt)))
+  :bind (("C-c S" . helm-mt)))
 
 (use-package magit
   :ensure nil

@@ -83,7 +83,7 @@
   (("M-x" . helm-M-x)
    ("M-y" . helm-show-kill-ring)
    ("C-x C-f" . helm-find-files)
-   ("C-s" . helm-occur)
+   ("C-c o" . helm-occur)
    ("C-x b" . helm-mini)
    ("C-x r b" . helm-bookmarks)
    ("C-h a" . helm-apropos)
@@ -91,6 +91,12 @@
    ("C-c L" . helm-locate)
    ("C-c r" . helm-resume)
    ("C-c i" . helm-imenu)))
+
+(use-package helm-swoop
+  :ensure nil
+  :bind
+  (("C-s" . helm-swoop-without-pre-input)
+   ("C-S" . helm-swoop)))
 
 (use-package helm-descbinds
   :ensure nil

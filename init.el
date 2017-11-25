@@ -79,6 +79,9 @@
   :init
   (setq helm-split-window-default-side 'other)
   (helm-mode 1)
+  :config
+  (define-key helm-find-files-map (kbd "<backtab>") #'helm-select-action)
+  (define-key helm-find-files-map (kbd "C-i")  #'helm-execute-persistent-action)
   :bind
   (("M-x" . helm-M-x)
    ("M-y" . helm-show-kill-ring)

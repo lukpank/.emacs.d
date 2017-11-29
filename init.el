@@ -815,6 +815,22 @@ inserted between the braces between the braces."
     (incf character)))
 
 
+;;; Search engines
+;;; --------------
+
+
+(use-package engine-mode
+  :ensure nil
+  :config
+  (engine-mode t)
+  (defengine duckduckgo
+    "https://duckduckgo.com/?q=%s"
+    :keybinding "d")
+  (defengine google
+    "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+    :keybinding "g"))
+
+
 ;;; Workaround for security vulnerability in Emacs >= 21.1 and < 25.3
 ;;; -----------------------------------------------------------------
 ;;;

@@ -99,7 +99,7 @@
   :ensure nil
   :bind
   (("C-s" . helm-swoop-without-pre-input)
-   ("C-S" . helm-swoop)))
+   ("C-S-s" . helm-swoop)))
 
 (use-package helm-descbinds
   :ensure nil

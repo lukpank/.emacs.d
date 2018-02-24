@@ -732,6 +732,30 @@ inserted between the braces between the braces."
 (add-hook 'php-mode-hook #'my-php-mode-hook-fn)
 
 
+;;; TypeScript
+;;; ----------
+
+
+(defun my-setup-tide-mode ()
+  (tide-setup)
+  (flycheck-mode 1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode 1)
+  (company-mode 1))
+
+(use-package tide
+  :ensure nil
+  :init
+  (setq typescript-indent-level 2)
+  :bind
+  (:map go-mode-map
+   ("C-i" . my-indent-or-complete)
+   ("C-M-i" . my-indent-or-complete))
+  :config
+  (add-hook 'before-save-hook #'tide-format-before-save)
+  (add-hook 'typescript-mode-hook #'my-setup-tide-mode))
+
+
 ;;; web-mode
 ;;; --------
 

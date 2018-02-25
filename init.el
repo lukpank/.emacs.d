@@ -181,6 +181,11 @@
                ( "B" .   buffer-flip-backward)
                ( "C-g" . buffer-flip-abort)))
 
+(use-package goto-chg
+  :ensure nil
+  :bind
+  ("C-c G" . goto-last-change))
+
 
 ;;; Editing enhancements
 ;;; ---------------------

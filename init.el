@@ -52,6 +52,9 @@
 
 (require 'use-package)
 
+(use-package use-package-chords
+  :ensure nil
+  :config (key-chord-mode 1))
 
 ;;; This also turns on checking TLS certificates (in both possible modes)
 ;;; with `tls-program` set to only the first value from the default value
@@ -166,7 +169,17 @@
 (use-package treemacs
   :ensure nil
   :bind
-  ("C-c t" . treemacs-toggle))
+  ("C-c t" . treemacs-toggle)
+  :chords
+  (("tt" . treemacs-toggle)))
+
+(use-package buffer-flip
+  :ensure nil
+  :chords (("bb" . buffer-flip))
+  :bind  (:map buffer-flip-map
+               ( "b" .   buffer-flip-forward)
+               ( "B" .   buffer-flip-backward)
+               ( "C-g" . buffer-flip-abort)))
 
 
 ;;; Editing enhancements
@@ -820,23 +833,29 @@ inserted between the braces between the braces."
 ;;; -----------------
 
 
-;;; Set keys from H-a to H-z to switch to buffers from a register from a to z
+;;; Set keys from jj a to jj z to switch to buffers from a register from a to z
 
 (defalias 'pr #'point-to-register)
 
-(require 'cl)
+(defun my-switch-to-register ()
+  "Switch to buffer given by a register named by last character
+of the key binding used to execute this command."
+  (interactive)
+  (let* ((v (this-command-keys-vector))
+	 (c (aref v (1- (length v))))
+	 (r (get-register c)))
+    (if (and (markerp r) (marker-buffer r))
+	(switch-to-buffer (marker-buffer r))
+      (jump-to-register c))))
+
+(setq my-jj-map (make-sparse-keymap))
+
 (let ((character ?a))
   (while (<= character ?z)
-    (let ((func-name-symbol (make-symbol (format "my-switch-to-register-%c" character))))
-      (global-set-key (kbd (format "H-%c" character))
-		      (eval (list 'defun func-name-symbol '()
-				  (format "switch to buffer of register %c" character)
-				  '(interactive)
-				  `(let ((r (get-register ,character)))
-				     (if (and (markerp r) (marker-buffer r))
-					 (switch-to-buffer (marker-buffer r))
-				       (jump-to-register ,character)))))))
+    (define-key my-jj-map (format "%c" character) #'my-switch-to-register)
     (incf character)))
+
+(key-chord-define-global "jj" my-jj-map)
 
 
 ;;; Search engines

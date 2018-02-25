@@ -761,17 +761,23 @@ inserted between the braces between the braces."
   (eldoc-mode 1)
   (company-mode 1))
 
-(use-package tide
+(use-package typescript-mode
   :ensure nil
   :init
   (setq typescript-indent-level 2)
   :bind
-  (:map go-mode-map
+  (:map typescript-mode-map
    ("C-i" . my-indent-or-complete)
-   ("C-M-i" . my-indent-or-complete))
+   ("C-M-i" . my-indent-or-complete)))
+
+(use-package tide
+  :ensure nil
   :config
   (add-hook 'before-save-hook #'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'my-setup-tide-mode))
+
+(use-package ng2-mode
+  :ensure nil)
 
 
 ;;; web-mode

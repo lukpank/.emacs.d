@@ -864,7 +864,7 @@ of the key binding used to execute this command."
 (let ((character ?a))
   (while (<= character ?z)
     (define-key my-jj-map (format "%c" character) #'my-switch-to-register)
-    (incf character)))
+    (setq character (1+ character))))
 
 (key-chord-define-global "jj" my-jj-map)
 

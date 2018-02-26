@@ -330,6 +330,13 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :bind ("C-c m" . magit-status))
 
+(use-package git-messenger
+  :ensure nil
+  :bind ("C-c M" . git-messenger:popup-message)
+  :config
+  (setq git-messenger:show-detail t
+	git-messenger:use-magit-popup t))
+
 
 ;;; Using C/C++ under Emacs
 ;;; -----------------------

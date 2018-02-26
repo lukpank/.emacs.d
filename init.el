@@ -7,6 +7,9 @@
 ;;; Below are fragments from my Emacs configuration file
 ;;; (`~/.emacs.d/init.el`).
 
+;;; The newest verstion of this config is available from a [github
+;;; repo](https://github.com/lukpank/.emacs.d).
+
 ;;; I use `:ensure nil` argument of the `use-package` macro below for
 ;;; the packages I use because I do not want them to be upgraded on
 ;;; every Emacs start, actually `:ensure nil` is the default so it has
@@ -623,14 +626,14 @@ inserted between the braces between the braces."
 
 ;;; 2. Install Go compiler. Under Debian you install `golang-go` package
 ;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
-;;;    1.3.3 compared to the current 1.9, so you may
+;;;    1.3.3 compared to the current 1.10, so you may
 ;;;    consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
 ;;;    search for the package for your system or otherwise
 ;;;    see [Getting started](https://golang.org/doc/install).
 
 ;;; 3. Install [godef](https://godoc.org/github.com/rogpeppe/godef)
-;;;    can be installed with
+;;;    with
 
 ;;;    ```
 ;;;    $ go get github.com/rogpeppe/godef
@@ -650,13 +653,14 @@ inserted between the braces between the braces."
 ;;;    $ go get -u github.com/nsf/gocode
 ;;;    ```
 
-;;; 5. Install [go guru] with
+;;; 6. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
+;;;    with
 
 ;;;    ```
 ;;;    $ go get golang.org/x/tools/cmd/guru
 ;;;    ```
 
-;;; 6. Add your `$GOPATH/bin` to your `PATH` environment variable (or copy
+;;; 7. Add your `$GOPATH/bin` to your `PATH` environment variable (or copy
 ;;;    the `godef`, `goimports`, `gocode`, and `guru` executables from
 ;;;    `$GOPATH/bin` to some directory which is in your `PATH`).
 

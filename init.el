@@ -55,9 +55,6 @@
 
 (require 'use-package)
 
-(use-package use-package-chords
-  :ensure nil
-  :config (key-chord-mode 1))
 
 ;;; This also turns on checking TLS certificates (in both possible modes)
 ;;; with `tls-program` set to only the first value from the default value
@@ -172,16 +169,15 @@
 (use-package treemacs
   :ensure nil
   :bind
-  ("C-c t" . treemacs-toggle)
-  :chords
-  (("tt" . treemacs-toggle)))
+  (("C-c t" . treemacs-toggle)
+   ("s-a" . treemacs-toggle)))
 
 (use-package buffer-flip
   :ensure nil
-  :chords (("bb" . buffer-flip))
-  :bind  (:map buffer-flip-map
-               ( "b" .   buffer-flip-forward)
-               ( "B" .   buffer-flip-backward)
+  :bind  (("s-v" . buffer-flip)
+	  :map buffer-flip-map
+               ( "s-v" .   buffer-flip-forward)
+               ( "s-V" .   buffer-flip-backward)
                ( "C-g" . buffer-flip-abort)))
 
 (use-package goto-chg
@@ -855,7 +851,7 @@ inserted between the braces between the braces."
 ;;; -----------------
 
 
-;;; Set keys from jj a to jj z to switch to buffers from a register from a to z
+;;; Set keys from s-s a to s-s z to switch to buffers from a register from a to z
 
 (defalias 'pr #'point-to-register)
 
@@ -870,14 +866,14 @@ of the key binding used to execute this command."
 	(switch-to-buffer (marker-buffer r))
       (jump-to-register c))))
 
-(setq my-jj-map (make-sparse-keymap))
+(setq my-switch-to-register-map (make-sparse-keymap))
 
 (let ((character ?a))
   (while (<= character ?z)
-    (define-key my-jj-map (format "%c" character) #'my-switch-to-register)
+    (define-key my-switch-to-register-map (format "%c" character) #'my-switch-to-register)
     (setq character (1+ character))))
 
-(key-chord-define-global "jj" my-jj-map)
+(global-set-key (kbd "s-s") my-switch-to-register-map)
 
 
 ;;; Search engines

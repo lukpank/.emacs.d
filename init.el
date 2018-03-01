@@ -752,7 +752,8 @@ inserted between the braces between the braces."
 (defun my-php-mode-hook-fn()
   (when (require 'company-php nil t)
     (set (make-local-variable 'company-backends) '(company-ac-php-backend))
-    (company-mode t)))
+    (company-mode t)
+    (local-set-key (kbd "M-.") #'ac-php-find-symbol-at-point)))
 
 (add-hook 'php-mode-hook #'my-php-mode-hook-fn)
 

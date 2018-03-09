@@ -166,6 +166,16 @@
   :bind
   ("C-:" . avy-goto-char-timer))
 
+(use-package ace-link
+  :ensure nil
+  :config
+  (ace-link-setup-default))
+
+(use-package avy-flycheck
+  :ensure nil
+  :bind
+  ("C-c '" . avy-flycheck-goto-error))
+
 (use-package treemacs
   :ensure nil
   :bind

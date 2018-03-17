@@ -120,6 +120,11 @@
   :bind
   (("C-c g" . helm-ls-git-ls)))
 
+(use-package helm-make
+  :ensure nil
+  :bind
+  (("C-c K" . helm-make)))
+
 (use-package helm-c-yasnippet
   :ensure nil
   :bind

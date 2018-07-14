@@ -721,6 +721,28 @@ inserted between the braces between the braces."
 	("C-c & &" . org-mark-ring-goto)))
 
 
+;;; Rust
+;;; ----
+
+
+(use-package racer-mode
+  :ensure nil
+  :defer)
+
+(use-package rust-mode
+  :ensure nil
+  :init
+  (setq company-tooltip-align-annotations t
+	rust-format-on-save t)
+  :config
+  (add-hook 'rust-mode-hook #'company-mode)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  :bind
+  (:map rust-mode-map
+   ("C-i" . company-indent-or-complete-common)))
+
+
 ;;; Dart
 ;;; ----
 

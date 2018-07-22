@@ -389,15 +389,12 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (company-mode)
   (local-set-key (kbd "M-.") #'rtags-find-symbol-at-point)
   (local-set-key (kbd "M-,") #'rtags-location-stack-back)
-  (local-set-key "\C-i" #'my-indent-or-complete)
-  (local-set-key (kbd "<tab>") #'my-indent-or-complete)
-  (local-set-key "\C-\M-i" #'my-indent-or-complete))
+  (local-set-key "\C-i" #'company-indent-or-complete-common)
+  (local-set-key (kbd "<tab>") #'company-indent-or-complete-common)
+  (local-set-key "\C-\M-i" #'company-indent-or-complete-common))
 
 (add-hook 'c-mode-hook #'my-c-c++-mode-hook-fn)
 (add-hook 'c++-mode-hook #'my-c-c++-mode-hook-fn)
-
-;;; Function `my-indent-or-complete` is defined above in section
-;;; [Using Go under Emacs](#using-go-under-emacs).
 
 ;;; Now:
 
@@ -512,31 +509,19 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;; functions, autocompletion and [eldoc] support, auto formatting of the
 ;;; code on save with adding of missing imports ([goimports]).
 
-;;; It is quite long as I define three interactive functions:
+;;; It is quite long as I define two interactive functions:
 
-;;; 1. `my-indent-or-complete` which is bind to `TAB` key and
-;;; (contextually) either completes the symbol at point or indents the
-;;; line,
-
-;;; 2. `my-go-electric-brace` which is bind to `{` key and inserts an
+;;; 1. `my-go-electric-brace` which is bind to `{` key and inserts an
 ;;; indented pair of braces (if previous character is a space,
 ;;; otherwise it inserts single opening brace),
 
-;;; 3. `my-godoc-package` which is bind to `C-c P` key and display
+;;; 2. `my-godoc-package` which is bind to `C-c P` key and display
 ;;; documentation for a package choosen from a list of installed
 ;;; packages.
 
 ;;; [go-mode]: https://github.com/dominikh/go-mode.el
 ;;; [eldoc]: http://emacswiki.org/emacs/ElDoc
 ;;; [goimports]: https://godoc.org/golang.org/x/tools/cmd/goimports
-
-(defun my-indent-or-complete ()
-  "Complete or indent if nothing to complete."
-  (interactive)
-  (if (or (looking-at "\\w")
-	  (looking-back "^\\|\s"))
-      (indent-for-tab-command)
-    (company-complete)))
 
 (defun my-go-electric-brace ()
   "Insert an opening brace may be with the closing one.
@@ -599,8 +584,8 @@ inserted between the braces between the braces."
    ("C-c h" . go-guru-hl-identifier)
    ("C-c P" . my-godoc-package)
    ("{" . my-go-electric-brace)
-   ("C-i" . my-indent-or-complete)
-   ("C-M-i" . my-indent-or-complete))
+   ("C-i" . company-indent-or-complete-common)
+   ("C-M-i" . company-indent-or-complete-common))
   :config
   ;; run gofmt/goimports when saving the file
   (add-hook 'before-save-hook #'gofmt-before-save)
@@ -697,12 +682,9 @@ inserted between the braces between the braces."
   (smartparens-mode 1)
   (local-set-key (kbd "M-.") #'jedi:goto-definition)
   (local-set-key (kbd "M-,") #'jedi:goto-definition-pop-marker)
-  (local-set-key "\C-i" #'my-indent-or-complete))
+  (local-set-key "\C-i" #'company-indent-or-complete-common))
 
 (add-hook 'python-mode-hook #'my-python-mode-hook-fn)
-
-;;; Function `my-indent-or-complete` is defined above in section
-;;; [Using Go under Emacs](#using-go-under-emacs).
 
 
 ;;; Yasnippet and abbrev mode
@@ -763,8 +745,8 @@ inserted between the braces between the braces."
   (:map dart-mode-map
    ("M-." . my-dart-goto)
    ("M-/" . dabbrev-expand)
-   ("C-i" . my-indent-or-complete)
-   ("C-M-i" . my-indent-or-complete))
+   ("C-i" . company-indent-or-complete-common)
+   ("C-M-i" . company-indent-or-complete-common))
   :config
 
   (defun my-dart-mode-hook-fn ()
@@ -812,8 +794,8 @@ inserted between the braces between the braces."
   (setq typescript-indent-level 2)
   :bind
   (:map typescript-mode-map
-   ("C-i" . my-indent-or-complete)
-   ("C-M-i" . my-indent-or-complete)))
+   ("C-i" . company-indent-or-complete-common)
+   ("C-M-i" . company-indent-or-complete-common)))
 
 (use-package tide
   :ensure nil
@@ -841,7 +823,7 @@ inserted between the braces between the braces."
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
   :bind
   (:map web-mode-map
-	("C-i" . my-indent-or-complete)))
+	("C-i" . company-indent-or-complete-common)))
 
 
 ;;; css-mode

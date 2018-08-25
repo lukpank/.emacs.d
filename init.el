@@ -1,14 +1,13 @@
-;;; Emacs configuration
-;;; ===================
-
-;;; I recommend watching the following video by BuildFunThings called
-;;; [My GNU Emacs configuration for programming](https://www.youtube.com/watch?v=I28jFkpN5Zk).
-
 ;;; Below are fragments from my Emacs configuration file
 ;;; (`~/.emacs.d/init.el`).
 
-;;; The newest verstion of this config is available from a [github
+;;; <!-- more -->
+
+;;; The newest version of this config is available from a [github
 ;;; repo](https://github.com/lukpank/.emacs.d).
+
+;;; I recommend watching the following video by BuildFunThings called
+;;; [My GNU Emacs configuration for programming](https://www.youtube.com/watch?v=I28jFkpN5Zk).
 
 ;;; I use `:ensure nil` argument of the `use-package` macro below for
 ;;; the packages I use because I do not want them to be upgraded on
@@ -195,11 +194,12 @@
 
 (use-package buffer-flip
   :ensure nil
-  :bind  (("s-v" . buffer-flip)
-	  :map buffer-flip-map
-               ( "s-v" .   buffer-flip-forward)
-               ( "s-V" .   buffer-flip-backward)
-               ( "C-g" . buffer-flip-abort)))
+  :bind
+  (("s-v" . buffer-flip)
+   :map buffer-flip-map
+   ("s-v" . buffer-flip-forward)
+   ("s-V" . buffer-flip-backward)
+   ("C-g" . buffer-flip-abort)))
 
 (use-package goto-chg
   :ensure nil
@@ -240,13 +240,15 @@
   "Set font to Inconsolata:pixelsize=SIZE:antialias=true:autohint=false.
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive "n[Inconsolata] size: ")
-  (set-frame-font (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
+  (set-frame-font
+   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
 
 (defun set-frame-font-go-mono (size &optional frames)
   "Set font to Go mono:pixelsize=SIZE:antialias=true:autohint=false.
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive "n[Go mono] size: ")
-  (set-frame-font (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
+  (set-frame-font
+   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
 
 ;; my customization of used themes
 
@@ -628,7 +630,7 @@ inserted between the braces between the braces."
 
 ;;; 2. Install Go compiler. Under Debian you install `golang-go` package
 ;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
-;;;    1.3.3 compared to the current 1.10, so you may
+;;;    1.3.3 compared to the current 1.11, so you may
 ;;;    consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
 ;;;    search for the package for your system or otherwise

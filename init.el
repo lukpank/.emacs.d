@@ -130,6 +130,12 @@
   :bind
   (("C-c y" . helm-yas-complete)))
 
+(use-package rg
+  :ensure nil
+  :bind
+  (("C-c R" . rg)))
+
+
 ;;; Use more more efficient changing windows
 
 (use-package ace-window

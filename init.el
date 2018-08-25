@@ -416,28 +416,13 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;;    `libclang` library (package `libclang-dev` or may be newer
 ;;;    `libclang-X.Y-dev` under Debian) which is required by `rtags`.
 
-;;; 2. Install `rtags` server with (it assumes first that you do have
-;;;    `llvm-config-3.8` instead of `llvm-config` thus the extra option is
-;;;    needed and second that you want to install it in `/opt/rtags`
-;;;    instead of default `/usr/local`):
-
-;;;    ```
-;;;    $ git clone --recursive https://github.com/Andersbakken/rtags.git
-;;;    $ cd rtags
-;;;    $ mkdir build
-;;;    $ cd build
-;;;    $ cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config-3.8 \
-;;;            -DCMAKE_INSTALL_PREFIX=/opt/rtags ..
-;;;    $ make
-;;;    ```
-
-;;;    And as root
-
-;;;    ```
-;;;    # make install
-;;;    # ln -s /opt/rtags/bin/rc /usr/local/bin/rc
-;;;    # ln -s /opt/rtags/bin/rdm /usr/local/bin/rdm
-;;;    ```
+;;; 2. Under Emacs having `rtags` package installed press `M-:` and
+;;;    evaluate expression `(require 'rtags)` and then press `M-x` and
+;;;    run command `rtags-install` (should work if you have
+;;;    `llvm-config` in your path) and wait until it compiles to 100%.
+;;;    The `rtags-install` command needs to be rerun if you install
+;;;    newer `rtags` from MELPA and the below commands do not work
+;;;    complaining about protocol mismatch.
 
 ;;; 3. Usefull `rtags` functions (use `C-c r C-h` to see these and other key bindings)
 

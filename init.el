@@ -82,8 +82,10 @@
   (setq helm-split-window-default-side 'other)
   (helm-mode 1)
   :config
-  (define-key helm-find-files-map (kbd "<backtab>") #'helm-select-action)
-  (define-key helm-find-files-map (kbd "C-i")  #'helm-execute-persistent-action)
+  (define-key helm-find-files-map
+    (kbd "<backtab>") #'helm-select-action)
+  (define-key helm-find-files-map
+    (kbd "C-i")  #'helm-execute-persistent-action)
   :bind
   (("M-x" . helm-M-x)
    ("M-y" . helm-show-kill-ring)
@@ -135,7 +137,7 @@
   (("C-c R" . rg)))
 
 
-;;; Use more more efficient changing windows
+;;; Use more efficient changing windows
 
 (use-package ace-window
   :ensure nil
@@ -156,7 +158,9 @@
 (use-package helm-spaces
   :ensure nil
   ;; customize mode-line-format to add: "(" sp-current-space ")"
-  ;; or in powerline theme add: (powerline-raw (if (and (boundp 'sp-current-space) sp-current-space) (concat " (" sp-current-space ")") "") face2)
+  ;; or in powerline theme add:
+  ;; (powerline-raw (if (and (boundp 'sp-current-space) sp-current-space)
+  ;;                    (concat " (" sp-current-space ")") "") face2)
   :bind
   ("C-c b" . helm-spaces))
 
@@ -241,14 +245,16 @@
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive "n[Inconsolata] size: ")
   (set-frame-font
-   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
+   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size)
+   nil frames))
 
 (defun set-frame-font-go-mono (size &optional frames)
   "Set font to Go mono:pixelsize=SIZE:antialias=true:autohint=false.
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive "n[Go mono] size: ")
   (set-frame-font
-   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size) nil frames))
+   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size)
+   nil frames))
 
 ;; my customization of used themes
 
@@ -420,7 +426,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;;    $ cd rtags
 ;;;    $ mkdir build
 ;;;    $ cd build
-;;;    $ cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config-3.8 -DCMAKE_INSTALL_PREFIX=/opt/rtags ..
+;;;    $ cmake -DLIBCLANG_LLVM_CONFIG_EXECUTABLE=llvm-config-3.8 \
+;;;            -DCMAKE_INSTALL_PREFIX=/opt/rtags ..
 ;;;    $ make
 ;;;    ```
 
@@ -481,7 +488,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (paren-face-mode))
 
 (defun my-lisp-mode-hook-fn ()
-  (set (make-local-variable 'lisp-indent-function) #'common-lisp-indent-function)
+  (set (make-local-variable 'lisp-indent-function)
+       #'common-lisp-indent-function)
   (paredit-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (show-paren-mode 1)
@@ -493,14 +501,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (defun slime-qlot-exec (directory)
   "from https://github.com/fukamachi/qlot/blob/master/README.markdown"
   (interactive (list (read-directory-name "Project directory: ")))
-  (slime-start :program "qlot"
-               :program-args '("exec" "ros" "-S" "." "run")
-               :directory directory
-               :name 'qlot
-               :env (list (concat "PATH="
-                                  (mapconcat #'identity exec-path ":"))
-                          (concat "QUICKLISP_HOME="
-                                  (file-name-as-directory directory) "quicklisp/"))))
+  (slime-start
+   :program "qlot"
+   :program-args '("exec" "ros" "-S" "." "run")
+   :directory directory
+   :name 'qlot
+   :env (list (concat "PATH="
+		      (mapconcat #'identity exec-path ":"))
+	      (concat "QUICKLISP_HOME="
+		      (file-name-as-directory directory) "quicklisp/"))))
 
 ;;; JS mode
 ;;; -------
@@ -582,7 +591,8 @@ inserted between the braces between the braces."
   :ensure nil
   :init
   (setq gofmt-command "goimports"     ; use goimports instead of gofmt
-	go-fontify-function-calls nil ; fontifing names of called functions is too much for me
+	go-fontify-function-calls nil ; fontifing names of called
+				      ; functions is too much for me
 	company-idle-delay nil)
   :bind
   (:map go-mode-map
@@ -745,7 +755,8 @@ inserted between the braces between the braces."
 (use-package dart-mode
   :ensure nil
   :init
-  (let ((path (expand-file-name "~/local/src/flutter/bin/cache/dart-sdk/")))
+  (let ((path (expand-file-name
+	       "~/local/src/flutter/bin/cache/dart-sdk/")))
     (if (file-accessible-directory-p path)
 	(setq dart-sdk-path path)))
   (setq dart-enable-analysis-server t)
@@ -778,7 +789,8 @@ inserted between the braces between the braces."
 
 (defun my-php-mode-hook-fn()
   (when (require 'company-php nil t)
-    (set (make-local-variable 'company-backends) '(company-ac-php-backend))
+    (set (make-local-variable 'company-backends)
+	 '(company-ac-php-backend))
     (company-mode t)
     (local-set-key (kbd "M-.") #'ac-php-find-symbol-at-point)))
 
@@ -898,7 +910,8 @@ of the key binding used to execute this command."
 
 (let ((character ?a))
   (while (<= character ?z)
-    (define-key my-switch-to-register-map (format "%c" character) #'my-switch-to-register)
+    (define-key my-switch-to-register-map
+      (format "%c" character) #'my-switch-to-register)
     (setq character (1+ character))))
 
 (global-set-key (kbd "s-s") my-switch-to-register-map)

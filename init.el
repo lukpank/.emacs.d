@@ -70,11 +70,9 @@
 ;;; `use-package` to work.
 
 
-;;; Buffer, file, and window selection enhancements
-;;; ----------------------------------------------
+;;; More efficient buffer/file selection
+;;; ------------------------------------
 
-
-;;; Use more efficient buffer/file selection
 
 (use-package helm
   :ensure nil
@@ -136,8 +134,27 @@
   :bind
   (("C-c R" . rg)))
 
+(use-package treemacs
+  :ensure nil
+  :bind
+  (("C-c t" . treemacs)
+   ("s-a" . treemacs)))
 
-;;; Use more efficient changing windows
+;;; Cycle through buffers' history
+
+(use-package buffer-flip
+  :ensure nil
+  :bind
+  (("s-v" . buffer-flip)
+   :map buffer-flip-map
+   ("s-v" . buffer-flip-forward)
+   ("s-V" . buffer-flip-backward)
+   ("C-g" . buffer-flip-abort)))
+
+
+;;; Window selection enhancements
+;;; ----------------------------------------------
+
 
 (use-package ace-window
   :ensure nil
@@ -168,6 +185,11 @@
 
 (winner-mode 1)
 
+
+;;; In buffer movement enhancements
+;;; -------------------------------
+
+
 ;;; Remind of keys than can follow in a key sequence
 
 (use-package which-key
@@ -175,35 +197,28 @@
   :config
   (which-key-mode))
 
+;;; Type prefix and wait to select one of the with a single or two letters
+
 (use-package avy
   :ensure nil
   :bind
   ("C-:" . avy-goto-char-timer))
+
+;;; Bind key `o` to selection of links by a single or two letters
 
 (use-package ace-link
   :ensure nil
   :config
   (ace-link-setup-default))
 
+;;; Select from visible errors by a single letter
+
 (use-package avy-flycheck
   :ensure nil
   :bind
   ("C-c '" . avy-flycheck-goto-error))
 
-(use-package treemacs
-  :ensure nil
-  :bind
-  (("C-c t" . treemacs-toggle)
-   ("s-a" . treemacs-toggle)))
-
-(use-package buffer-flip
-  :ensure nil
-  :bind
-  (("s-v" . buffer-flip)
-   :map buffer-flip-map
-   ("s-v" . buffer-flip-forward)
-   ("s-V" . buffer-flip-backward)
-   ("C-g" . buffer-flip-abort)))
+;;; Go to last change in the buffer
 
 (use-package goto-chg
   :ensure nil
@@ -876,7 +891,7 @@ inserted between the braces between the braces."
 ;;; -----------------
 
 
-;;; Set keys from s-s a to s-s z to switch to buffers from a register from a to z
+;;; Set keys from `s-s a` to `s-s z` to switch to buffers from a register from a to z
 
 (defalias 'pr #'point-to-register)
 

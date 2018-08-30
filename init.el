@@ -19,6 +19,10 @@
 ;;; next time.
 
 
+;;; Basic settings
+;;; ==============
+
+
 ;;; Directory with local Emacs lisp files
 ;;; -------------------------------------
 
@@ -68,6 +72,26 @@
 
 ;;; Note: The last line above requires installing package named
 ;;; `use-package` to work.
+
+
+;;; Other settings
+;;; --------------
+
+(setq recentf-max-saved-items 100)
+
+
+;;; Workaround for security vulnerability in Emacs >= 21.1 and < 25.3
+;;; -----------------------------------------------------------------
+;;;
+;;;  See [Changes in Emacs 25.3](https://www.gnu.org/software/emacs/news/NEWS.25.3)
+
+(eval-after-load "enriched"
+    '(defun enriched-decode-display-prop (start end &optional param)
+       (list start end)))
+
+
+;;; Productivity
+;;; ============
 
 
 ;;; More efficient buffer/file selection
@@ -153,7 +177,7 @@
 
 
 ;;; Window selection enhancements
-;;; ----------------------------------------------
+;;; -----------------------------
 
 
 (use-package ace-window
@@ -181,7 +205,7 @@
   :bind
   ("C-c b" . helm-spaces))
 
-;;; Allow for Undo/Redo of window manipulations (such as C-x 1)
+;;; Allow for Undo/Redo of window manipulations (such as `C-x 1`)
 
 (winner-mode 1)
 
@@ -245,95 +269,8 @@
    ("C-c p" . mc/mark-previous-like-this)))
 
 
-;;; Appearance
-;;; ----------
-
-
-(setq inhibit-startup-screen t
-      ediff-window-setup-function #'ediff-setup-windows-plain)
-(set-scroll-bar-mode 'right)
-(menu-bar-mode 0)
-(tool-bar-mode 0)
-
-(defun set-frame-font-inconsolata (size &optional frames)
-  "Set font to Inconsolata:pixelsize=SIZE:antialias=true:autohint=false.
-Argument FRAMES has the same meaning as for `set-frame-font'"
-  (interactive "n[Inconsolata] size: ")
-  (set-frame-font
-   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size)
-   nil frames))
-
-(defun set-frame-font-go-mono (size &optional frames)
-  "Set font to Go mono:pixelsize=SIZE:antialias=true:autohint=false.
-Argument FRAMES has the same meaning as for `set-frame-font'"
-  (interactive "n[Go mono] size: ")
-  (set-frame-font
-   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size)
-   nil frames))
-
-;; my customization of used themes
-
-(eval-after-load 'firebelly-theme
-  '(custom-theme-set-faces
-    'firebelly
-    '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
-
-(eval-after-load 'nimbus-theme
-  '(custom-theme-set-faces
-    'nimbus
-    '(region ((t (:background "#505050"))))))
-
-(use-package powerline
-  :ensure nil
-  :defer)
-
-(use-package nimbus-theme
-  :ensure nil
-  :defer)
-
-(use-package leuven-theme
-  :ensure nil
-  :defer)
-
-;; easy switching between themes
-(use-package helm-themes
-  :ensure nil
-  :bind
-  (("C-c T" . helm-themes))
-  :config
-  ;; need to update powerline after changing theme
-  (advice-add 'helm-themes :after #'powerline-reset))
-
-(defun my-make-frame-function(frame)
-  (if (not (featurep 'powerline))
-      (powerline-center-theme)))
-
-(setq my-dark-theme 'nimbus
-      my-light-theme 'leuven)
-
-(defun my-light-theme ()
-  "Switch to my light theme."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes)
-  (when (load-theme my-light-theme)
-    (powerline-reset)))
-
-(defun my-dark-theme ()
-  "Switch to my dark theme."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes)
-  (when (load-theme my-dark-theme)
-    (powerline-reset)))
-
-(when window-system
-  (my-make-frame-function (selected-frame)))
-
-(add-hook 'after-make-frame-functions
-	  #'my-make-frame-function)
-
-
 ;;; Convenience functions, aliases, and key bindings
-;;; ---------------------------------
+;;; ------------------------------------------------
 
 
 ;; Convenience functions and aliases
@@ -381,8 +318,42 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 	git-messenger:use-magit-popup t))
 
 
-;;; Using C/C++ under Emacs
-;;; -----------------------
+;;; Switching buffers
+;;; -----------------
+
+
+;;; Set keys from `s-s a` to `s-s z` to switch to buffers from a register from a to z
+
+(defalias 'pr #'point-to-register)
+
+(defun my-switch-to-register ()
+  "Switch to buffer given by a register named by last character
+of the key binding used to execute this command."
+  (interactive)
+  (let* ((v (this-command-keys-vector))
+	 (c (aref v (1- (length v))))
+	 (r (get-register c)))
+    (if (and (markerp r) (marker-buffer r))
+	(switch-to-buffer (marker-buffer r))
+      (jump-to-register c))))
+
+(setq my-switch-to-register-map (make-sparse-keymap))
+
+(let ((character ?a))
+  (while (<= character ?z)
+    (define-key my-switch-to-register-map
+      (format "%c" character) #'my-switch-to-register)
+    (setq character (1+ character))))
+
+(global-set-key (kbd "s-s") my-switch-to-register-map)
+
+
+;;; Programming languages
+;;; =====================
+
+
+;;; C and C++
+;;; ---------
 
 ;;; The following Emacs packages [from MELPA](#add-melpa-package-list)
 ;;; need to be installed: [cmake-ide](https://melpa.org/#/cmake-ide),
@@ -453,8 +424,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;;    | `C-c r ;` | `rtags-find-file` (in the current project no metter in which directory)
 
 
-;;; Lisp and Emacs lisp modes
-;;; -------------------------
+;;; Lisp and Emacs lisp
+;;; -------------------
 
 
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
@@ -511,15 +482,15 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 	      (concat "QUICKLISP_HOME="
 		      (file-name-as-directory directory) "quicklisp/"))))
 
-;;; JS mode
-;;; -------
+;;; JavaScript
+;;; ----------
 
 
 (setq js-indent-level 8)
 
 
-;;; Using Go under Emacs
-;;; --------------------
+;;; Go
+;;; --
 
 ;;; I use the following setup for the [go-mode] in my `~/.emacs.d/init.el`. This
 ;;; adds syntax highlighting but without fontifing names of called
@@ -687,8 +658,8 @@ inserted between the braces between the braces."
 ;;; [go-guru]: https://melpa.org/#/go-guru
 
 
-;;; Using Python under Emacs
-;;; ------------------------
+;;; Python
+;;; ------
 
 (use-package company-jedi
   :ensure nil
@@ -703,22 +674,6 @@ inserted between the braces between the braces."
   (local-set-key "\C-i" #'company-indent-or-complete-common))
 
 (add-hook 'python-mode-hook #'my-python-mode-hook-fn)
-
-
-;;; Yasnippet and abbrev mode
-;;; -------------------------
-
-
-(setq-default abbrev-mode 1)
-
-(use-package yasnippet
-  :ensure nil
-  :init
-  (yas-global-mode 1)
-  :bind
-  (:map yas-minor-mode-map
-	("C-c & t" . yas-describe-tables)
-	("C-c & &" . org-mark-ring-goto)))
 
 
 ;;; Rust
@@ -827,7 +782,27 @@ inserted between the braces between the braces."
   :ensure nil)
 
 
-;;; web-mode
+;;; Other modes
+;;; ===========
+
+
+;;; Yasnippet and abbrev mode
+;;; -------------------------
+
+
+(setq-default abbrev-mode 1)
+
+(use-package yasnippet
+  :ensure nil
+  :init
+  (yas-global-mode 1)
+  :bind
+  (:map yas-minor-mode-map
+	("C-c & t" . yas-describe-tables)
+	("C-c & &" . org-mark-ring-goto)))
+
+
+;;; Web mode
 ;;; --------
 
 
@@ -846,8 +821,8 @@ inserted between the braces between the braces."
 	("C-i" . company-indent-or-complete-common)))
 
 
-;;; css-mode
-;;; --------
+;;; CSS
+;;; ---
 
 
 (use-package rainbow-mode
@@ -887,36 +862,6 @@ inserted between the braces between the braces."
   (require 'ox-beamer))
 
 
-;;; Switching buffers
-;;; -----------------
-
-
-;;; Set keys from `s-s a` to `s-s z` to switch to buffers from a register from a to z
-
-(defalias 'pr #'point-to-register)
-
-(defun my-switch-to-register ()
-  "Switch to buffer given by a register named by last character
-of the key binding used to execute this command."
-  (interactive)
-  (let* ((v (this-command-keys-vector))
-	 (c (aref v (1- (length v))))
-	 (r (get-register c)))
-    (if (and (markerp r) (marker-buffer r))
-	(switch-to-buffer (marker-buffer r))
-      (jump-to-register c))))
-
-(setq my-switch-to-register-map (make-sparse-keymap))
-
-(let ((character ?a))
-  (while (<= character ?z)
-    (define-key my-switch-to-register-map
-      (format "%c" character) #'my-switch-to-register)
-    (setq character (1+ character))))
-
-(global-set-key (kbd "s-s") my-switch-to-register-map)
-
-
 ;;; Search engines
 ;;; --------------
 
@@ -933,18 +878,8 @@ of the key binding used to execute this command."
     :keybinding "g"))
 
 
-;;; Workaround for security vulnerability in Emacs >= 21.1 and < 25.3
-;;; -----------------------------------------------------------------
-;;;
-;;;  See [Changes in Emacs 25.3](https://www.gnu.org/software/emacs/news/NEWS.25.3)
-
-(eval-after-load "enriched"
-    '(defun enriched-decode-display-prop (start end &optional param)
-       (list start end)))
-
-
-;;; Rest
-;;; ----
+;;; EWW Browser
+;;; -----------
 
 
 (defun my-eww-scale-adjust ()
@@ -958,6 +893,97 @@ of the key binding used to execute this command."
   (other-window 1)
   (sleep-for 1)
   (delete-window))
+
+
+;;; Appearance and custom file
+;;; ==========================
+
+
+;;; Appearance
+;;; ----------
+
+
+(setq inhibit-startup-screen t
+      ediff-window-setup-function #'ediff-setup-windows-plain)
+(set-scroll-bar-mode 'right)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+
+(defun set-frame-font-inconsolata (size &optional frames)
+  "Set font to Inconsolata:pixelsize=SIZE:antialias=true:autohint=false.
+Argument FRAMES has the same meaning as for `set-frame-font'"
+  (interactive "n[Inconsolata] size: ")
+  (set-frame-font
+   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size)
+   nil frames))
+
+(defun set-frame-font-go-mono (size &optional frames)
+  "Set font to Go mono:pixelsize=SIZE:antialias=true:autohint=false.
+Argument FRAMES has the same meaning as for `set-frame-font'"
+  (interactive "n[Go mono] size: ")
+  (set-frame-font
+   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size)
+   nil frames))
+
+(use-package powerline
+  :ensure nil
+  :defer)
+
+(use-package nimbus-theme
+  :ensure nil
+  :defer)
+
+(use-package leuven-theme
+  :ensure nil
+  :defer)
+
+;; easy switching between themes
+(use-package helm-themes
+  :ensure nil
+  :bind
+  (("C-c T" . helm-themes))
+  :config
+  ;; need to update powerline after changing theme
+  (advice-add 'helm-themes :after #'powerline-reset))
+
+(defun my-make-frame-function(frame)
+  (if (not (featurep 'powerline))
+      (powerline-center-theme)))
+
+(setq my-dark-theme 'nimbus
+      my-light-theme 'leuven)
+
+(defun my-light-theme ()
+  "Switch to my light theme."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
+  (when (load-theme my-light-theme)
+    (powerline-reset)))
+
+(defun my-dark-theme ()
+  "Switch to my dark theme."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
+  (when (load-theme my-dark-theme)
+    (powerline-reset)))
+
+(when window-system
+  (my-make-frame-function (selected-frame)))
+
+(add-hook 'after-make-frame-functions
+	  #'my-make-frame-function)
+
+;;; My customization for some used themes
+
+(eval-after-load 'firebelly-theme
+  '(custom-theme-set-faces
+    'firebelly
+    '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
+
+(eval-after-load 'nimbus-theme
+  '(custom-theme-set-faces
+    'nimbus
+    '(region ((t (:background "#505050"))))))
 
 
 ;;; Use separate custom file

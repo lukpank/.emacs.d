@@ -909,20 +909,19 @@ inserted between the braces between the braces."
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 
-(defun set-frame-font-inconsolata (size &optional frames)
-  "Set font to Inconsolata:pixelsize=SIZE:antialias=true:autohint=false.
-Argument FRAMES has the same meaning as for `set-frame-font'"
-  (interactive "n[Inconsolata] size: ")
-  (set-frame-font
-   (format "Inconsolata:pixelsize=%d:antialias=true:autohint=true" size)
-   nil frames))
+(setq my-font-list '("Inconsolata" "Go mono" "mononoki"))
 
-(defun set-frame-font-go-mono (size &optional frames)
-  "Set font to Go mono:pixelsize=SIZE:antialias=true:autohint=false.
+(defun my-set-frame-font (font-name size &optional frames)
+  "Set font to one of the fonts from `my-font-list'
 Argument FRAMES has the same meaning as for `set-frame-font'"
-  (interactive "n[Go mono] size: ")
+  (interactive
+   (list (helm :prompt "Font name: "
+	       :sources (helm-build-sync-source "Fonts"
+			  :candidates my-font-list)
+	       :buffer "*font selection*")
+	 (read-number "Font size: ")))
   (set-frame-font
-   (format "Go mono:pixelsize=%d:antialias=true:autohint=true" size)
+   (format "%s:pixelsize=%d:antialias=true:autohint=true" font-name size)
    nil frames))
 
 (use-package powerline

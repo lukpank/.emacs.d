@@ -878,7 +878,7 @@ inserted between the braces between the braces."
     :keybinding "g"))
 
 
-;;; EWW Browser
+;;; EWW browser
 ;;; -----------
 
 
@@ -902,12 +902,15 @@ inserted between the braces between the braces."
 ;;; Appearance
 ;;; ----------
 
+;;; Minimalistic look
 
 (setq inhibit-startup-screen t
       ediff-window-setup-function #'ediff-setup-windows-plain)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
+
+;;; Easy switching between some fonts
 
 (setq my-font-list '("Inconsolata" "Go mono" "mononoki"))
 
@@ -923,6 +926,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (set-frame-font
    (format "%s:pixelsize=%d:antialias=true:autohint=true" font-name size)
    nil frames))
+
+;;; Fancy mode line and some themes
 
 (use-package powerline
   :ensure nil

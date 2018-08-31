@@ -926,7 +926,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (use-package powerline
   :ensure nil
-  :defer)
+  :config
+  (powerline-center-theme))
 
 (use-package nimbus-theme
   :ensure nil
@@ -936,7 +937,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :ensure nil
   :defer)
 
-;; easy switching between themes
+;;; Easy switching between themes
+
 (use-package helm-themes
   :ensure nil
   :bind
@@ -944,33 +946,6 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :config
   ;; need to update powerline after changing theme
   (advice-add 'helm-themes :after #'powerline-reset))
-
-(defun my-make-frame-function(frame)
-  (if (not (featurep 'powerline))
-      (powerline-center-theme)))
-
-(setq my-dark-theme 'nimbus
-      my-light-theme 'leuven)
-
-(defun my-light-theme ()
-  "Switch to my light theme."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes)
-  (when (load-theme my-light-theme)
-    (powerline-reset)))
-
-(defun my-dark-theme ()
-  "Switch to my dark theme."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes)
-  (when (load-theme my-dark-theme)
-    (powerline-reset)))
-
-(when window-system
-  (my-make-frame-function (selected-frame)))
-
-(add-hook 'after-make-frame-functions
-	  #'my-make-frame-function)
 
 ;;; My customization for some used themes
 

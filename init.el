@@ -285,8 +285,6 @@
   (interactive)
   (setq ispell-local-dictionary "polish"))
 
-(defalias 'fi #'set-frame-font-inconsolata)
-(defalias 'fm #'set-frame-font-go-mono)
 (defalias 'st #'magit-status)
 (defalias 'ir #'ispell-region)
 (defalias 'md #'markdown-mode)
@@ -918,10 +916,12 @@ inserted between the braces between the braces."
   "Set font to one of the fonts from `my-font-list'
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive
-   (list (helm :prompt "Font name: "
-	       :sources (helm-build-sync-source "Fonts"
-			  :candidates my-font-list)
-	       :buffer "*font selection*")
+   (list (or (helm :prompt "Font name: "
+		   :resume 'noresume
+		   :sources (helm-build-sync-source "Fonts"
+			      :candidates my-font-list)
+		   :buffer "*font selection*")
+	     (signal 'quit nil))
 	 (read-number "Font size: ")))
   (set-frame-font
    (format "%s:pixelsize=%d:antialias=true:autohint=true" font-name size)

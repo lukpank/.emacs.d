@@ -879,6 +879,7 @@ inserted between the braces between the braces."
 ;;; EWW browser
 ;;; -----------
 
+(setq browse-url-browser-function #'eww-browse-url)
 
 (defun my-eww-scale-adjust ()
   "Slightly bigger font but text shorter than text."

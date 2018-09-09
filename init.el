@@ -678,6 +678,10 @@ inserted between the braces between the braces."
 ;;; ----
 
 
+(use-package cargo
+  :ensure nil
+  :defer)
+
 (use-package racer-mode
   :ensure nil
   :defer)
@@ -689,6 +693,7 @@ inserted between the braces between the braces."
 	rust-format-on-save t)
   :config
   (add-hook 'rust-mode-hook #'company-mode)
+  (add-hook 'rust-mode-hook #'cargo-minor-mode)
   (add-hook 'rust-mode-hook #'racer-mode)
   (add-hook 'racer-mode-hook #'eldoc-mode)
   :bind

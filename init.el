@@ -916,7 +916,7 @@ inserted between the braces between the braces."
 
 ;;; Easy switching between some fonts
 
-(setq my-font-list '("Inconsolata" "Go mono" "mononoki"))
+(setq my-font-list '("FantasqueSansMono" "Go mono" "Inconsolata" "mononoki"))
 
 (defun my-set-frame-font (font-name size &optional frames)
   "Set font to one of the fonts from `my-font-list'
@@ -932,6 +932,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (set-frame-font
    (format "%s:pixelsize=%d:antialias=true:autohint=true" font-name size)
    nil frames))
+
+(global-set-key (kbd "C-c F") #'my-set-frame-font)
 
 ;;; Fancy mode line and some themes
 

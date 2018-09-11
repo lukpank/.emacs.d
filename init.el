@@ -682,7 +682,7 @@ inserted between the braces between the braces."
   :ensure nil
   :defer)
 
-(use-package racer-mode
+(use-package racer
   :ensure nil
   :defer)
 

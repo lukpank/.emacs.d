@@ -563,6 +563,8 @@ inserted between the braces between the braces."
 	go-fontify-function-calls nil ; fontifing names of called
 				      ; functions is too much for me
 	company-idle-delay nil)
+  :config
+  (require 'go-guru)
   :bind
   (:map go-mode-map
    ("M-." . go-guru-definition)

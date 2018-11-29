@@ -954,13 +954,17 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Easy switching between themes
 
+(defun my-helm-theme-after ()
+  (powerline-reset)
+  (set-face-background 'scroll-bar (face-background 'fringe)))
+
 (use-package helm-themes
   :ensure nil
   :bind
   (("C-c T" . helm-themes))
   :config
   ;; need to update powerline after changing theme
-  (advice-add 'helm-themes :after #'powerline-reset))
+  (advice-add 'helm-themes :after #'my-helm-theme-after))
 
 ;;; My customization for some used themes
 

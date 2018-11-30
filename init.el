@@ -954,7 +954,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Easy switching between themes
 
-(defun my-helm-theme-after ()
+(defun my-helm-themes-after ()
   (powerline-reset)
   (set-face-background 'scroll-bar (face-background 'fringe)))
 
@@ -964,7 +964,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (("C-c T" . helm-themes))
   :config
   ;; need to update powerline after changing theme
-  (advice-add 'helm-themes :after #'my-helm-theme-after))
+  (advice-add 'helm-themes :after #'my-helm-themes-after))
 
 ;;; My customization for some used themes
 

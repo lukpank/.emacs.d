@@ -1014,6 +1014,37 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   ;; need to update powerline after changing theme
   (advice-add 'helm-themes :after #'my-helm-themes-after))
 
+;;; Toggle between dark and light themes with a key
+
+(use-package solarized-theme
+  :ensure nil
+  :defer)
+
+(use-package monokai-theme
+  :ensure nil
+  :defer)
+
+(setq my-dark-theme 'solarized-dark
+      my-light-theme 'solarized-light
+      my-terminal-theme 'monokai)
+
+(defun my-toggle-theme ()
+  "Toggle between dark and light themes"
+  (interactive)
+  (let ((dark-p (custom-theme-enabled-p my-dark-theme)))
+    (mapc #'disable-theme custom-enabled-themes)
+    (if dark-p
+	(load-theme my-light-theme t)
+      (load-theme my-dark-theme t)))
+  (my-helm-themes-after))
+
+(global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
+
+(if (or (window-system) (daemonp))
+    (my-toggle-theme)
+  (load-theme my-terminal-theme t)
+  (set-face-background 'default "unspecified-bg" (selected-frame)))
+
 ;;; My customization for some used themes
 
 (eval-after-load 'firebelly-theme

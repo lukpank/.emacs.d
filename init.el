@@ -361,9 +361,16 @@ of the key binding used to execute this command."
 ;;; and `rtags`) when you open a C/C++ file from a project which uses
 ;;; [cmake](https://cmake.org) to build.
 
+(defconst my-cc-style
+  '("k&r"
+    (c-offsets-alist . ((innamespace . [0])))))
+
+(c-add-style "my-cc-mode" my-cc-style)
+
 (setq-default c-basic-offset 8)
 (setq c-default-style '((java-mode . "java")
 			(awk-mode . "awk")
+			(c++-mode . "my-cc-mode")
 			(other . "k&r"))
       company-async-timeout 5		; completion may be slow
       rtags-completions-enabled t)

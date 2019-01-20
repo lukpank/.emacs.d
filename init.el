@@ -703,6 +703,46 @@ inserted between the braces between the braces."
    ("C-i" . company-indent-or-complete-common)))
 
 
+;;; Language server with Vala support
+;;; ---------------------------------
+
+(use-package lsp
+  :ensure nil
+  :config
+  (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("vala-language-server"))
+                    :major-modes '(vala-mode)
+                    :server-id 'vala-ls)))
+
+
+;;; Meson build system
+;;; ------------------
+
+(use-package meson-mode
+  :ensure nil
+  :init
+  (setq meson-indent-basic 4))
+
+
+;;; Vala
+;;; ----
+
+(defun my-vala-mode-hook-fn ()
+  (setq c-basic-offset 4
+	tab-width 8
+	indent-tabs-mode nil)
+  (set (make-local-variable 'company-backends) '(company-lsp))
+  (company-mode 1)
+  (local-set-key "\C-i" #'company-indent-or-complete-common)
+  (lsp))
+
+(use-package vala-mode
+  :ensure nil
+  :config
+  (add-hook 'vala-mode-hook #'my-vala-mode-hook-fn))
+
+
 ;;; Dart
 ;;; ----
 

@@ -958,6 +958,7 @@ inserted between the braces between the braces."
 ;;; Minimalistic look
 
 (setq inhibit-startup-screen t
+      frame-title-format (list "[" user-login-name "@" (system-name) "] %b")
       ediff-window-setup-function #'ediff-setup-windows-plain)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)

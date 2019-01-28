@@ -254,6 +254,13 @@
   (("C-c n" . mc/mark-next-like-this)
    ("C-c p" . mc/mark-previous-like-this)))
 
+;;; Fix trailing spaces but only in modified lines
+
+(use-package ws-butler
+  :defer
+  :init
+  (add-hook 'prog-mode-hook #'ws-butler-mode))
+
 
 ;;; Convenience functions, aliases, and key bindings
 ;;; ------------------------------------------------

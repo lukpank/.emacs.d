@@ -161,6 +161,20 @@
    ("s-V" . buffer-flip-backward)
    ("C-g" . buffer-flip-abort)))
 
+;;; fzf and lcd for finding files and directories
+
+(defun my-lcd ()
+  (interactive)
+  (fzf/start default-directory
+             (fzf/grep-cmd "lcd" "-l %s")))
+
+(use-package fzf
+  :init
+  (autoload 'fzf/start "fzf")
+  :bind
+  (("C-c f" . fzf)
+   ("C-c d" . my-lcd)))
+
 
 ;;; Window selection enhancements
 ;;; -----------------------------

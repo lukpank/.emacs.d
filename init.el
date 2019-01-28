@@ -9,14 +9,9 @@
 ;;; I recommend watching the following video by BuildFunThings called
 ;;; [My GNU Emacs configuration for programming](https://www.youtube.com/watch?v=I28jFkpN5Zk).
 
-;;; I use `:ensure nil` argument of the `use-package` macro below for
-;;; the packages I use because I do not want them to be upgraded on
-;;; every Emacs start, actually `:ensure nil` is the default so it has
-;;; no effect, but if I copy my Emacs configuration file to a new
-;;; computer I can simply replace all occurrences of `:ensure nil` to
-;;; `:ensure t` and install all used packages after restarting Emacs,
-;;; and then replace it back to `:ensure nil` to avoid auto upgrading
-;;; next time.
+;;; When I want to ensure all of the packages (on a new machine) I set
+;;; `use-package-always-ensure` below to `t` start Emacs and then set
+;;; it back to `nil`.
 
 
 ;;; Basic settings
@@ -56,6 +51,7 @@
 
 (package-initialize)
 
+(setq use-package-always-ensure nil)
 (require 'use-package)
 
 
@@ -99,7 +95,6 @@
 
 
 (use-package helm
-  :ensure nil
   :init
   (setq helm-split-window-default-side 'other)
   (helm-mode 1)
@@ -122,44 +117,36 @@
    ("C-c i" . helm-imenu)))
 
 (use-package helm-swoop
-  :ensure nil
   :bind
   (("C-s" . helm-swoop-without-pre-input)
    ("C-S-s" . helm-swoop)))
 
 (use-package helm-descbinds
-  :ensure nil
   :init
   (helm-descbinds-mode))
 
 (use-package helm-git-grep
-  :ensure nil
   :bind
   (("C-c j" . helm-git-grep)
    ("C-c J" . helm-git-grep-at-point)))
 
 (use-package helm-ls-git
-  :ensure nil
   :bind
   (("C-c g" . helm-ls-git-ls)))
 
 (use-package helm-make
-  :ensure nil
   :bind
   (("C-c K" . helm-make)))
 
 (use-package helm-c-yasnippet
-  :ensure nil
   :bind
   (("C-c y" . helm-yas-complete)))
 
 (use-package rg
-  :ensure nil
   :bind
   (("C-c R" . rg)))
 
 (use-package treemacs
-  :ensure nil
   :bind
   (("C-c t" . treemacs)
    ("s-a" . treemacs)))
@@ -167,7 +154,6 @@
 ;;; Cycle through buffers' history
 
 (use-package buffer-flip
-  :ensure nil
   :bind
   (("s-v" . buffer-flip)
    :map buffer-flip-map
@@ -181,12 +167,10 @@
 
 
 (use-package ace-window
-  :ensure nil
   :bind
   ("C-x o" . ace-window))
 
 (use-package windmove
-  :ensure nil
   :demand
   :bind
   (("C-s-n" . windmove-down)
@@ -197,7 +181,6 @@
   (windmove-default-keybindings))
 
 (use-package helm-spaces
-  :ensure nil
   ;; customize mode-line-format to add: "(" sp-current-space ")"
   ;; or in powerline theme add:
   ;; (powerline-raw (if (and (boundp 'sp-current-space) sp-current-space)
@@ -217,35 +200,30 @@
 ;;; Remind of keys than can follow in a key sequence
 
 (use-package which-key
-  :ensure nil
   :config
   (which-key-mode))
 
 ;;; Type prefix and wait to select one of the with a single or two letters
 
 (use-package avy
-  :ensure nil
   :bind
   ("C-:" . avy-goto-char-timer))
 
 ;;; Bind key `o` to selection of links by a single or two letters
 
 (use-package ace-link
-  :ensure nil
   :config
   (ace-link-setup-default))
 
 ;;; Select from visible errors by a single letter
 
 (use-package avy-flycheck
-  :ensure nil
   :bind
   ("C-c '" . avy-flycheck-goto-error))
 
 ;;; Go to last change in the buffer
 
 (use-package goto-chg
-  :ensure nil
   :bind
   ("C-c G" . goto-last-change))
 
@@ -257,13 +235,11 @@
 ;;; Context aware insertion of pairs of parenthesis
 
 (use-package smartparens
-    :ensure nil
-    :defer)
+  :defer)
 
 ;;; Edit with multiple cursors
 
 (use-package multiple-cursors
-  :ensure nil
   :bind
   (("C-c n" . mc/mark-next-like-this)
    ("C-c p" . mc/mark-previous-like-this)))
@@ -295,21 +271,17 @@
 (global-set-key "\C-cq" #'bury-buffer)
 
 (use-package shell-pop
-  :ensure nil
   :init
   (setq shell-pop-full-span t)
   :bind (("C-c s" . shell-pop)))
 
 (use-package helm-mt
-  :ensure nil
   :bind (("C-c S" . helm-mt)))
 
 (use-package magit
-  :ensure nil
   :bind ("C-c m" . magit-status))
 
 (use-package git-messenger
-  :ensure nil
   :bind ("C-c M" . git-messenger:popup-message)
   :config
   (setq git-messenger:show-detail t
@@ -377,13 +349,11 @@ of the key binding used to execute this command."
 
 (use-package rtags
   ;; need to install all three: rc rdm rp for jump to definition to work
-  :ensure nil
   :defer
   :config
   (rtags-enable-standard-keybindings nil "C-c R"))
 
 (use-package cmake-ide
-  :ensure nil
   :after cc-mode
   :init
   :config
@@ -445,13 +415,11 @@ of the key binding used to execute this command."
       (setq common-lisp-hyperspec-root (concat "file://" path))))
 
 (use-package paredit
-  :ensure nil
   :init
   (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
   :defer)
 
 (use-package paren-face
-  :ensure nil
   :defer)
 
 (defun my-emacs-lisp-mode-hook-fn ()
@@ -548,23 +516,18 @@ inserted between the braces between the braces."
 	       :buffer "*godoc packages*")))
 
 (use-package flycheck
-  :ensure nil
   :defer)
 
 (use-package go-eldoc
-  :ensure nil
   :defer)
 
 (use-package company-go
-  :ensure nil
   :defer)
 
 (use-package go-guru
-  :ensure nil
   :defer)
 
 (use-package go-mode
-  :ensure nil
   :init
   (setq gofmt-command "goimports"     ; use goimports instead of gofmt
 	go-fontify-function-calls nil ; fontifing names of called
@@ -669,7 +632,6 @@ inserted between the braces between the braces."
 ;;; ------
 
 (use-package company-jedi
-  :ensure nil
   :defer)
 
 (defun my-python-mode-hook-fn ()
@@ -688,15 +650,12 @@ inserted between the braces between the braces."
 
 
 (use-package cargo
-  :ensure nil
   :defer)
 
 (use-package racer
-  :ensure nil
   :defer)
 
 (use-package rust-mode
-  :ensure nil
   :init
   (setq company-tooltip-align-annotations t
 	rust-format-on-save t)
@@ -714,7 +673,6 @@ inserted between the braces between the braces."
 ;;; ---------------------------------
 
 (use-package lsp
-  :ensure nil
   :config
   (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
   (lsp-register-client
@@ -727,7 +685,6 @@ inserted between the braces between the braces."
 ;;; ------------------
 
 (use-package meson-mode
-  :ensure nil
   :init
   (setq meson-indent-basic 4))
 
@@ -745,7 +702,6 @@ inserted between the braces between the braces."
   (lsp))
 
 (use-package vala-mode
-  :ensure nil
   :config
   (add-hook 'vala-mode-hook #'my-vala-mode-hook-fn))
 
@@ -760,7 +716,6 @@ inserted between the braces between the braces."
   (dart-goto))
 
 (use-package dart-mode
-  :ensure nil
   :init
   (let ((path (expand-file-name
 	       "~/local/src/flutter/bin/cache/dart-sdk/")))
@@ -787,11 +742,9 @@ inserted between the braces between the braces."
 
 
 (use-package php-mode
-  :ensure nil
   :defer)
 
 (use-package company-php
-  :ensure nil
   :defer)
 
 (defun my-php-mode-hook-fn()
@@ -816,7 +769,6 @@ inserted between the braces between the braces."
   (company-mode 1))
 
 (use-package typescript-mode
-  :ensure nil
   :init
   (setq typescript-indent-level 2)
   :bind
@@ -825,13 +777,12 @@ inserted between the braces between the braces."
    ("C-M-i" . company-indent-or-complete-common)))
 
 (use-package tide
-  :ensure nil
   :config
   (add-hook 'before-save-hook #'tide-format-before-save)
   (add-hook 'typescript-mode-hook #'my-setup-tide-mode))
 
 (use-package ng2-mode
-  :ensure nil)
+  :defer)
 
 
 ;;; Other modes
@@ -845,7 +796,6 @@ inserted between the braces between the braces."
 (setq-default abbrev-mode 1)
 
 (use-package yasnippet
-  :ensure nil
   :init
   (yas-global-mode 1)
   :bind
@@ -864,7 +814,6 @@ inserted between the braces between the braces."
     (my-php-mode-hook-fn))))
 
 (use-package web-mode
-  :ensure nil
   :init
   (add-hook 'web-mode-hook #'my-web-mode-hook-fn)
   (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
@@ -878,7 +827,6 @@ inserted between the braces between the braces."
 
 
 (use-package rainbow-mode
-  :ensure nil
   :defer)
 
 (add-hook 'css-mode-hook #'rainbow-mode)
@@ -889,11 +837,9 @@ inserted between the braces between the braces."
 
 
 (use-package org-bullets
-  :ensure nil
   :defer)
 
 (use-package org
-  :ensure nil
   :init
   (setq org-default-notes-file "~/org/notes.org"
 	org-highlight-latex-and-related '(latex)
@@ -919,7 +865,6 @@ inserted between the braces between the braces."
 
 
 (use-package engine-mode
-  :ensure nil
   :config
   (engine-mode t)
   (defengine duckduckgo
@@ -988,16 +933,13 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;; Fancy mode line and some themes
 
 (use-package powerline
-  :ensure nil
   :config
   (powerline-center-theme))
 
 (use-package nimbus-theme
-  :ensure nil
   :defer)
 
 (use-package leuven-theme
-  :ensure nil
   :defer)
 
 ;;; Easy switching between themes
@@ -1007,7 +949,6 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (set-face-background 'scroll-bar (face-background 'fringe)))
 
 (use-package helm-themes
-  :ensure nil
   :bind
   (("C-c T" . helm-themes))
   :config
@@ -1017,11 +958,9 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;; Toggle between dark and light themes with a key
 
 (use-package solarized-theme
-  :ensure nil
   :defer)
 
 (use-package monokai-theme
-  :ensure nil
   :defer)
 
 (setq my-dark-theme 'solarized-dark

@@ -180,13 +180,9 @@
   :config
   (windmove-default-keybindings))
 
-(use-package helm-spaces
-  ;; customize mode-line-format to add: "(" sp-current-space ")"
-  ;; or in powerline theme add:
-  ;; (powerline-raw (if (and (boundp 'sp-current-space) sp-current-space)
-  ;;                    (concat " (" sp-current-space ")") "") face2)
-  :bind
-  ("C-c b" . helm-spaces))
+(use-package perspective
+  :config
+  (persp-mode))
 
 ;;; Allow for Undo/Redo of window manipulations (such as `C-x 1`)
 

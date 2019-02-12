@@ -161,7 +161,7 @@
    ("s-V" . buffer-flip-backward)
    ("C-g" . buffer-flip-abort)))
 
-;;; fzf and lcd for finding files and directories
+;;; `fzf` and `lcd` for finding files and directories
 
 (defun my-lcd ()
   (interactive)

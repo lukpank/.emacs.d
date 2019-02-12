@@ -985,12 +985,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (use-package solarized-theme
   :defer)
 
-(use-package monokai-theme
-  :defer)
-
 (setq my-dark-theme 'solarized-dark
-      my-light-theme 'solarized-light
-      my-terminal-theme 'monokai)
+      my-light-theme 'solarized-light)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
@@ -1004,10 +1000,14 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 
-(if (or (window-system) (daemonp))
-    (my-toggle-theme)
-  (load-theme my-terminal-theme t)
-  (set-face-background 'default "unspecified-bg" (selected-frame)))
+(my-toggle-theme)
+
+(defun my-frame-setup-fn (&optional frame)
+  (unless (display-graphic-p frame)
+    (set-face-background 'default "unspecified-bg" (or frame (selected-frame)))))
+
+(add-hook 'after-make-frame-functions #'my-frame-setup-fn)
+(add-hook 'window-setup-hook #'my-frame-setup-fn)
 
 ;;; My customization for some used themes
 

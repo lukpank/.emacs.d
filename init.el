@@ -448,13 +448,23 @@ of the key binding used to execute this command."
   (show-paren-mode 1)
   (paren-face-mode))
 
+(use-package slime-company
+  :defer)
+
+(use-package slime
+  :init
+  (slime-setup '(slime-fancy slime-company slime-cl-indent)))
+
 (defun my-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function)
        #'common-lisp-indent-function)
   (paredit-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (show-paren-mode 1)
-  (paren-face-mode))
+  (paren-face-mode)
+  (set (make-local-variable 'company-backends) '(company-slime))
+  (company-mode)
+  (local-set-key "\C-i" #'company-indent-or-complete-common))
 
 (add-hook 'emacs-lisp-mode-hook #'my-emacs-lisp-mode-hook-fn)
 (add-hook 'lisp-mode-hook #'my-lisp-mode-hook-fn)

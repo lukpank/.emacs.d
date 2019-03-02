@@ -616,11 +616,11 @@ inserted between the braces between the braces."
 ;;;    $ go get golang.org/x/tools/cmd/goimports
 ;;;    ```
 
-;;; 5. Install [gocode](https://github.com/nsf/gocode) which can be
-;;;    installed from Debian package `gocode` or with
+;;; 5. Install [gocode](https://github.com/stamblerre/gocode) (a fork
+;;;    with Go modules support) which can be installed with
 
 ;;;    ```
-;;;    $ go get -u github.com/nsf/gocode
+;;;    $ go get -u github.com/stamblerre/gocode
 ;;;    ```
 
 ;;; 6. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)

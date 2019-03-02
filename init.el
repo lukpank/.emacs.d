@@ -469,18 +469,6 @@ of the key binding used to execute this command."
 (add-hook 'emacs-lisp-mode-hook #'my-emacs-lisp-mode-hook-fn)
 (add-hook 'lisp-mode-hook #'my-lisp-mode-hook-fn)
 
-(defun slime-qlot-exec (directory)
-  "from https://github.com/fukamachi/qlot/blob/master/README.markdown"
-  (interactive (list (read-directory-name "Project directory: ")))
-  (slime-start
-   :program "qlot"
-   :program-args '("exec" "ros" "-S" "." "run")
-   :directory directory
-   :name 'qlot
-   :env (list (concat "PATH="
-		      (mapconcat #'identity exec-path ":"))
-	      (concat "QUICKLISP_HOME="
-		      (file-name-as-directory directory) "quicklisp/"))))
 
 ;;; JavaScript
 ;;; ----------

@@ -344,11 +344,12 @@ of the key binding used to execute this command."
 
 ;;; The following Emacs packages [from MELPA](#add-melpa-package-list)
 ;;; need to be installed: [cmake-ide](https://melpa.org/#/cmake-ide),
-;;; [company](https://melpa.org/#/company), and
-;;; [rtags](https://melpa.org/#/rtags).  Package `cmake-ide`
-;;; automatically configures other C++ Emacs packages (here `company`
-;;; and `rtags`) when you open a C/C++ file from a project which uses
-;;; [cmake](https://cmake.org) to build.
+;;; [company](https://melpa.org/#/company),
+;;; [rtags](https://melpa.org/#/rtags), and
+;;; [company-rtags](https://melpa.org/#/company-rtags).  Package
+;;; `cmake-ide` automatically configures other C++ Emacs packages
+;;; (here `company` and `rtags`) when you open a C/C++ file from a
+;;; project which uses [cmake](https://cmake.org) to build.
 
 (defconst my-cc-style
   '("k&r"
@@ -365,10 +366,12 @@ of the key binding used to execute this command."
       rtags-completions-enabled t)
 
 (use-package rtags
-  ;; need to install all three: rc rdm rp for jump to definition to work
   :defer
   :config
   (rtags-enable-standard-keybindings nil "C-c R"))
+
+(use-package company-rtags
+  :defer)
 
 (use-package cmake-ide
   :after cc-mode

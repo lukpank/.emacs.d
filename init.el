@@ -663,6 +663,28 @@ inserted between the braces between the braces."
 (add-hook 'python-mode-hook #'my-python-mode-hook-fn)
 
 
+;;; Nim
+;;; ---
+
+(use-package lsp-mode
+  :commands lsp
+  :config
+  ;; Register `nimlsp` from https://github.com/PMunch/nimlsp
+  (add-to-list 'lsp-language-id-configuration '(nim-mode . "nim"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("nimlsp"))
+		    :major-modes '(nim-mode)
+		    :server-id 'nim-ls)))
+
+(use-package highlight-indent-guides
+  :init
+  (setq highlight-indent-guides-method 'character))
+
+(use-package nim-mode
+  :init
+  (add-hook 'nim-mode-hook 'highlight-indent-guides-mode))
+
+
 ;;; Rust
 ;;; ----
 

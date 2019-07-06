@@ -980,10 +980,10 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   :config
   (powerline-center-theme))
 
-(use-package nimbus-theme
+(use-package zerodark-theme
   :defer)
 
-(use-package leuven-theme
+(use-package parchment-theme
   :defer)
 
 ;;; Easy switching between themes
@@ -1001,11 +1001,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Toggle between dark and light themes with a key
 
-(use-package solarized-theme
-  :defer)
-
-(setq my-dark-theme 'solarized-dark
-      my-light-theme 'solarized-light)
+(setq my-dark-theme 'zerodark
+      my-light-theme 'parchment)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"

@@ -483,10 +483,21 @@ of the key binding used to execute this command."
 ;;; Go
 ;;; --
 
-;;; I use the following setup for the [go-mode] in my `~/.emacs.d/init.el`. This
-;;; adds syntax highlighting but without fontifing names of called
-;;; functions, autocompletion and [eldoc] support, auto formatting of the
-;;; code on save with adding of missing imports ([goimports]).
+;;; <div class="warning">
+;;; This is my new Go setup (partially) based on <a
+;;; href="https://github.com/golang/go/wiki/gopls">gopls</a> (which is
+;;; still in alpha stage) and may not work for you if that is the case
+;;; try my <a href="#old-go-setup">old Go setup
+;;; (below)</a>. <code>gopls</code> supports Go modules outside of
+;;; <code>GOPATH</code> (some Go tools, for example <code>guru</code>
+;;; <a href="https://github.com/golang/go/issues/24661">does not</a>).
+;;; </div>
+
+;;; I use the following setup for the [go-mode] in my
+;;; `~/.emacs.d/init.el`. This adds syntax highlighting but without
+;;; fontifing names of called functions, autocompletion and info on
+;;; called function in mode line, auto formatting of the code on save
+;;; with adding of missing imports ([goimports]).
 
 ;;; It is quite long as I define two interactive functions:
 
@@ -499,7 +510,6 @@ of the key binding used to execute this command."
 ;;; packages.
 
 ;;; [go-mode]: https://github.com/dominikh/go-mode.el
-;;; [eldoc]: http://emacswiki.org/emacs/ElDoc
 ;;; [goimports]: https://godoc.org/golang.org/x/tools/cmd/goimports
 
 (defun my-go-electric-brace ()
@@ -533,16 +543,16 @@ inserted between the braces between the braces."
 			  :candidates (my-go-list-packages))
 	       :buffer "*godoc packages*")))
 
-(use-package flycheck
-  :defer)
+(use-package lsp-mode
+  :commands lsp)
 
-(use-package go-eldoc
-  :defer)
-
-(use-package company-go
+(use-package company-lsp
   :defer)
 
 (use-package go-guru
+  :defer)
+
+(use-package company
   :defer)
 
 (use-package go-mode
@@ -550,34 +560,23 @@ inserted between the braces between the braces."
   (setq gofmt-command "goimports"     ; use goimports instead of gofmt
 	go-fontify-function-calls nil ; fontifing names of called
 				      ; functions is too much for me
-	company-idle-delay nil)
-  :config
-  (require 'go-guru)
+	company-idle-delay nil)	; avoid auto completion popup, use TAB
+				; to show it
   :bind
   (:map go-mode-map
-   ("M-." . go-guru-definition)
-   ("C-c d" . godoc-at-point)
-   ("C-c g" . godoc)
-   ("C-c h" . go-guru-hl-identifier)
-   ("C-c P" . my-godoc-package)
-   ("{" . my-go-electric-brace)
-   ("C-i" . company-indent-or-complete-common)
-   ("C-M-i" . company-indent-or-complete-common))
+	("C-c d" . lsp-describe-thing-at-point)
+	("C-c g" . godoc)
+	("C-c P" . my-godoc-package)
+	("{" . my-go-electric-brace)
+	("C-i" . company-indent-or-complete-common)
+	("C-M-i" . company-indent-or-complete-common)
+   )
   :config
+  (require 'go-guru)
+  (add-hook 'go-mode-hook #'lsp)
+  (add-hook 'go-mode-hook #'smartparens-mode)
   ;; run gofmt/goimports when saving the file
-  (add-hook 'before-save-hook #'gofmt-before-save)
-
-  (defun my-go-mode-hook-fn ()
-    (go-eldoc-setup)
-    (set (make-local-variable 'company-backends) '(company-go))
-    (company-mode)
-    (smartparens-mode 1)
-    (flycheck-mode 1)
-    (setq imenu-generic-expression
-	  '(("type" "^type *\\([^ \t\n\r\f]*\\)" 1)
-	    ("func" "^func *\\(.*\\) {" 1))))
-
-  (add-hook 'go-mode-hook #'my-go-mode-hook-fn))
+  (add-hook 'before-save-hook #'gofmt-before-save))
 
 ;; Go/speedbar integration
 
@@ -589,61 +588,58 @@ inserted between the braces between the braces."
 ;;; the identifier at point (use `M-,` to jump back as for normal tags
 ;;; in Emacs 25.1) and you can also use `C-c C-d` for a short
 ;;; description of the identifier at point (actually it is constantly
-;;; displayed in the mode line by enabled Go [eldoc] support). You can
+;;; displayed in the mode line by enabled lsp support). You can
 ;;; use `C-c d` for a longer description of the identifier at point.
 
 ;;; For this to work you have to
 
-;;; 1. Install [from MELPA](#add-melpa-package-list) the following Emacs
-;;;    packages: [go-mode], [company-go], [go-eldoc], and [go-guru].
+;;; 1. After adding above to your emacs config file see how to
+;;;    [install from MELPA all required packages](#add-melpa-package-list).
+;;;    Or just install [go-mode], [go-guru], [company-lsp].
 
 ;;; 2. Install Go compiler. Under Debian you install `golang-go` package
 ;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
-;;;    1.3.3 compared to the current 1.11, so you may
+;;;    1.3.3 compared to the current 1.12, so you may
 ;;;    consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
-;;;    search for the package for your system or otherwise
+;;;    search for the package for your system or
 ;;;    see [Getting started](https://golang.org/doc/install).
 
-;;; 3. Install [godef](https://godoc.org/github.com/rogpeppe/godef)
+;;; 3. Install [gopls](https://github.com/golang/go/wiki/gopls)
 ;;;    with
 
 ;;;    ```
-;;;    $ go get github.com/rogpeppe/godef
+;;;    $ go get -u golang.org/x/tools/cmd/gopls
 ;;;    ```
 
 ;;; 4. Install [goimports] which can be installed from Debian package
 ;;;    `golang-go.tools` or with
 
 ;;;    ```
-;;;    $ go get golang.org/x/tools/cmd/goimports
+;;;    $ go get -u golang.org/x/tools/cmd/goimports
 ;;;    ```
 
-;;; 5. Install [gocode](https://github.com/stamblerre/gocode) (a fork
-;;;    with Go modules support) which can be installed with
-
-;;;    ```
-;;;    $ go get -u github.com/stamblerre/gocode
-;;;    ```
-
-;;; 6. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
+;;; 5. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
 ;;;    with
 
 ;;;    ```
-;;;    $ go get golang.org/x/tools/cmd/guru
+;;;    $ go get -u golang.org/x/tools/cmd/guru
 ;;;    ```
 
-;;; 7. Add your `$GOPATH/bin` to your `PATH` environment variable (or copy
-;;;    the `godef`, `goimports`, `gocode`, and `guru` executables from
+;;; 6. Add your `$GOPATH/bin` to your `PATH` environment variable (or
+;;;    copy the `gopls`, `goimports`, and `guru` executables from
 ;;;    `$GOPATH/bin` to some directory which is in your `PATH`).
 
 ;;; See also
-;;; [Writing Go in Emacs](http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/)
+;;; [Go, pls stop breaking my editor - GopherCon SG 2019](https://www.youtube.com/watch?v=gZ7N3HulAb0)
+;;; and [Writing Go in Emacs](http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/)
 ;;; for more info.
 
-;;; [company-go]: https://melpa.org/#/company-go
-;;; [go-eldoc]: https://melpa.org/#/go-eldoc
+;;; [company-lsp]: https://melpa.org/#/company-lsp
 ;;; [go-guru]: https://melpa.org/#/go-guru
+
+
+;;; {{old-go.el}}
 
 
 ;;; Python

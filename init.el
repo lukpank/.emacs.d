@@ -937,6 +937,13 @@ inserted between the braces between the braces."
   (delete-window))
 
 
+;;; API documentation
+;;; -----------------
+
+(when (require 'devdocs-lookup nil t)
+  (devdocs-setup))
+
+
 ;;; Appearance and custom file
 ;;; ==========================
 

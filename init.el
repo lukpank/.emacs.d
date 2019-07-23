@@ -976,10 +976,10 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Fancy mode line and some themes
 
-(use-package zerodark-theme
+(use-package zenburn-theme
   :defer)
 
-(use-package parchment-theme
+(use-package leuven-theme
   :defer)
 
 ;;; Easy switching between themes
@@ -996,8 +996,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Toggle between dark and light themes with a key
 
-(setq my-dark-theme 'zerodark
-      my-light-theme 'parchment)
+(setq my-dark-theme 'zenburn
+      my-light-theme 'leuven)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"

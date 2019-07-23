@@ -194,9 +194,9 @@
   :config
   (windmove-default-keybindings))
 
-(use-package perspective
+(use-package eyebrowse
   :config
-  (persp-mode))
+  (eyebrowse-mode))
 
 ;;; Allow for Undo/Redo of window manipulations (such as `C-x 1`)
 
@@ -976,10 +976,6 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Fancy mode line and some themes
 
-(use-package powerline
-  :config
-  (powerline-center-theme))
-
 (use-package zerodark-theme
   :defer)
 
@@ -989,7 +985,6 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 ;;; Easy switching between themes
 
 (defun my-helm-themes-after ()
-  (powerline-reset)
   (set-face-background 'scroll-bar (face-background 'fringe)))
 
 (use-package helm-themes

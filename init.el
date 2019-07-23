@@ -713,7 +713,8 @@ inserted between the braces between the braces."
   :config
   (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
   (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("vala-language-server"))
+   (make-lsp-client :new-connection (lsp-stdio-connection
+				     '("vala-language-server"))
                     :major-modes '(vala-mode)
                     :server-id 'vala-ls)))
 
@@ -962,7 +963,8 @@ inserted between the braces between the braces."
 
 ;;; Easy switching between some fonts
 
-(setq my-font-list '("Fantasque Sans Mono" "Go mono" "IBM 3270" "Inconsolata" "Monofur" "Monoid" "mononoki"))
+(setq my-font-list '("Fantasque Sans Mono" "Go mono" "IBM 3270"
+		     "Inconsolata" "Monofur" "Monoid" "mononoki"))
 
 (defun my-set-frame-font (font-name size &optional frames)
   "Set font to one of the fonts from `my-font-list'
@@ -1022,7 +1024,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (defun my-frame-setup-fn (&optional frame)
   (unless (display-graphic-p frame)
-    (set-face-background 'default "unspecified-bg" (or frame (selected-frame)))))
+    (set-face-background 'default "unspecified-bg"
+			 (or frame (selected-frame)))))
 
 (add-hook 'after-make-frame-functions #'my-frame-setup-fn)
 (add-hook 'window-setup-hook #'my-frame-setup-fn)

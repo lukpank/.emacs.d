@@ -1038,4 +1038,5 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 
 (setq custom-file "~/.emacs.d/custom.el")
-(load custom-file)
+(if (file-exists-p custom-file)
+    (load custom-file))

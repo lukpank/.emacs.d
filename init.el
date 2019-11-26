@@ -754,32 +754,32 @@ inserted between the braces between the braces."
 ;;; Dart
 ;;; ----
 
+;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
+;;; dart-mode.
 
-(defun my-dart-goto ()
-  (interactive)
-  (xref-push-marker-stack)
-  (dart-goto))
 
 (use-package dart-mode
   :init
-  (let ((path (expand-file-name
-	       "~/local/src/flutter/bin/cache/dart-sdk/")))
-    (if (file-accessible-directory-p path)
-	(setq dart-sdk-path path)))
-  (setq dart-enable-analysis-server t)
+  (setq lsp-dart-analysis-sdk-dir "~/local/flutter/bin/cache/dart-sdk/")
   :bind
   (:map dart-mode-map
-   ("M-." . my-dart-goto)
-   ("M-/" . dabbrev-expand)
-   ("C-i" . company-indent-or-complete-common)
-   ("C-M-i" . company-indent-or-complete-common))
+	("C-i" . company-indent-or-complete-common)
+	("C-M-i" . company-indent-or-complete-common))
   :config
-
   (defun my-dart-mode-hook-fn ()
     (smartparens-mode 1)
-    (flycheck-mode 1))
-
+    (flycheck-mode 1)
+    (company-mode 1)
+    (lsp))
   (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn))
+
+(use-package flutter
+  :after dart-mode
+  :init
+  (setq flutter-sdk-path "~/local/flutter/")
+  :bind
+  (:map dart-mode-map
+        ("C-M-x" . #'flutter-run-or-hot-reload)))
 
 
 ;;; PHP

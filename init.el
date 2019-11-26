@@ -757,6 +757,7 @@ inserted between the braces between the braces."
 ;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
 ;;; dart-mode.
 
+(use-package format-all)
 
 (use-package dart-mode
   :init
@@ -770,6 +771,7 @@ inserted between the braces between the braces."
     (smartparens-mode 1)
     (flycheck-mode 1)
     (company-mode 1)
+    (format-all-mode)
     (lsp))
   (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn))
 

@@ -1,5 +1,4 @@
-;;; Old Go setup
-;;; ------------
+;;; ### Old Go setup ###
 
 ;;; <div class="warning">
 ;;; This is my old Go setup, you may try the <a href="#go">new setup

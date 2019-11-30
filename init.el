@@ -15,11 +15,10 @@
 
 
 ;;; Basic settings
-;;; ==============
+;;; --------------
 
 
-;;; Directory with local Emacs lisp files
-;;; -------------------------------------
+;;; ### Directory with local Emacs lisp files ###
 
 ;;; I add a directory to the lisp search path where I can add my own
 ;;; lisp code and (now less often) downloaded lisp code which is not
@@ -32,8 +31,7 @@
       (add-to-list 'load-path path t)))
 
 
-;;; Add MELPA package list
-;;; ----------------------
+;;; ### Add MELPA package list ###
 
 ;;; You can install many Emacs packages from [MELPA](https://melpa.org)
 ;;; repository. To add MELPA to the package list add the following to your
@@ -70,14 +68,12 @@
 ;;; `use-package` to work.
 
 
-;;; Other settings
-;;; --------------
+;;; ### Other settings ###
 
 (setq recentf-max-saved-items 100)
 
 
-;;; Workaround for security vulnerability in Emacs >= 21.1 and < 25.3
-;;; -----------------------------------------------------------------
+;;; ### Workaround for security vulnerability in Emacs >= 21.1 and < 25.3 ###
 ;;;
 ;;;  See [Changes in Emacs 25.3](https://www.gnu.org/software/emacs/news/NEWS.25.3)
 
@@ -87,12 +83,10 @@
 
 
 ;;; Productivity
-;;; ============
+;;; ------------
 
 
-;;; More efficient buffer/file selection
-;;; ------------------------------------
-
+;;; ### More efficient buffer/file selection ###
 
 (use-package helm
   :init
@@ -176,8 +170,7 @@
    ("C-c d" . my-lcd)))
 
 
-;;; Window selection enhancements
-;;; -----------------------------
+;;; ### Window selection enhancements ###
 
 
 (use-package ace-window
@@ -203,9 +196,7 @@
 (winner-mode 1)
 
 
-;;; In buffer movement enhancements
-;;; -------------------------------
-
+;;; ### In buffer movement enhancements ###
 
 ;;; Remind of keys than can follow in a key sequence
 
@@ -238,9 +229,7 @@
   ("C-c G" . goto-last-change))
 
 
-;;; Editing enhancements
-;;; ---------------------
-
+;;; ### Editing enhancements ###
 
 ;;; Context aware insertion of pairs of parenthesis
 
@@ -262,9 +251,7 @@
   (add-hook 'prog-mode-hook #'ws-butler-mode))
 
 
-;;; Convenience functions, aliases, and key bindings
-;;; ------------------------------------------------
-
+;;; ### Convenience functions, aliases, and key bindings ###
 
 ;; Convenience functions and aliases
 
@@ -305,9 +292,7 @@
 	git-messenger:use-magit-popup t))
 
 
-;;; Switching buffers
-;;; -----------------
-
+;;; ### Switching buffers ###
 
 ;;; Set keys from `s-s a` to `s-s z` to switch to buffers from a register from a to z
 
@@ -336,11 +321,10 @@ of the key binding used to execute this command."
 
 
 ;;; Programming languages
-;;; =====================
+;;; ---------------------
 
 
-;;; C and C++
-;;; ---------
+;;; ### C and C++ ###
 
 ;;; The following Emacs packages [from MELPA](#add-melpa-package-list)
 ;;; need to be installed: [cmake-ide](https://melpa.org/#/cmake-ide),
@@ -419,9 +403,7 @@ of the key binding used to execute this command."
 ;;;    | `C-c r ;` | `rtags-find-file` (in the current project no metter in which directory)
 
 
-;;; Lisp and Emacs lisp
-;;; -------------------
-
+;;; ### Lisp and Emacs lisp ###
 
 ;; in emacs 25.1: M-. runs xref-find-definitions,  M-, jumps back
 (global-set-key (kbd "C-c e l") #'find-library)
@@ -473,15 +455,12 @@ of the key binding used to execute this command."
 (add-hook 'lisp-mode-hook #'my-lisp-mode-hook-fn)
 
 
-;;; JavaScript
-;;; ----------
-
+;;; ### JavaScript ###
 
 (setq js-indent-level 8)
 
 
-;;; Go
-;;; --
+;;; ###  Go ###
 
 ;;; <div class="warning">
 ;;; This is my new Go setup (partially) based on <a
@@ -642,8 +621,7 @@ inserted between the braces between the braces."
 ;;; {{old-go.el}}
 
 
-;;; Python
-;;; ------
+;;; ### Python ###
 
 (use-package company-jedi
   :defer)
@@ -659,8 +637,7 @@ inserted between the braces between the braces."
 (add-hook 'python-mode-hook #'my-python-mode-hook-fn)
 
 
-;;; Nim
-;;; ---
+;;; ### Nim ###
 
 (use-package lsp-mode
   :commands lsp
@@ -681,9 +658,7 @@ inserted between the braces between the braces."
   (add-hook 'nim-mode-hook 'highlight-indent-guides-mode))
 
 
-;;; Rust
-;;; ----
-
+;;; ### Rust ###
 
 (use-package cargo
   :defer)
@@ -705,8 +680,7 @@ inserted between the braces between the braces."
    ("C-i" . company-indent-or-complete-common)))
 
 
-;;; Language server with Vala support
-;;; ---------------------------------
+;;; ### Language server with Vala support ###
 
 (use-package lsp-mode
   :commands lsp
@@ -722,16 +696,14 @@ inserted between the braces between the braces."
   :defer)
 
 
-;;; Meson build system
-;;; ------------------
+;;; ### Meson build system ###
 
 (use-package meson-mode
   :init
   (setq meson-indent-basic 4))
 
 
-;;; Vala
-;;; ----
+;;; ### Vala ###
 
 (use-package dumb-jump
   :defer)
@@ -751,8 +723,7 @@ inserted between the braces between the braces."
   (add-hook 'vala-mode-hook #'my-vala-mode-hook-fn))
 
 
-;;; Dart
-;;; ----
+;;; ### Dart ###
 
 ;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
 ;;; dart-mode.
@@ -784,9 +755,7 @@ inserted between the braces between the braces."
         ("C-M-x" . #'flutter-run-or-hot-reload)))
 
 
-;;; PHP
-;;; ---
-
+;;; ### PHP ###
 
 (use-package php-mode
   :defer)
@@ -804,9 +773,7 @@ inserted between the braces between the braces."
 (add-hook 'php-mode-hook #'my-php-mode-hook-fn)
 
 
-;;; TypeScript
-;;; ----------
-
+;;; ### TypeScript ###
 
 (defun my-setup-tide-mode ()
   (tide-setup)
@@ -833,12 +800,10 @@ inserted between the braces between the braces."
 
 
 ;;; Other modes
-;;; ===========
+;;; -----------
 
 
-;;; Yasnippet and abbrev mode
-;;; -------------------------
-
+;;; ### Yasnippet and abbrev mode ###
 
 (setq-default abbrev-mode 1)
 
@@ -851,9 +816,7 @@ inserted between the braces between the braces."
 	("C-c & &" . org-mark-ring-goto)))
 
 
-;;; Web mode
-;;; --------
-
+;;; ### Web mode ###
 
 (defun my-web-mode-hook-fn()
   (cond
@@ -869,9 +832,7 @@ inserted between the braces between the braces."
 	("C-i" . company-indent-or-complete-common)))
 
 
-;;; CSS
-;;; ---
-
+;;; ### CSS ###
 
 (use-package rainbow-mode
   :defer)
@@ -879,9 +840,7 @@ inserted between the braces between the braces."
 (add-hook 'css-mode-hook #'rainbow-mode)
 
 
-;;; Org mode
-;;; --------
-
+;;; ### Org mode ###
 
 (use-package org-bullets
   :defer)
@@ -907,9 +866,7 @@ inserted between the braces between the braces."
   (require 'ox-beamer))
 
 
-;;; Search engines
-;;; --------------
-
+;;; ### Search engines ###
 
 (use-package engine-mode
   :config
@@ -922,8 +879,7 @@ inserted between the braces between the braces."
     :keybinding "g"))
 
 
-;;; EWW browser
-;;; -----------
+;;; ### EWW browser ###
 
 (setq browse-url-browser-function #'eww-browse-url)
 
@@ -940,19 +896,17 @@ inserted between the braces between the braces."
   (delete-window))
 
 
-;;; API documentation
-;;; -----------------
+;;; ### API documentation ###
 
 (when (require 'devdocs-lookup nil t)
   (devdocs-setup))
 
 
 ;;; Appearance and custom file
-;;; ==========================
+;;; --------------------------
 
 
-;;; Appearance
-;;; ----------
+;;; ### Appearance ###
 
 ;;; Minimalistic look
 
@@ -1045,9 +999,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
     '(region ((t (:background "#505050"))))))
 
 
-;;; Use separate custom file
-;;; ------------------------
-
+;;; ### Use separate custom file ###
 
 (setq custom-file "~/.emacs.d/custom.el")
 (if (file-exists-p custom-file)

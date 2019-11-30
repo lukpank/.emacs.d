@@ -597,7 +597,7 @@ inserted between the braces between the braces."
 ;;;    ```
 
 ;;; 5. Add your `$GOPATH/bin` to your `PATH` environment variable (or
-;;;    copy the `gopls`, `goimports`, and `guru` executables from
+;;;    copy the `gopls` and `guru` executables from
 ;;;    `$GOPATH/bin` to some directory which is in your `PATH`).
 
 ;;; See also

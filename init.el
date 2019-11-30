@@ -588,7 +588,7 @@ inserted between the braces between the braces."
 ;;;    (in your home directory, not inside some Go module)
 
 ;;;    ```
-;;;    $ GO111MODULE=on go get -u golang.org/x/tools/cmd/gopls@latest
+;;;    $ GO111MODULE=on go get golang.org/x/tools/cmd/gopls@latest
 ;;;    ```
 
 ;;; 4. Install [goimports] which can be installed from Debian package

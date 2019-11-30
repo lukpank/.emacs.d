@@ -476,7 +476,7 @@ of the key binding used to execute this command."
 ;;; `~/.emacs.d/init.el`. This adds syntax highlighting but without
 ;;; fontifing names of called functions, autocompletion and info on
 ;;; called function in mode line, auto formatting of the code on save
-;;; with adding of missing imports ([goimports]).
+;;; with adding of missing imports.
 
 ;;; It is quite long as I define two interactive functions:
 
@@ -489,7 +489,6 @@ of the key binding used to execute this command."
 ;;; packages.
 
 ;;; [go-mode]: https://github.com/dominikh/go-mode.el
-;;; [goimports]: https://godoc.org/golang.org/x/tools/cmd/goimports
 
 (defun my-go-electric-brace ()
   "Insert an opening brace may be with the closing one.
@@ -536,8 +535,7 @@ inserted between the braces between the braces."
 
 (use-package go-mode
   :init
-  (setq gofmt-command "goimports"     ; use goimports instead of gofmt
-	go-fontify-function-calls nil ; fontifing names of called
+  (setq go-fontify-function-calls nil ; fontifing names of called
 				      ; functions is too much for me
 	company-idle-delay nil)	; avoid auto completion popup, use TAB
 				; to show it
@@ -554,8 +552,9 @@ inserted between the braces between the braces."
   (require 'go-guru)
   (add-hook 'go-mode-hook #'lsp)
   (add-hook 'go-mode-hook #'smartparens-mode)
-  ;; run gofmt/goimports when saving the file
-  (add-hook 'before-save-hook #'gofmt-before-save))
+  ;; reformat code and add missing (or remove old) imports
+  (add-hook 'before-save-hook #'lsp-format-buffer)
+  (add-hook 'before-save-hook #'lsp-organize-imports))
 
 ;; Go/speedbar integration
 
@@ -591,21 +590,14 @@ inserted between the braces between the braces."
 ;;;    $ GO111MODULE=on go get golang.org/x/tools/cmd/gopls@latest
 ;;;    ```
 
-;;; 4. Install [goimports] which can be installed from Debian package
-;;;    `golang-go.tools` or with
-
-;;;    ```
-;;;    $ go get -u golang.org/x/tools/cmd/goimports
-;;;    ```
-
-;;; 5. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
+;;; 4. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
 ;;;    with
 
 ;;;    ```
 ;;;    $ go get -u golang.org/x/tools/cmd/guru
 ;;;    ```
 
-;;; 6. Add your `$GOPATH/bin` to your `PATH` environment variable (or
+;;; 5. Add your `$GOPATH/bin` to your `PATH` environment variable (or
 ;;;    copy the `gopls`, `goimports`, and `guru` executables from
 ;;;    `$GOPATH/bin` to some directory which is in your `PATH`).
 

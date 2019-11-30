@@ -464,7 +464,7 @@ of the key binding used to execute this command."
 
 ;;; <div class="warning">
 ;;; This is my new Go setup (partially) based on <a
-;;; href="https://github.com/golang/go/wiki/gopls">gopls</a> (which is
+;;; href="https://github.com/golang/tools/blob/master/gopls/README.md">gopls</a> (which is
 ;;; still in alpha stage) and may not work for you if that is the case
 ;;; try my <a href="#old-go-setup">old Go setup
 ;;; (below)</a>. <code>gopls</code> supports Go modules outside of

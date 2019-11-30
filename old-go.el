@@ -121,10 +121,9 @@ inserted between the braces between the braces."
 ;;; 1. Install [from MELPA](#add-melpa-package-list) the following Emacs
 ;;;    packages: [go-mode], [company-go], [go-eldoc], and [go-guru].
 
-;;; 2. Install Go compiler. Under Debian you install `golang-go` package
-;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
-;;;    1.3.3 compared to the current 1.11, so you may
-;;;    consider
+;;; 2. Install Go compiler. Under Debian you may install `golang` package
+;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.13,
+;;;    so you may consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
 ;;;    search for the package for your system or otherwise
 ;;;    see [Getting started](https://golang.org/doc/install).

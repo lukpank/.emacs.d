@@ -575,10 +575,9 @@ inserted between the braces between the braces."
 ;;;    [install from MELPA all required packages](#add-melpa-package-list).
 ;;;    Or just install [go-mode], [go-guru], [company-lsp].
 
-;;; 2. Install Go compiler. Under Debian you install `golang-go` package
-;;;    (but in Debian 9 Stretch it is 1.7 while in Debian 8 Jessie it is
-;;;    1.3.3 compared to the current 1.12, so you may
-;;;    consider
+;;; 2. Install Go compiler. Under Debian you may install `golang` package
+;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.13,
+;;;    so you may consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
 ;;;    search for the package for your system or
 ;;;    see [Getting started](https://golang.org/doc/install).

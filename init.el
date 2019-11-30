@@ -605,11 +605,11 @@ inserted between the braces between the braces."
 ;;;    search for the package for your system or
 ;;;    see [Getting started](https://golang.org/doc/install).
 
-;;; 3. Install [gopls](https://github.com/golang/go/wiki/gopls)
-;;;    with
+;;; 3. Install [gopls](https://github.com/golang/go/wiki/gopls) with
+;;;    (in your home directory, not inside some Go module)
 
 ;;;    ```
-;;;    $ go get -u golang.org/x/tools/cmd/gopls
+;;;    $ GO111MODULE=on go get -u golang.org/x/tools/cmd/gopls@latest
 ;;;    ```
 
 ;;; 4. Install [goimports] which can be installed from Debian package

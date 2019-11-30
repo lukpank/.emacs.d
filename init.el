@@ -1,7 +1,7 @@
 ;;; Below are fragments from my Emacs configuration file
 ;;; (`~/.emacs.d/init.el`).
 
-;;; <!-- more -->
+;;; <!--more-->
 
 ;;; The newest version of this config is available from a [github
 ;;; repo](https://github.com/lukpank/.emacs.d).

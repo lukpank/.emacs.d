@@ -719,8 +719,6 @@ inserted between the braces between the braces."
 ;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
 ;;; dart-mode.
 
-(use-package format-all)
-
 (use-package dart-mode
   :init
   (setq lsp-dart-analysis-sdk-dir "~/local/flutter/bin/cache/dart-sdk/")
@@ -733,9 +731,9 @@ inserted between the braces between the braces."
     (smartparens-mode 1)
     (flycheck-mode 1)
     (company-mode 1)
-    (format-all-mode)
     (lsp))
-  (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn))
+  (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn)
+  (add-hook 'before-save-hook #'lsp-format-buffer))
 
 (use-package flutter
   :after dart-mode

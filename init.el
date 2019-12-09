@@ -654,24 +654,25 @@ inserted between the braces between the braces."
 
 ;;; ### Rust ###
 
-(use-package cargo
-  :defer)
+;;; If you have [Rustup](https://www.rust-lang.org/learn/get-started)
+;;; than you should install component `rls` with the command
+;;;
+;;; ```
+;;; $ rustup component add rls
+;;; ```
+;;;
+;;; and then add to config file
 
-(use-package racer
-  :defer)
+(use-package lsp-mode
+  :commands lsp)
 
-(use-package rust-mode
+(use-package rustic
   :init
   (setq company-tooltip-align-annotations t
-	rust-format-on-save t)
-  :config
-  (add-hook 'rust-mode-hook #'company-mode)
-  (add-hook 'rust-mode-hook #'cargo-minor-mode)
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
+	rustic-format-on-save t)
   :bind
-  (:map rust-mode-map
-   ("C-i" . company-indent-or-complete-common)))
+  (:map rustic-mode-map
+	("C-i" . company-indent-or-complete-common)))
 
 
 ;;; ### Language server with Vala support ###

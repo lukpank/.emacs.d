@@ -167,7 +167,7 @@
   (autoload 'fzf/start "fzf")
   :bind
   (("C-c f" . fzf)
-   ("C-c d" . my-lcd)))
+   ("C-c D" . my-lcd)))
 
 
 ;;; ### Window selection enhancements ###
@@ -322,6 +322,17 @@ of the key binding used to execute this command."
 
 ;;; Programming languages
 ;;; ---------------------
+
+
+;;; ### Global bindings for programming modes ###
+
+(global-set-key (kbd "C-c d") #'lsp-describe-thing-at-point)
+(global-set-key (kbd "C-c e n") #'flymake-goto-next-error)
+(global-set-key (kbd "C-c e p") #'flymake-goto-prev-error)
+(global-set-key (kbd "C-c e r") #'lsp-find-references)
+(global-set-key (kbd "C-c e R") #'lsp-rename)
+(global-set-key (kbd "C-c e i") #'lsp-find-implementation)
+(global-set-key (kbd "C-c e t") #'lsp-find-type-definition)
 
 
 ;;; ### C and C++ ###

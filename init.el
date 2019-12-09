@@ -736,7 +736,8 @@ inserted between the braces between the braces."
     (company-mode 1)
     (lsp))
   (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn)
-  (add-hook 'before-save-hook #'lsp-format-buffer))
+  (add-hook 'before-save-hook #'lsp-format-buffer)
+  (add-hook 'before-save-hook #'lsp-organize-imports))
 
 (use-package flutter
   :after dart-mode

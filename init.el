@@ -654,25 +654,54 @@ inserted between the braces between the braces."
 
 ;;; ### Rust ###
 
-;;; If you have [Rustup](https://www.rust-lang.org/learn/get-started)
-;;; than you should install component `rls` with the command
+;;; If you have Emacs 26 than you need
+;;; [Rustup](https://www.rust-lang.org/learn/get-started) and using
+;;; Rustup you should install component
+;;; [rls](https://github.com/rust-lang/rls) with the command
 ;;;
 ;;; ```
 ;;; $ rustup component add rls
 ;;; ```
 ;;;
-;;; and then add to config file
+;;; and then add
 
 (use-package lsp-mode
+  :if (>= emacs-major-version 26)
   :commands lsp)
 
 (use-package rustic
+  :if (>= emacs-major-version 26)
   :init
   (setq company-tooltip-align-annotations t
 	rustic-format-on-save t)
   :bind
   (:map rustic-mode-map
 	("C-i" . company-indent-or-complete-common)))
+
+;;; But if you have Emacs older than 26 than you should install
+;;; [racer](https://github.com/racer-rust/racer) and add
+
+(use-package cargo
+  :if (< emacs-major-version 26)
+  :defer)
+
+(use-package racer
+  :if (< emacs-major-version 26)
+  :defer)
+
+(use-package rust-mode
+  :if (< emacs-major-version 26)
+  :init
+  (setq company-tooltip-align-annotations t
+	rust-format-on-save t)
+  :config
+  (add-hook 'rust-mode-hook #'company-mode)
+  (add-hook 'rust-mode-hook #'cargo-minor-mode)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  :bind
+  (:map rust-mode-map
+   ("C-i" . company-indent-or-complete-common)))
 
 
 ;;; ### Language server with Vala support ###

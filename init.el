@@ -332,15 +332,42 @@ of the key binding used to execute this command."
 ;;; ---------------------
 
 
-;;; ### Global bindings for programming modes ###
+;;; ### Common settings for programming modes ###
 
-(global-set-key (kbd "C-c d") #'lsp-describe-thing-at-point)
-(global-set-key (kbd "C-c e n") #'flymake-goto-next-error)
-(global-set-key (kbd "C-c e p") #'flymake-goto-prev-error)
-(global-set-key (kbd "C-c e r") #'lsp-find-references)
-(global-set-key (kbd "C-c e R") #'lsp-rename)
-(global-set-key (kbd "C-c e i") #'lsp-find-implementation)
-(global-set-key (kbd "C-c e t") #'lsp-find-type-definition)
+;;; For modes using [company](https://company-mode.github.io/) for tab
+;;; completion add
+
+(use-package company
+  :init
+  (setq company-idle-delay nil  ; avoid auto completion popup, use TAB
+				; to show it
+	company-tooltip-align-annotations t)
+  :hook (after-init . global-company-mode)
+  :bind
+  (:map prog-mode-map
+	("C-i" . company-indent-or-complete-common)
+	("C-M-i" . completion-at-point)))
+
+;;; For modes that also use Language Server Protocol from
+;;; [lsp-mode](https://github.com/emacs-lsp/lsp-mode) add
+
+(use-package company-lsp
+  :defer)
+
+(use-package lsp-mode
+  :commands lsp
+  ;; reformat code and add missing (or remove old) imports
+  :hook ((before-save . lsp-format-buffer)
+	 (before-save . lsp-organize-imports))
+  :bind (("C-c d" . lsp-describe-thing-at-point)
+	 ("C-c e n" . flymake-goto-next-error)
+	 ("C-c e p" . flymake-goto-prev-error)
+	 ("C-c e r" . lsp-find-references)
+	 ("C-c e R" . lsp-rename)
+	 ("C-c e i" . lsp-find-implementation)
+	 ("C-c e t" . lsp-find-type-definition)))
+
+;;; [my common settings for programming modes]: #common-settings-for-programming-modes
 
 
 ;;; ### C and C++ ###
@@ -509,6 +536,9 @@ of the key binding used to execute this command."
 
 ;;; [go-mode]: https://github.com/dominikh/go-mode.el
 
+;;; For **tab completion** and **lsp** support also add [my common
+;;; settings for programming modes].
+
 (defun my-go-electric-brace ()
   "Insert an opening brace may be with the closing one.
 If there is a space before the brace also adds new line with
@@ -532,40 +562,20 @@ inserted between the braces between the braces."
 			  :candidates (go-packages))
 	       :buffer "*godoc packages*")))
 
-(use-package lsp-mode
-  :commands lsp)
-
-(use-package company-lsp
-  :defer)
-
 (use-package go-guru
-  :defer)
-
-(use-package company
-  :defer)
+  :after go-mode)
 
 (use-package go-mode
   :init
-  (setq go-fontify-function-calls nil ; fontifing names of called
-				      ; functions is too much for me
-	company-idle-delay nil)	; avoid auto completion popup, use TAB
-				; to show it
+  (setq go-fontify-function-calls nil)  ; fontifing names of called
+					; functions is too much for me
   :bind
   (:map go-mode-map
-	("C-c d" . lsp-describe-thing-at-point)
-	("C-c g" . godoc)
+	("C-c e g" . godoc)
 	("C-c P" . my-godoc-package)
-	("{" . my-go-electric-brace)
-	("C-i" . company-indent-or-complete-common)
-	("C-M-i" . company-indent-or-complete-common)
-   )
-  :config
-  (require 'go-guru)
-  (add-hook 'go-mode-hook #'lsp)
-  (add-hook 'go-mode-hook #'smartparens-mode)
-  ;; reformat code and add missing (or remove old) imports
-  (add-hook 'before-save-hook #'lsp-format-buffer)
-  (add-hook 'before-save-hook #'lsp-organize-imports))
+	("{" . my-go-electric-brace))
+  :hook ((go-mode . lsp)
+	 (go-mode . smartparens-mode)))
 
 ;; Go/speedbar integration
 
@@ -671,20 +681,17 @@ inserted between the braces between the braces."
 ;;; $ rustup component add rls
 ;;; ```
 ;;;
-;;; and then add
+;;; For **tab completion** and **lsp** support add [my common settings
+;;; for programming modes] and then add
 
-(use-package lsp-mode
-  :if (>= emacs-major-version 26)
-  :commands lsp)
+(defun my-rustic-mode-hook-fn ()
+  "needed for lsp-format-buffer to indent with 4 spaces"
+  (setq tab-width 4
+	indent-tabs-mode nil))
 
 (use-package rustic
   :if (>= emacs-major-version 26)
-  :init
-  (setq company-tooltip-align-annotations t
-	rustic-format-on-save t)
-  :bind
-  (:map rustic-mode-map
-	("C-i" . company-indent-or-complete-common)))
+  :hook (rustic-mode . my-rustic-mode-hook-fn))
 
 ;;; But if you have Emacs older than 26 than you should install
 ;;; [racer](https://github.com/racer-rust/racer) and add
@@ -700,16 +707,12 @@ inserted between the braces between the braces."
 (use-package rust-mode
   :if (< emacs-major-version 26)
   :init
-  (setq company-tooltip-align-annotations t
-	rust-format-on-save t)
+  (setq rust-format-on-save t)
   :config
   (add-hook 'rust-mode-hook #'company-mode)
   (add-hook 'rust-mode-hook #'cargo-minor-mode)
   (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode)
-  :bind
-  (:map rust-mode-map
-   ("C-i" . company-indent-or-complete-common)))
+  (add-hook 'racer-mode-hook #'eldoc-mode))
 
 
 ;;; ### Language server with Vala support ###
@@ -760,22 +763,14 @@ inserted between the braces between the braces."
 ;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
 ;;; dart-mode.
 
+;;; For **tab completion** and **lsp** support also add [my common
+;;; settings for programming modes].
+
 (use-package dart-mode
   :init
   (setq lsp-dart-analysis-sdk-dir "~/local/flutter/bin/cache/dart-sdk/")
-  :bind
-  (:map dart-mode-map
-	("C-i" . company-indent-or-complete-common)
-	("C-M-i" . company-indent-or-complete-common))
-  :config
-  (defun my-dart-mode-hook-fn ()
-    (smartparens-mode 1)
-    (flycheck-mode 1)
-    (company-mode 1)
-    (lsp))
-  (add-hook 'dart-mode-hook #'my-dart-mode-hook-fn)
-  (add-hook 'before-save-hook #'lsp-format-buffer)
-  (add-hook 'before-save-hook #'lsp-organize-imports))
+  :hook ((dart-mode . smartparens-mode)
+	 (dart-mode . lsp)))
 
 (use-package flutter
   :after dart-mode

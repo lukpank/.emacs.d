@@ -137,9 +137,14 @@
   :bind
   (("C-c y" . helm-yas-complete)))
 
-(use-package rg
+;;; Install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg) and
+;;; add
+
+(use-package helm-rg
   :bind
-  (("C-c R" . rg)))
+  (("C-c R" . helm-rg)))
+
+;;; Directory sidebar
 
 (use-package treemacs
   :bind
@@ -156,7 +161,9 @@
    ("s-V" . buffer-flip-backward)
    ("C-g" . buffer-flip-abort)))
 
-;;; `fzf` and `lcd` for finding files and directories
+;;; [fzf](https://github.com/junegunn/fzf) and
+;;; [lcd](https://github.com/lukpank/lcd) for finding files and
+;;; directories
 
 (defun my-lcd ()
   (interactive)

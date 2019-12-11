@@ -92,6 +92,7 @@
   :init
   (setq helm-split-window-default-side 'other)
   (helm-mode 1)
+  (helm-autoresize-mode 1)
   :config
   (define-key helm-find-files-map
     (kbd "<backtab>") #'helm-select-action)

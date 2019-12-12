@@ -708,18 +708,6 @@ inserted between the braces between the braces."
 	 (rust-mode . eldoc-mode)))
 
 
-;;; ### Language server with Vala support ###
-
-(use-package lsp-mode
-  :commands lsp
-  :config
-  (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection
-				     '("vala-language-server"))
-                    :major-modes '(vala-mode)
-                    :server-id 'vala-ls)))
-
 (use-package company-lsp
   :defer)
 
@@ -733,6 +721,16 @@ inserted between the braces between the braces."
 
 
 ;;; ### Vala ###
+
+(use-package lsp-mode
+  :commands lsp
+  :config
+  (add-to-list 'lsp-language-id-configuration '(vala-mode . "vala"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection
+				     '("vala-language-server"))
+                    :major-modes '(vala-mode)
+                    :server-id 'vala-ls)))
 
 (use-package dumb-jump
   :defer)

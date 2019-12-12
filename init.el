@@ -93,11 +93,6 @@
   (setq helm-split-window-default-side 'other)
   (helm-mode 1)
   (helm-autoresize-mode 1)
-  :config
-  (define-key helm-find-files-map
-    (kbd "<backtab>") #'helm-select-action)
-  (define-key helm-find-files-map
-    (kbd "C-i")  #'helm-execute-persistent-action)
   :bind
   (("M-x" . helm-M-x)
    ("M-y" . helm-show-kill-ring)
@@ -109,7 +104,10 @@
    ("C-h d" . helm-info-at-point)
    ("C-c L" . helm-locate)
    ("C-c r" . helm-resume)
-   ("C-c i" . helm-imenu)))
+   ("C-c i" . helm-imenu)
+  :map helm-find-files-map
+  ("<backtab>" . helm-select-action)
+  ("C-i" . helm-execute-persistent-action)))
 
 (use-package helm-swoop
   :bind
@@ -171,8 +169,7 @@
              (fzf/grep-cmd "lcd" "-l %s")))
 
 (use-package fzf
-  :init
-  (autoload 'fzf/start "fzf")
+  :commands fzf/start
   :bind
   (("C-c f" . fzf)
    ("C-c D" . my-lcd)))
@@ -254,9 +251,7 @@
 ;;; Fix trailing spaces but only in modified lines
 
 (use-package ws-butler
-  :defer
-  :init
-  (add-hook 'prog-mode-hook #'ws-butler-mode))
+  :hook (prog-mode . ws-butler-mode))
 
 
 ;;; ### Convenience functions, aliases, and key bindings ###
@@ -463,9 +458,7 @@ of the key binding used to execute this command."
       (setq common-lisp-hyperspec-root (concat "file://" path))))
 
 (use-package paredit
-  :init
-  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
-  :defer)
+  :hook (eval-expression-minibuffer-setup . paredit-mode))
 
 (use-package paren-face
   :defer)
@@ -662,12 +655,13 @@ inserted between the braces between the braces."
 		    :server-id 'nim-ls)))
 
 (use-package highlight-indent-guides
+  :defer
   :init
   (setq highlight-indent-guides-method 'character))
 
 (use-package nim-mode
-  :init
-  (add-hook 'nim-mode-hook 'highlight-indent-guides-mode))
+  :hook ((nim-mode . highlight-indent-guides-mode)
+	 (nim-mode . lsp)))
 
 
 ;;; ### Rust ###
@@ -708,11 +702,10 @@ inserted between the braces between the braces."
   :if (< emacs-major-version 26)
   :init
   (setq rust-format-on-save t)
-  :config
-  (add-hook 'rust-mode-hook #'company-mode)
-  (add-hook 'rust-mode-hook #'cargo-minor-mode)
-  (add-hook 'rust-mode-hook #'racer-mode)
-  (add-hook 'racer-mode-hook #'eldoc-mode))
+  :hook ((rust-mode . company-mode)
+	 (rust-mode . cargo-minor-mode)
+	 (rust-mode . racer-mode)
+	 (rust-mode . eldoc-mode)))
 
 
 ;;; ### Language server with Vala support ###
@@ -734,6 +727,7 @@ inserted between the braces between the braces."
 ;;; ### Meson build system ###
 
 (use-package meson-mode
+  :defer
   :init
   (setq meson-indent-basic 4))
 
@@ -754,8 +748,7 @@ inserted between the braces between the braces."
   (lsp))
 
 (use-package vala-mode
-  :config
-  (add-hook 'vala-mode-hook #'my-vala-mode-hook-fn))
+  :hook (vala-mode . my-vala-mode-hook-fn))
 
 
 ;;; ### Dart ###
@@ -817,9 +810,9 @@ inserted between the braces between the braces."
    ("C-M-i" . company-indent-or-complete-common)))
 
 (use-package tide
-  :config
-  (add-hook 'before-save-hook #'tide-format-before-save)
-  (add-hook 'typescript-mode-hook #'my-setup-tide-mode))
+  :after typescript-mode
+  :hook ((before-save . tide-format-before-save)
+	 (typescript-mode . my-setup-tide-mode)))
 
 (use-package ng2-mode
   :defer)
@@ -861,9 +854,7 @@ inserted between the braces between the braces."
 ;;; ### CSS ###
 
 (use-package rainbow-mode
-  :defer)
-
-(add-hook 'css-mode-hook #'rainbow-mode)
+  :hook (css-mode . rainbow-mode))
 
 
 ;;; ### Org mode ###
@@ -886,9 +877,9 @@ inserted between the braces between the braces."
    ("C-c B" . org-iswitchb)
    ("C-c c" . org-capture)
    ("C-c l" . org-store-link))
+  :hook ((org-timer-done . my-org-timer-done)
+	 (org-mode . org-bullets-mode))
   :config
-  (add-hook 'org-timer-done-hook #'my-org-timer-done)
-  (add-hook 'org-mode-hook #'org-bullets-mode)
   (require 'ox-beamer))
 
 

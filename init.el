@@ -216,7 +216,7 @@
 
 (use-package avy
   :bind
-  ("C-:" . avy-goto-char-timer))
+  ("s-;" . avy-goto-char-timer))
 
 ;;; Bind key `o` to selection of links by a single or two letters
 

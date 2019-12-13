@@ -900,9 +900,22 @@ inserted between the braces between the braces."
     :keybinding "g"))
 
 
-;;; ### EWW browser ###
+;;; ### WWW browsers ###
 
-(setq browse-url-browser-function #'eww-browse-url)
+(setq my-browsers
+      '(("Firefox" . browse-url-firefox)
+	("Chromium" . browse-url-chromium)
+	("EWW" . eww-browse-url)))
+
+(defun my-browse-url (&rest args)
+  "Select the prefered browser from a helm menu before opening the URL."
+  (interactive)
+  (let ((browser (helm :sources (helm-build-sync-source "WWW browsers"
+				  :candidates (mapcar 'car my-browsers))
+		       :buffer "*my browsers*")))
+    (apply (cdr (assoc browser my-browsers)) args)))
+
+(setq browse-url-browser-function #'my-browse-url)
 
 (defun my-eww-scale-adjust ()
   "Slightly bigger font but text shorter than text."

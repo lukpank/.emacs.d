@@ -91,6 +91,7 @@
 (use-package helm
   :init
   (setq helm-split-window-default-side 'other)
+  (require 'helm-config)	    ; required to setup "C-x c keymap"
   (helm-mode 1)
   (helm-autoresize-mode 1)
   :bind
@@ -102,12 +103,15 @@
    ("C-x r b" . helm-bookmarks)
    ("C-h a" . helm-apropos)
    ("C-h d" . helm-info-at-point)
-   ("C-c L" . helm-locate)
-   ("C-c r" . helm-resume)
-   ("C-c i" . helm-imenu)
-  :map helm-find-files-map
-  ("<backtab>" . helm-select-action)
-  ("C-i" . helm-execute-persistent-action)))
+   ("C-c a" . helm-all-mark-rings)
+   ("C-c h e" . helm-info-emacs)
+   ("C-c h g" . helm-info-gnus)
+   ("C-c R" . helm-register)
+   ("s-p" . helm-run-external-command)
+   ;; More key bindings in "C-x c" keymap
+   :map helm-find-files-map
+   ("<backtab>" . helm-select-action)
+   ("C-i" . helm-execute-persistent-action)))
 
 (use-package helm-swoop
   :bind
@@ -140,7 +144,7 @@
 
 (use-package helm-rg
   :bind
-  (("C-c R" . helm-rg)))
+  (("C-c r" . helm-rg)))
 
 ;;; Directory sidebar
 
@@ -871,8 +875,8 @@ inserted between the braces between the braces."
   (defun my-org-timer-done ()
     (shell-command "echo Timer timed out; date &"))
   :bind
-  (("C-c a" . org-agenda)
-   ("C-c B" . org-iswitchb)
+  (("C-c A" . org-agenda)
+   ("C-c B" . org-switchb)
    ("C-c c" . org-capture)
    ("C-c l" . org-store-link))
   :hook ((org-timer-done . my-org-timer-done)

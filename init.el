@@ -469,12 +469,16 @@ of the key binding used to execute this command."
 (use-package paren-face
   :defer)
 
+;; I do not want completion in extra frame
+(setq helm-show-completion-display-function #'helm-default-display-buffer)
+
 (defun my-emacs-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function) #'lisp-indent-function)
   (paredit-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (local-set-key (kbd "C-c C-z")
 		 (lambda () (interactive) (switch-to-buffer "*scratch*")))
+  (local-set-key (kbd "C-M-i") #'helm-lisp-completion-at-point)
   (show-paren-mode 1)
   (paren-face-mode))
 

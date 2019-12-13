@@ -90,8 +90,10 @@
 
 (use-package helm
   :init
-  (setq helm-split-window-default-side 'other)
-  (require 'helm-config)	    ; required to setup "C-x c keymap"
+  (setq helm-split-window-default-side 'other
+	helm-split-window-inside-p t
+	helm-command-prefix-key "s-c")
+  (require 'helm-config)	      ; required to setup "s-c" keymap
   (helm-mode 1)
   (helm-autoresize-mode 1)
   :bind
@@ -108,7 +110,7 @@
    ("C-c h g" . helm-info-gnus)
    ("C-c R" . helm-register)
    ("s-p" . helm-run-external-command)
-   ;; More key bindings in "C-x c" keymap
+   ;; More key bindings in "s-c" keymap
    :map helm-find-files-map
    ("<backtab>" . helm-select-action)
    ("C-i" . helm-execute-persistent-action)))

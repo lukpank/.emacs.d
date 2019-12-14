@@ -9,9 +9,13 @@
 ;;; I recommend watching the following video by BuildFunThings called
 ;;; [My GNU Emacs configuration for programming](https://www.youtube.com/watch?v=I28jFkpN5Zk).
 
-;;; When I want to ensure all of the packages (on a new machine) I set
+;;; If you put this config on a new machine with no Emacs packages
+;;; installed then you will be asked if you want automatically install
+;;; all packages used below.
+
+;;; Later, if you add new packages you can temporary set
 ;;; `use-package-always-ensure` below to `t` start Emacs and then set
-;;; it back to `nil`.
+;;; it back to `nil` (or always have it set to `t`, if you prefer).
 
 
 ;;; Basic settings
@@ -50,8 +54,18 @@
 (package-initialize)
 
 (setq use-package-always-ensure nil)
-(require 'use-package)
 
+;;; Load [use-package](https://github.com/jwiegley/use-package/),
+;;; propose automatic installation if it is not yet installed.
+
+(unless (require 'use-package nil t)
+  (if (not (yes-or-no-p (concat "Refresh packages, install use-package and"
+				" other packages used by init file? ")))
+      (error "you need to install use-package first")
+    (package-refresh-contents)
+    (package-install 'use-package)
+    (require 'use-package)
+    (setq use-package-always-ensure t)))
 
 ;;; This also turns on checking TLS certificates (in both possible modes)
 ;;; with `tls-program` set to only the first value from the default value

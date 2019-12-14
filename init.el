@@ -712,10 +712,13 @@ inserted between the braces between the braces."
 
 (use-package rustic
   :if (>= emacs-major-version 26)
+  :demand	 ; to use rustic-mode even if rust-mode also installed
   :hook (rustic-mode . my-rustic-mode-hook-fn))
 
 ;;; But if you have Emacs older than 26 than you should install
-;;; [racer](https://github.com/racer-rust/racer) and add
+;;; [racer](https://github.com/racer-rust/racer) and for **tab
+;;; completion** add [my common settings for programming modes] and
+;;; then add
 
 (use-package cargo
   :if (< emacs-major-version 26)
@@ -733,10 +736,6 @@ inserted between the braces between the braces."
 	 (rust-mode . cargo-minor-mode)
 	 (rust-mode . racer-mode)
 	 (rust-mode . eldoc-mode)))
-
-
-(use-package company-lsp
-  :defer)
 
 
 ;;; ### Meson build system ###

@@ -981,18 +981,11 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key (kbd "C-c F") #'my-set-frame-font)
 
-;;; Fancy mode line and some themes
-
-(use-package zenburn-theme
-  :defer)
-
-(use-package leuven-theme
-  :defer)
 
 ;;; Easy switching between themes
 
 (defun my-helm-themes-after ()
-  (set-face-background 'scroll-bar (face-background 'fringe)))
+  (set-face-background 'scroll-bar "#908070"))
 
 (use-package helm-themes
   :bind
@@ -1003,8 +996,11 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Toggle between dark and light themes with a key
 
-(setq my-dark-theme 'zenburn
-      my-light-theme 'leuven)
+(use-package gruvbox-theme
+  :defer)
+
+(setq my-dark-theme 'gruvbox-dark-medium
+      my-light-theme 'gruvbox-light-medium)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"

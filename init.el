@@ -194,7 +194,11 @@
   (("C-s-n" . windmove-down)
    ("C-s-p" . windmove-up)
    ("C-s-b" . windmove-left)
-   ("C-s-f" . windmove-right))
+   ("C-s-f" . windmove-right)
+   ("s-j" . windmove-down)
+   ("s-k" . windmove-up)
+   ("s-h" . windmove-left)
+   ("s-l" . windmove-right))
   :config
   (windmove-default-keybindings))
 
@@ -274,9 +278,7 @@
   (interactive)
   (setq ispell-local-dictionary "polish"))
 
-(defalias 'st #'magit-status)
 (defalias 'ir #'ispell-region)
-(defalias 'md #'markdown-mode)
 
 ;; Bind keys
 
@@ -289,7 +291,8 @@
   :bind (("C-c s" . shell-pop)))
 
 (use-package helm-mt
-  :bind (("C-c S" . helm-mt)))
+  :bind (("C-c z" . helm-mt))
+  :hook (term-exec . toggle-truncate-lines))
 
 (use-package magit
   :bind ("C-c m" . magit-status))

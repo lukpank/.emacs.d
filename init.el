@@ -420,7 +420,6 @@ of the key binding used to execute this command."
 
 (use-package cmake-ide
   :after cc-mode
-  :init
   :config
   (cmake-ide-setup))
 
@@ -440,28 +439,29 @@ of the key binding used to execute this command."
 
 ;;; 1. Install [clang](http://clang.llvm.org/) compiler or more accurately
 ;;;    `libclang` library (package `libclang-dev` or may be newer
-;;;    `libclang-X.Y-dev` under Debian) which is required by `rtags`.
+;;;    `libclang-X-dev` under Debian) which is required by `rtags`.
 
 ;;; 2. Under Emacs having `rtags` package installed press `M-:` and
-;;;    evaluate expression `(require 'rtags)` and then press `M-x` and
-;;;    run command `rtags-install` (should work if you have
-;;;    `llvm-config` in your path) and wait until it compiles to 100%.
-;;;    The `rtags-install` command needs to be rerun if you install
-;;;    newer `rtags` from MELPA and the below commands do not work
-;;;    complaining about protocol mismatch.
+;;;    evaluate expression `(require 'rtags)` and then press `M-:` and
+;;;    evaluate expression `(rtags-install nil
+;;;    '("-DRTAGS_NO_ELISP_FILES=true"))` (should work if you have
+;;;    `llvm-config` or `llvm-config-X` in your `PATH`) and wait until
+;;;    it compiles to 100%.  The `rtags-install` command needs to be
+;;;    rerun if you install newer `rtags` from MELPA and the below
+;;;    commands do not work complaining about protocol mismatch.
 
-;;; 3. Usefull `rtags` functions (use `C-c r C-h` to see these and other key bindings)
+;;; 3. Usefull `rtags` functions (use `C-c R C-h` to see these and other key bindings)
 
 ;;;    | Key       | Function
 ;;;    |-----------|----------
-;;;    | `C-c r .` | `rtags-find-symbol-at-point`
-;;;    | `C-c r [` | `rtags-location-stack-back`
-;;;    | `C-c r ,` | `rtags-find-references-at-point`
-;;;    | `C-c r /` | `rtags-find-all-references-at-point`
+;;;    | `C-c R .` | `rtags-find-symbol-at-point`
+;;;    | `C-c R [` | `rtags-location-stack-back`
+;;;    | `C-c R ,` | `rtags-find-references-at-point`
+;;;    | `C-c R /` | `rtags-find-all-references-at-point`
 ;;;    |           | `rtags-find-references-current-file`
 ;;;    |           | `rtags-find-references-current-dir`
-;;;    | `C-c r v` | `rtags-find-virtuals-at-point`
-;;;    | `C-c r ;` | `rtags-find-file` (in the current project no metter in which directory)
+;;;    | `C-c R v` | `rtags-find-virtuals-at-point`
+;;;    | `C-c R ;` | `rtags-find-file` (in the current project no metter in which directory)
 
 
 ;;; ### Lisp and Emacs lisp ###

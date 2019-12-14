@@ -78,9 +78,6 @@
 ;;; to install all marked packages (the necessary dependencies will be
 ;;; installed automatically).
 
-;;; Note: The last line above requires installing package named
-;;; `use-package` to work.
-
 
 ;;; ### Other settings ###
 

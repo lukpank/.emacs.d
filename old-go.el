@@ -125,7 +125,7 @@ inserted between the braces between the braces."
 ;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.13,
 ;;;    so you may consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
-;;;    search for the package for your system or otherwise
+;;;    search for the package for your system or
 ;;;    see [Getting started](https://golang.org/doc/install).
 
 ;;; 3. Install [godef](https://godoc.org/github.com/rogpeppe/godef)

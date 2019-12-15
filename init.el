@@ -97,6 +97,16 @@
 ;;; ------------
 
 
+;;; ### Key discoverability ###
+
+;;; If you type a prefix key (such as `C-x r`) and wait some time then
+;;; display window with keys that can follow.
+
+(use-package which-key
+  :config
+  (which-key-mode))
+
+
 ;;; ### More efficient buffer/file selection ###
 
 (use-package helm
@@ -224,19 +234,15 @@
 
 ;;; ### In buffer movement enhancements ###
 
-;;; Remind of keys than can follow in a key sequence
-
-(use-package which-key
-  :config
-  (which-key-mode))
-
-;;; Type prefix and wait to select one of the with a single or two letters
+;;; Type substring and wait to select one of its visible occurrences
+;;; (even in other windows) with a single or two letters.
 
 (use-package avy
   :bind
   ("s-;" . avy-goto-char-timer))
 
-;;; Bind key `o` to selection of links by a single or two letters
+;;; Bind key `o` to selection of a link in help or info buffers by a
+;;; single or two letters.
 
 (use-package ace-link
   :config
@@ -248,7 +254,7 @@
   :bind
   ("C-c '" . avy-flycheck-goto-error))
 
-;;; Go to last change in the buffer
+;;; Go to last change in the current buffer
 
 (use-package goto-chg
   :bind
@@ -296,6 +302,9 @@
 (global-set-key "\C-ck" #'compile)
 (global-set-key "\C-cq" #'bury-buffer)
 
+
+;;; ### Shell and terminal ###
+
 (use-package shell-pop
   :init
   (setq shell-pop-full-span t)
@@ -304,6 +313,9 @@
 (use-package helm-mt
   :bind (("C-c z" . helm-mt))
   :hook (term-exec . toggle-truncate-lines))
+
+
+;;; ### Git ###
 
 (use-package magit
   :bind ("C-c m" . magit-status))
@@ -317,7 +329,8 @@
 
 ;;; ### Switching buffers ###
 
-;;; Set keys from `s-s a` to `s-s z` to switch to buffers from a register from a to z
+;;; Bind keys from `s-s a` to `s-s z` to switch to buffers from a
+;;; register from `a` to `z`.
 
 (defalias 'pr #'point-to-register)
 
@@ -438,7 +451,7 @@ of the key binding used to execute this command."
 ;;; Now:
 
 ;;; 1. Install [clang](http://clang.llvm.org/) compiler or more accurately
-;;;    `libclang` library (package `libclang-dev` or may be newer
+;;;    `libclang` development package (package `libclang-dev` or may be newer
 ;;;    `libclang-X-dev` under Debian) which is required by `rtags`.
 
 ;;; 2. Under Emacs having `rtags` package installed press `M-:` and
@@ -621,7 +634,7 @@ inserted between the braces between the braces."
 ;;;    see [Getting started](https://golang.org/doc/install).
 
 ;;; 3. Install [gopls](https://github.com/golang/go/wiki/gopls) with
-;;;    (in your home directory, not inside some Go module)
+;;;    (but in your home directory, not inside some Go module)
 
 ;;;    ```
 ;;;    $ GO111MODULE=on go get golang.org/x/tools/cmd/gopls@latest
@@ -774,7 +787,7 @@ inserted between the braces between the braces."
 
 ;;; ### Dart ###
 
-;;; NOTE: `pub` and `dart` must be in PATH for lsp to start in
+;;; NOTE: `pub` and `dart` must be in `PATH` for lsp to start in
 ;;; dart-mode.
 
 ;;; For **tab completion** and **lsp** support also add [my common

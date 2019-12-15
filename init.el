@@ -587,9 +587,10 @@ inserted between the braces between the braces."
 (defun my-godoc-package ()
   "Display godoc for given package (with completion)."
   (interactive)
-  (godoc (helm :sources (helm-build-sync-source "Go packages"
-			  :candidates (go-packages))
-	       :buffer "*godoc packages*")))
+  (godoc (or (helm :sources (helm-build-sync-source "Go packages"
+			    :candidates (go-packages))
+		   :buffer "*godoc packages*")
+	     (signal 'quit nil))))
 
 (use-package go-guru
   :after go-mode)
@@ -939,9 +940,10 @@ inserted between the braces between the braces."
 (defun my-browse-url (&rest args)
   "Select the prefered browser from a helm menu before opening the URL."
   (interactive)
-  (let ((browser (helm :sources (helm-build-sync-source "WWW browsers"
-				  :candidates (mapcar 'car my-browsers))
-		       :buffer "*my browsers*")))
+  (let ((browser (or (helm :sources (helm-build-sync-source "WWW browsers"
+				   :candidates (mapcar 'car my-browsers))
+			   :buffer "*my browsers*")
+		     (signal 'quit nil))))
     (apply (cdr (assoc browser my-browsers)) args)))
 
 (setq browse-url-browser-function #'my-browse-url)

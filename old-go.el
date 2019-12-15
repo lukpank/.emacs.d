@@ -32,9 +32,8 @@ If there is a space before the brace also adds new line with
 properly indented closing brace and moves cursor to another line
 inserted between the braces between the braces."
   (interactive)
-  (if (not (looking-back " "))
-      (insert "{")
-    (insert "{")
+  (insert "{")
+  (when (looking-back " {")
     (newline)
     (indent-according-to-mode)
     (save-excursion
@@ -42,19 +41,11 @@ inserted between the braces between the braces."
       (insert "}")
       (indent-according-to-mode))))
 
-(defun my-go-list-packages ()
-  "Return list of Go packages."
-  (split-string
-   (with-temp-buffer
-     (shell-command "go list ... 2>/dev/null" (current-buffer))
-     (buffer-substring-no-properties (point-min) (point-max)))
-   "\n"))
-
 (defun my-godoc-package ()
   "Display godoc for given package (with completion)."
   (interactive)
   (godoc (helm :sources (helm-build-sync-source "Go packages"
-			  :candidates (my-go-list-packages))
+			  :candidates (go-packages))
 	       :buffer "*godoc packages*")))
 
 (use-package flycheck
@@ -67,16 +58,15 @@ inserted between the braces between the braces."
   :defer)
 
 (use-package go-guru
-  :defer)
+  :after go-mode)
 
 (use-package go-mode
   :init
   (setq gofmt-command "goimports"     ; use goimports instead of gofmt
 	go-fontify-function-calls nil ; fontifing names of called
 				      ; functions is too much for me
-	company-idle-delay nil)
-  :config
-  (require 'go-guru)
+	company-idle-delay nil)	; avoid auto completion popup, use TAB
+				; to show it
   :bind
   (:map go-mode-map
    ("M-." . go-guru-definition)

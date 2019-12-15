@@ -350,7 +350,7 @@ of the key binding used to execute this command."
 (let ((character ?a))
   (while (<= character ?z)
     (define-key my-switch-to-register-map
-      (format "%c" character) #'my-switch-to-register)
+      (char-to-string character) #'my-switch-to-register)
     (setq character (1+ character))))
 
 (global-set-key (kbd "s-s") my-switch-to-register-map)
@@ -486,7 +486,7 @@ of the key binding used to execute this command."
       slime-default-lisp 'sbcl
       slime-contribs '(slime-fancy))
 
-(let ((path (expand-file-name "/usr/local/share/doc/HyperSpec/")))
+(let ((path "/usr/local/share/doc/HyperSpec/"))
   (if (file-accessible-directory-p path)
       (setq common-lisp-hyperspec-root (concat "file://" path))))
 
@@ -575,9 +575,8 @@ If there is a space before the brace also adds new line with
 properly indented closing brace and moves cursor to another line
 inserted between the braces between the braces."
   (interactive)
-  (if (not (looking-back " "))
-      (insert "{")
-    (insert "{")
+  (insert "{")
+  (when (looking-back " {")
     (newline)
     (indent-according-to-mode)
     (save-excursion
@@ -1030,9 +1029,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive)
   (let ((dark-p (custom-theme-enabled-p my-dark-theme)))
     (mapc #'disable-theme custom-enabled-themes)
-    (if dark-p
-	(load-theme my-light-theme t)
-      (load-theme my-dark-theme t)))
+    (load-theme (if dark-p my-light-theme my-dark-theme) t))
   (my-helm-themes-after))
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)

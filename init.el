@@ -312,7 +312,10 @@
 
 (use-package helm-mt
   :bind (("C-c z" . helm-mt))
-  :hook (term-exec . toggle-truncate-lines))
+  ;; hooks for fish shell (term-mode for Emacs 26 and term-exec for
+  ;; Emacs 27)
+  :hook ((term-mode . toggle-truncate-lines)
+	 (term-exec . toggle-truncate-lines)))
 
 
 ;;; ### Git ###

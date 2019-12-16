@@ -318,10 +318,10 @@
 ;;; ### Git ###
 
 (use-package magit
-  :bind ("C-c m" . magit-status))
+  :bind ("C-x g" . magit-status))
 
 (use-package git-messenger
-  :bind ("C-c M" . git-messenger:popup-message)
+  :bind ("C-x G" . git-messenger:popup-message)
   :config
   (setq git-messenger:show-detail t
 	git-messenger:use-magit-popup t))

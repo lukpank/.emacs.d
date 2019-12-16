@@ -180,10 +180,10 @@
 
 (use-package buffer-flip
   :bind
-  (("s-v" . buffer-flip)
+  (("s-o" . buffer-flip)
    :map buffer-flip-map
-   ("s-v" . buffer-flip-forward)
-   ("s-V" . buffer-flip-backward)
+   ("s-o" . buffer-flip-forward)
+   ("s-O" . buffer-flip-backward)
    ("C-g" . buffer-flip-abort)))
 
 ;;; [fzf](https://github.com/junegunn/fzf) and

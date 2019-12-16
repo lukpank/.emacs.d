@@ -864,8 +864,7 @@ inserted between the braces between the braces."
 (setq-default abbrev-mode 1)
 
 (use-package yasnippet
-  :init
-  (yas-global-mode 1)
+  :hook (after-init . yas-global-mode)
   :bind
   (:map yas-minor-mode-map
 	("C-c & t" . yas-describe-tables)

@@ -497,14 +497,14 @@ of the key binding used to execute this command."
 
 ;;;    | Key       | Function
 ;;;    |-----------|----------
-;;;    | `C-c R .` | `rtags-find-symbol-at-point`
-;;;    | `C-c R [` | `rtags-location-stack-back`
-;;;    | `C-c R ,` | `rtags-find-references-at-point`
-;;;    | `C-c R /` | `rtags-find-all-references-at-point`
+;;;    | `C-c R .` | `rtags-find-symbol-at-point`
+;;;    | `C-c R [` | `rtags-location-stack-back`
+;;;    | `C-c R ,` | `rtags-find-references-at-point`
+;;;    | `C-c R /` | `rtags-find-all-references-at-point`
 ;;;    |           | `rtags-find-references-current-file`
 ;;;    |           | `rtags-find-references-current-dir`
-;;;    | `C-c R v` | `rtags-find-virtuals-at-point`
-;;;    | `C-c R ;` | `rtags-find-file` (in the current project no metter in which directory)
+;;;    | `C-c R v` | `rtags-find-virtuals-at-point`
+;;;    | `C-c R ;` | `rtags-find-file` (in the current project no metter in which directory)
 
 
 ;;; ### Lisp and Emacs lisp ###

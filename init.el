@@ -991,9 +991,7 @@ inserted between the braces between the braces."
 ;;; --------------------------
 
 
-;;; ### Appearance ###
-
-;;; Minimalistic look
+;;; ### Minimalistic look ###
 
 (setq inhibit-startup-screen t
       frame-title-format (list "[" user-login-name "@" (system-name)
@@ -1003,7 +1001,8 @@ inserted between the braces between the braces."
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 
-;;; Easy switching between some fonts
+
+;;; ### Easy switching between some fonts ###
 
 (setq my-font-list '("Fantasque Sans Mono" "Go mono" "IBM 3270"
 		     "Inconsolata" "Monofur" "Monoid" "mononoki"))
@@ -1026,7 +1025,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (global-set-key (kbd "C-c F") #'my-set-frame-font)
 
 
-;;; Easy switching between themes
+;;; ### Easy switching between themes ###
 
 (defun my-helm-themes-after ()
   (set-face-background 'scroll-bar "#908070"))
@@ -1038,7 +1037,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   ;; need to update powerline after changing theme
   (advice-add 'helm-themes :after #'my-helm-themes-after))
 
-;;; Toggle between dark and light themes with a key
+
+;;; ### Toggle between dark and light themes with a key ###
 
 (setq my-dark-theme 'gruvbox-dark-medium
       my-light-theme 'gruvbox-light-medium)
@@ -1065,7 +1065,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'after-make-frame-functions #'my-frame-setup-fn)
 (add-hook 'window-setup-hook #'my-frame-setup-fn)
 
-;;; My customization for some used themes
+
+;;; ### My customization for some used themes ###
 
 (eval-after-load 'firebelly-theme
   '(custom-theme-set-faces

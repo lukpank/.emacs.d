@@ -106,8 +106,20 @@
   :config
   (which-key-mode))
 
+;;; Helm version for `C-h b`.
+
+(use-package helm-descbinds
+  :init
+  (helm-descbinds-mode))
+
+;;; List of personal key bindings
+
+(global-set-key (kbd "C-c h b") 'describe-personal-keybindings)
+
 
 ;;; ### More efficient buffer/file selection ###
+
+(global-set-key "\C-cq" #'bury-buffer)
 
 (use-package helm
   :init
@@ -136,32 +148,6 @@
    ("<backtab>" . helm-select-action)
    ("C-i" . helm-execute-persistent-action)))
 
-(use-package helm-swoop
-  :bind
-  (("C-s" . helm-swoop-without-pre-input)
-   ("C-S-s" . helm-swoop)))
-
-(use-package helm-descbinds
-  :init
-  (helm-descbinds-mode))
-
-(use-package helm-git-grep
-  :bind
-  (("C-c j" . helm-git-grep)
-   ("C-c J" . helm-git-grep-at-point)))
-
-(use-package helm-ls-git
-  :bind
-  (("C-c g" . helm-ls-git-ls)))
-
-(use-package helm-make
-  :bind
-  (("C-c K" . helm-make)))
-
-(use-package helm-c-yasnippet
-  :bind
-  (("C-c y" . helm-yas-complete)))
-
 ;;; Install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg) and
 ;;; add
 
@@ -169,7 +155,7 @@
   :bind
   (("C-c r" . helm-rg)))
 
-;;; Directory sidebar
+;;; File explorer sidebar
 
 (use-package treemacs
   :bind
@@ -234,6 +220,13 @@
 
 ;;; ### In buffer movement enhancements ###
 
+;;; Improved in buffer search
+
+(use-package helm-swoop
+  :bind
+  (("C-s" . helm-swoop-without-pre-input)
+   ("C-S-s" . helm-swoop)))
+
 ;;; Type substring and wait to select one of its visible occurrences
 ;;; (even in other windows) with a single or two letters.
 
@@ -281,9 +274,7 @@
   :hook (prog-mode . ws-butler-mode))
 
 
-;;; ### Convenience functions, aliases, and key bindings ###
-
-;; Convenience functions and aliases
+;;; ### Spell checking ###
 
 (defun am ()
   "Change dictionary to american."
@@ -296,11 +287,6 @@
   (setq ispell-local-dictionary "polish"))
 
 (defalias 'ir #'ispell-region)
-
-;; Bind keys
-
-(global-set-key "\C-ck" #'compile)
-(global-set-key "\C-cq" #'bury-buffer)
 
 
 ;;; ### Shell and terminal ###
@@ -328,6 +314,15 @@
   :config
   (setq git-messenger:show-detail t
 	git-messenger:use-magit-popup t))
+
+(use-package helm-git-grep
+  :bind
+  (("C-c j" . helm-git-grep)
+   ("C-c J" . helm-git-grep-at-point)))
+
+(use-package helm-ls-git
+  :bind
+  (("C-c g" . helm-ls-git-ls)))
 
 
 ;;; ### Switching buffers ###
@@ -357,6 +352,22 @@ of the key binding used to execute this command."
     (setq character (1+ character))))
 
 (global-set-key (kbd "s-s") my-switch-to-register-map)
+
+
+;;; ### Yasnippet and abbrev mode ###
+
+(setq-default abbrev-mode 1)
+
+(use-package yasnippet
+  :hook (after-init . yas-global-mode)
+  :bind
+  (:map yas-minor-mode-map
+	("C-c & t" . yas-describe-tables)
+	("C-c & &" . org-mark-ring-goto)))
+
+(use-package helm-c-yasnippet
+  :bind
+  (("C-c y" . helm-yas-complete)))
 
 
 ;;; Programming languages
@@ -397,6 +408,15 @@ of the key binding used to execute this command."
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition)))
+
+;;; Compilation
+
+(global-set-key "\C-ck" #'compile)
+
+(use-package helm-make
+  :bind
+  (("C-c K" . helm-make)))
+
 
 ;;; [my common settings for programming modes]: #common-settings-for-programming-modes
 
@@ -857,18 +877,6 @@ inserted between the braces between the braces."
 
 ;;; Other modes
 ;;; -----------
-
-
-;;; ### Yasnippet and abbrev mode ###
-
-(setq-default abbrev-mode 1)
-
-(use-package yasnippet
-  :hook (after-init . yas-global-mode)
-  :bind
-  (:map yas-minor-mode-map
-	("C-c & t" . yas-describe-tables)
-	("C-c & &" . org-mark-ring-goto)))
 
 
 ;;; ### Web mode ###

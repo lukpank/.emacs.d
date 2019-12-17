@@ -107,7 +107,8 @@
 ;;; Helm version for `C-h b`.
 
 (use-package helm-descbinds
-  :init
+  :demand
+  :config
   (helm-descbinds-mode))
 
 ;;; List of personal key bindings
@@ -122,10 +123,12 @@
 (global-set-key "\C-cq" #'bury-buffer)
 
 (use-package helm
+  :demand
   :init
   (setq helm-split-window-default-side 'other
 	helm-split-window-inside-p t
 	helm-command-prefix-key "s-c")
+  :config
   (require 'helm-config)	      ; required to setup "s-c" keymap
   (helm-mode 1)
   (helm-autoresize-mode 1)
@@ -538,7 +541,8 @@ of the key binding used to execute this command."
   :defer)
 
 (use-package slime
-  :init
+  :demand
+  :config
   (slime-setup '(slime-fancy slime-company slime-cl-indent)))
 
 (defun my-lisp-mode-hook-fn ()
@@ -1032,9 +1036,6 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; Toggle between dark and light themes with a key
 
-(use-package gruvbox-theme
-  :defer)
-
 (setq my-dark-theme 'gruvbox-dark-medium
       my-light-theme 'gruvbox-light-medium)
 
@@ -1048,7 +1049,9 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 
-(my-toggle-theme)
+(use-package gruvbox-theme
+  :config
+  (my-toggle-theme))
 
 (defun my-frame-setup-fn (&optional frame)
   (unless (display-graphic-p frame)

@@ -753,7 +753,9 @@ inserted between the braces between the braces."
 
 (use-package rustic
   :if (>= emacs-major-version 26)
-  :demand	 ; to use rustic-mode even if rust-mode also installed
+  :init
+  ;; to use rustic-mode even if rust-mode also installed
+  (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
   :hook (rustic-mode . my-rustic-mode-hook-fn))
 
 ;;; But if you have Emacs older than 26 than you should install

@@ -55,8 +55,19 @@
 
 (setq use-package-always-ensure nil)
 
-;;; Load [use-package](https://github.com/jwiegley/use-package/),
-;;; propose automatic installation if it is not yet installed.
+;;; This also turns on checking TLS certificates (in both possible
+;;; modes) with `tls-program` set to only the first value from the
+;;; default value (for more info see [Your Text Editor Is
+;;; Malware](https://glyph.twistedmatrix.com/2015/11/editor-malware.html)).
+
+;;; Now you can list available packages by running `M-x list-packages`.
+;;; Mark packages you want to install by pressing `i` and later press `x`
+;;; to install all marked packages (the necessary dependencies will be
+;;; installed automatically).
+
+;;; Now, load [use-package](https://github.com/jwiegley/use-package/)
+;;; package or propose automatic installation if it is not yet
+;;; installed.
 
 (unless (require 'use-package nil t)
   (if (not (yes-or-no-p (concat "Refresh packages, install use-package and"
@@ -67,21 +78,8 @@
     (require 'use-package)
     (setq use-package-always-ensure t)))
 
-;;; This also turns on checking TLS certificates (in both possible modes)
-;;; with `tls-program` set to only the first value from the default value
-;;; (for more info
-;;; see
-;;; [Your Text Editor Is Malware](https://glyph.twistedmatrix.com/2015/11/editor-malware.html)).
-
-;;; Now you can list available packages by running `M-x list-packages`.
-;;; Mark packages you want to install by pressing `i` and later press `x`
-;;; to install all marked packages (the necessary dependencies will be
-;;; installed automatically).
-
-
-;;; ### Other settings ###
-
-(setq recentf-max-saved-items 100)
+;;; After loading `use-package` we can use it to configure other
+;;; packages.
 
 
 ;;; ### Workaround for security vulnerability in Emacs >= 21.1 and < 25.3 ###
@@ -118,6 +116,8 @@
 
 
 ;;; ### More efficient buffer/file selection ###
+
+(setq recentf-max-saved-items 100)
 
 (global-set-key "\C-cq" #'bury-buffer)
 
@@ -208,6 +208,8 @@
    ("s-l" . windmove-right))
   :config
   (windmove-default-keybindings))
+
+;;; Switch between window configurations
 
 (use-package eyebrowse
   :config

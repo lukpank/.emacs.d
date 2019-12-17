@@ -132,10 +132,12 @@
   (require 'helm-config)	      ; required to setup "s-c" keymap
   (helm-mode 1)
   (helm-autoresize-mode 1)
+  ;; Only rebind M-x and C-x C-f on successful load of helm to remain
+  ;; this basic operations if helm is not installed.
+  (bind-key "M-x" #'helm-M-x)
+  (bind-key "C-x C-f" #'helm-find-files)
   :bind
-  (("M-x" . helm-M-x)
-   ("M-y" . helm-show-kill-ring)
-   ("C-x C-f" . helm-find-files)
+  (("M-y" . helm-show-kill-ring)
    ("C-c o" . helm-occur)
    ("C-x b" . helm-mini)
    ("C-x r b" . helm-bookmarks)

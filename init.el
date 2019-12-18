@@ -283,15 +283,21 @@
 
 ;;; ### Spell checking ###
 
-(defun am ()
+(setq ispell-dictionary "american")
+
+(defun my-american-dict ()
   "Change dictionary to american."
   (interactive)
-  (setq ispell-local-dictionary "american"))
+  (setq ispell-local-dictionary "american")
+  (flyspell-mode 1)
+  (flyspell-buffer))
 
-(defun pl ()
+(defun my-polish-dict ()
   "Change dictionary to polish."
   (interactive)
-  (setq ispell-local-dictionary "polish"))
+  (setq ispell-local-dictionary "polish")
+  (flyspell-mode 1)
+  (flyspell-buffer))
 
 (defalias 'ir #'ispell-region)
 
@@ -315,6 +321,9 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status))
+
+(use-package git-commit
+  :hook (git-commit-mode . my-american-dict))
 
 (use-package git-messenger
   :bind ("C-x G" . git-messenger:popup-message)

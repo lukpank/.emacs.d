@@ -324,7 +324,8 @@
 ;;; ### Git ###
 
 (use-package magit
-  :bind ("C-x g" . magit-status))
+  :bind (("C-x g" . magit-status)
+	 ("C-x M-g" . magit-dispatch)))
 
 (use-package git-commit
   :hook (git-commit-mode . my-american-dict))

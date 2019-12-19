@@ -758,39 +758,37 @@ inserted between the braces between the braces."
 ;;; For **tab completion** and **lsp** support add [my common settings
 ;;; for programming modes] and then add
 
-(defun my-rustic-mode-hook-fn ()
-  "needed for lsp-format-buffer to indent with 4 spaces"
-  (setq tab-width 4
-	indent-tabs-mode nil))
+(when (>= emacs-major-version 26)
+  (defun my-rustic-mode-hook-fn ()
+    "needed for lsp-format-buffer to indent with 4 spaces"
+    (setq tab-width 4
+	  indent-tabs-mode nil))
 
-(use-package rustic
-  :if (>= emacs-major-version 26)
-  :init
-  ;; to use rustic-mode even if rust-mode also installed
-  (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
-  :hook (rustic-mode . my-rustic-mode-hook-fn))
+  (use-package rustic
+    :init
+    ;; to use rustic-mode even if rust-mode also installed
+    (setq auto-mode-alist (delete '("\\.rs\\'" . rust-mode) auto-mode-alist))
+    :hook (rustic-mode . my-rustic-mode-hook-fn)))
 
 ;;; But if you have Emacs older than 26 than you should install
 ;;; [racer](https://github.com/racer-rust/racer) and for **tab
 ;;; completion** add [my common settings for programming modes] and
 ;;; then add
 
-(use-package cargo
-  :if (< emacs-major-version 26)
-  :defer)
+(when (< emacs-major-version 26)
+  (use-package cargo
+    :defer)
 
-(use-package racer
-  :if (< emacs-major-version 26)
-  :defer)
+  (use-package racer
+    :defer)
 
-(use-package rust-mode
-  :if (< emacs-major-version 26)
-  :init
-  (setq rust-format-on-save t)
-  :hook ((rust-mode . company-mode)
-	 (rust-mode . cargo-minor-mode)
-	 (rust-mode . racer-mode)
-	 (rust-mode . eldoc-mode)))
+  (use-package rust-mode
+    :init
+    (setq rust-format-on-save t)
+    :hook ((rust-mode . company-mode)
+	   (rust-mode . cargo-minor-mode)
+	   (rust-mode . racer-mode)
+	   (rust-mode . eldoc-mode))))
 
 
 ;;; ### Meson build system ###

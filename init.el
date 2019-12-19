@@ -381,6 +381,9 @@ of the key binding used to execute this command."
 	("C-c & t" . yas-describe-tables)
 	("C-c & &" . org-mark-ring-goto)))
 
+(use-package yasnippet-snippets
+  :defer)
+
 (use-package helm-c-yasnippet
   :bind
   (("C-c y" . helm-yas-complete)))

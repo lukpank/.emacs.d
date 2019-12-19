@@ -17,6 +17,10 @@
 ;;; `use-package-always-ensure` below to `t` start Emacs and then set
 ;;; it back to `nil` (or always have it set to `t`, if you prefer).
 
+;;; **Note** that for Emacs 25 you first need to install new ELPA
+;;; signing key as described
+;;; [here](https://elpa.gnu.org/packages/gnu-elpa-keyring-update.html).
+
 
 ;;; Basic settings
 ;;; --------------

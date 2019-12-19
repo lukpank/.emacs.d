@@ -751,17 +751,18 @@ inserted between the braces between the braces."
 
 ;;; ### Rust ###
 
-;;; If you have Emacs 26 than you need
-;;; [Rustup](https://www.rust-lang.org/learn/get-started) and using
-;;; Rustup you should install component
-;;; [rls](https://github.com/rust-lang/rls) with the command
+;;; If you have Emacs 26 than you need [Rustup] and using Rustup you
+;;; should install components [rls](https://github.com/rust-lang/rls)
+;;; and `rust-src` with the command
 ;;;
 ;;; ```
-;;; $ rustup component add rls
+;;; $ rustup component add rls rust-src
 ;;; ```
 ;;;
 ;;; For **tab completion** and **lsp** support add [my common settings
 ;;; for programming modes] and then add
+
+;;; [Rustup]: https://www.rust-lang.org/learn/get-started
 
 (when (>= emacs-major-version 26)
   (defun my-rustic-mode-hook-fn ()
@@ -776,9 +777,15 @@ inserted between the braces between the braces."
     :hook (rustic-mode . my-rustic-mode-hook-fn)))
 
 ;;; But if you have Emacs older than 26 than you should install
-;;; [racer](https://github.com/racer-rust/racer) and for **tab
-;;; completion** add [my common settings for programming modes] and
-;;; then add
+;;; [Rustup] and [racer](https://github.com/racer-rust/racer) and with
+;;; Rustup install component `rust-src` with the command
+;;;
+;;; ```
+;;; $ rustup component add rust-src
+;;; ```
+;;;
+;;; for **tab completion** add [my common settings for programming
+;;; modes] and then add
 
 (when (< emacs-major-version 26)
   (use-package cargo

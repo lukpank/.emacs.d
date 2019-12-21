@@ -1051,7 +1051,7 @@ inserted between the braces between the braces."
 
     (setq exwm-input-global-keys
 	  `((,(kbd "s-p") . my-run)
-	    (,(kbd "S-s-<return>") . (lambda () (interactive) (my-run "st")))
+	    (,(kbd "S-s-<return>") . vterm)
 	    (,(kbd "<f11>") . exwm-layout-toggle-fullscreen)
 	    (,(kbd "s-J") . windmove-down)
 	    (,(kbd "s-K") . windmove-up)

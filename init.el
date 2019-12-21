@@ -151,7 +151,7 @@
    ("C-c h e" . helm-info-emacs)
    ("C-c h g" . helm-info-gnus)
    ("C-c R" . helm-register)
-   ("s-p" . helm-run-external-command)
+   ("s-P" . helm-run-external-command)
    ;; More key bindings in "s-c" keymap
    :map helm-find-files-map
    ("<backtab>" . helm-select-action)
@@ -201,6 +201,8 @@
 
 
 (use-package ace-window
+  :init
+  (setq aw-scope 'frame) ; limit to single frame (useful when using exwm)
   :bind
   ("C-x o" . ace-window))
 
@@ -211,10 +213,10 @@
    ("C-s-p" . windmove-up)
    ("C-s-b" . windmove-left)
    ("C-s-f" . windmove-right)
-   ("s-j" . windmove-down)
-   ("s-k" . windmove-up)
-   ("s-h" . windmove-left)
-   ("s-l" . windmove-right))
+   ("s-J" . windmove-down)
+   ("s-K" . windmove-up)
+   ("s-H" . windmove-left)
+   ("s-L" . windmove-right))
   :config
   (windmove-default-keybindings))
 
@@ -1007,6 +1009,75 @@ inserted between the braces between the braces."
   (devdocs-setup))
 
 
+;;; exwm
+;;; ----
+;;;
+;;; Only load [exwm](https://elpa.gnu.org/packages/exwm.html) if
+;;; `MY_USE_EXWM` environment variable is set.
+
+(when (getenv "MY_USE_EXWM")
+  (use-package exwm
+    :init
+    (defun my-workspace (num)
+      `(,(kbd (format "s-%d" num)) .
+	(lambda ()
+	  (interactive)
+	  (exwm-workspace-switch-create ,num))))
+
+    (defun my-workspace-fn (num)
+      `(,(kbd (format "s-<f%d>" num)) .
+	(lambda ()
+	  (interactive)
+	  (exwm-workspace-switch-create ,(+ 10 num)))))
+
+    (defun my-workspace-name ()
+      (let ((num (exwm-workspace--position
+		  (exwm-workspace--workspace-from-frame-or-index
+		   (selected-frame)))))
+	(if (>= num 10)
+	    (format " <f%d>" (- num 10))
+	  (format " <%d>" num))))
+
+    (defun my-run (command)
+      (interactive (list (read-shell-command "$ ")))
+      (start-process-shell-command command nil command))
+
+    (setq exwm-input-global-keys
+	  `((,(kbd "s-p") . my-run)
+	    (,(kbd "S-s-<return>") . (lambda () (interactive) (my-run "st")))
+	    (,(kbd "<f11>") . exwm-layout-toggle-fullscreen)
+	    (,(kbd "s-J") . windmove-down)
+	    (,(kbd "s-K") . windmove-up)
+	    (,(kbd "s-H") . windmove-left)
+	    (,(kbd "s-L") . windmove-right)
+	    ,@ (mapcar #'my-workspace (number-sequence 0 9))
+	    ,@ (mapcar #'my-workspace-fn (number-sequence 1 12))))
+
+    (setq exwm-randr-workspace-monitor-plist
+	  `(,@ (mapcan (lambda (i) (list i "DP-1"))
+		       (number-sequence 0 9))
+	       ,@ (mapcan (lambda (i) (list i "HDMI-1"))
+			  (number-sequence 11 22))))
+
+    (defun my-screen-change-hook-fn ()
+      (start-process-shell-command
+       "xrandr" nil "xrandr --output HDMI-1 --right-of DP-1 --auto"))
+
+    (defun my-update-class-hook-fn ()
+      (exwm-workspace-rename-buffer exwm-class-name))
+
+    :config
+    (setq display-time-24hr-format t)
+    (display-time)
+    (set-default 'mode-line-format
+		 (list '(:eval (my-workspace-name)) mode-line-format))
+    (add-hook 'exwm-update-class-hook #'my-update-class-hook-fn)
+    (require 'exwm-randr)
+    (add-hook 'exwm-randr-screen-change-hook #'my-screen-change-hook-fn)
+    (exwm-enable)
+    (exwm-randr-enable)))
+
+
 ;;; Appearance and custom file
 ;;; --------------------------
 
@@ -1020,6 +1091,7 @@ inserted between the braces between the braces."
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)
+(scroll-bar-mode 0)
 
 
 ;;; ### Easy switching between some fonts ###

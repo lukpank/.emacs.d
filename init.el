@@ -316,11 +316,18 @@
   :bind (("C-c s" . shell-pop)))
 
 (use-package helm-mt
-  :bind (("C-c z" . helm-mt))
+  :bind (("C-c Z" . helm-mt))
   ;; hooks for fish shell (term-mode for Emacs 26 and term-exec for
   ;; Emacs 27)
   :hook ((term-mode . toggle-truncate-lines)
 	 (term-exec . toggle-truncate-lines)))
+
+(use-package vterm)
+
+(use-package vterm-toggle
+  :bind (("C-c z" . vterm-toggle)
+	 ("s-F" . vterm-toggle-forward)
+	 ("s-B" . vterm-toggle-backward)))
 
 
 ;;; ### Git ###

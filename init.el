@@ -1132,8 +1132,8 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; ### Toggle between dark and light themes with a key ###
 
-(setq my-dark-theme 'gruvbox-dark-medium
-      my-light-theme 'gruvbox-light-medium)
+(setq my-dark-theme 'apropospriate-dark
+      my-light-theme 'apropospriate-light)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
@@ -1145,7 +1145,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 
-(use-package gruvbox-theme
+(use-package apropospriate
   :config
   (my-toggle-theme))
 

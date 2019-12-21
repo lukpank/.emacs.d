@@ -366,11 +366,9 @@ of the key binding used to execute this command."
 
 (setq my-switch-to-register-map (make-sparse-keymap))
 
-(let ((character ?a))
-  (while (<= character ?z)
-    (define-key my-switch-to-register-map
-      (char-to-string character) #'my-switch-to-register)
-    (setq character (1+ character))))
+(dolist (character (number-sequence ?a ?z))
+  (define-key my-switch-to-register-map
+    (char-to-string character) #'my-switch-to-register))
 
 (global-set-key (kbd "s-s") my-switch-to-register-map)
 

@@ -203,7 +203,8 @@
 
 (use-package ace-window
   :init
-  (setq aw-scope 'frame) ; limit to single frame (useful when using exwm)
+  (setq aw-scope 'frame ; limit to single frame (useful when using exwm)
+	aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind
   ("C-x o" . ace-window))
 

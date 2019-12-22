@@ -1046,6 +1046,21 @@ inserted between the braces between the braces."
 	    (format " <f%d>" (- num 10))
 	  (format " <%d>" num))))
 
+    (setq my-previous-workspace 0
+	  my-current-workspace 0)
+
+    (defun my-workspace-switch-hook-fn ()
+      (let ((num (exwm-workspace--position
+		  (exwm-workspace--workspace-from-frame-or-index
+		   (selected-frame)))))
+	(if (/= num my-current-workspace)
+	    (setq my-previous-workspace my-current-workspace
+		  my-current-workspace num))))
+
+    (defun my-workspace-switch-previous ()
+      (interactive)
+      (exwm-workspace-switch my-previous-workspace))
+
     (defun my-run (command)
       (interactive (list (read-shell-command "$ ")))
       (start-process-shell-command command nil command))
@@ -1058,6 +1073,7 @@ inserted between the braces between the braces."
 	    (,(kbd "s-K") . windmove-up)
 	    (,(kbd "s-H") . windmove-left)
 	    (,(kbd "s-L") . windmove-right)
+	    (,(kbd "s-<tab>") . my-workspace-switch-previous)
 	    ,@ (mapcar #'my-workspace (number-sequence 0 9))
 	    ,@ (mapcar #'my-workspace-fn (number-sequence 1 12))))
 
@@ -1080,6 +1096,7 @@ inserted between the braces between the braces."
     (set-default 'mode-line-format
 		 (list '(:eval (my-workspace-name)) mode-line-format))
     (add-hook 'exwm-update-class-hook #'my-update-class-hook-fn)
+    (add-hook 'exwm-workspace-switch-hook #'my-workspace-switch-hook-fn)
     (require 'exwm-randr)
     (add-hook 'exwm-randr-screen-change-hook #'my-screen-change-hook-fn)
     (exwm-enable)

@@ -1152,7 +1152,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 
-(use-package apropospriate
+(use-package apropospriate-theme
   :config
   (my-toggle-theme))
 

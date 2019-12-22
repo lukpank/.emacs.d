@@ -592,7 +592,8 @@ of the key binding used to execute this command."
 (setq js-indent-level 8)
 
 
-;;; ###  Go ###
+;;; <span id="go"></span>
+;;; ###  Go (golang) ###
 
 ;;; <div class="warning">
 ;;; This is my new Go setup (partially) based on <a

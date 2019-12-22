@@ -131,6 +131,7 @@
   :init
   (setq helm-split-window-default-side 'other
 	helm-split-window-inside-p t
+	helm-swoop-split-with-multiple-windows t	
 	helm-command-prefix-key "s-c")
   :config
   (require 'helm-config)	      ; required to setup "s-c" keymap

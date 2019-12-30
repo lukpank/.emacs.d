@@ -247,7 +247,7 @@
 
 (use-package avy
   :bind
-  ("s-;" . avy-goto-char-timer))
+  ("s-." . avy-goto-char-timer))
 
 ;;; Bind key `o` to selection of a link in help or info buffers by a
 ;;; single or two letters.

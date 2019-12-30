@@ -1013,6 +1013,14 @@ inserted between the braces between the braces."
   (delete-window))
 
 
+;;; ### Mail ###
+
+(use-package notmuch
+  :defer
+  :init
+  (setq notmuch-search-oldest-first nil))
+
+
 ;;; ### API documentation ###
 
 (when (require 'devdocs-lookup nil t)

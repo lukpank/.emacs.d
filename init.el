@@ -312,6 +312,9 @@
 
 ;;; ### Shell and terminal ###
 
+(if (executable-find "/usr/bin/fish")
+    (setq shell-file-name "/usr/bin/fish"))
+
 (use-package shell-pop
   :init
   (setq shell-pop-full-span t)
@@ -324,7 +327,8 @@
   :hook ((term-mode . toggle-truncate-lines)
 	 (term-exec . toggle-truncate-lines)))
 
-(use-package vterm)
+(use-package vterm
+  :defer)
 
 (use-package vterm-toggle
   :bind (("C-c z" . vterm-toggle)

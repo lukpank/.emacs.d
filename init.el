@@ -1120,9 +1120,10 @@ inserted between the braces between the braces."
 ;;; ### Minimalistic look ###
 
 (setq inhibit-startup-screen t
-      frame-title-format (list "[" user-login-name "@" (system-name)
-			       "] %b")
+      frame-title-format "%b"
       ediff-window-setup-function #'ediff-setup-windows-plain)
+(add-to-list 'global-mode-string
+	     `(t (,(user-login-name) "@" system-name " ")) t)
 (set-scroll-bar-mode 'right)
 (menu-bar-mode 0)
 (tool-bar-mode 0)

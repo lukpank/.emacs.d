@@ -949,14 +949,11 @@ inserted between the braces between the braces."
 
 ;;; ### Org mode ###
 
-(use-package org-bullets
-  :defer)
-
 (use-package org
   :init
   (setq org-default-notes-file "~/org/notes.org"
 	org-highlight-latex-and-related '(latex)
-	org-bullets-bullet-list '("●" "○" "✸" "✿")
+	org-hide-leading-stars t
 	org-ellipsis "…"
 	org-catch-invisible-edits 'smart
 	gnuplot-program "pyxplot")
@@ -967,8 +964,7 @@ inserted between the braces between the braces."
    ("C-c B" . org-switchb)
    ("C-c c" . org-capture)
    ("C-c l" . org-store-link))
-  :hook ((org-timer-done . my-org-timer-done)
-	 (org-mode . org-bullets-mode))
+  :hook ((org-timer-done . my-org-timer-done))
   :config
   (require 'ox-beamer))
 

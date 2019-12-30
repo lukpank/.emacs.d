@@ -1119,6 +1119,8 @@ inserted between the braces between the braces."
 (menu-bar-mode 0)
 (tool-bar-mode 0)
 (scroll-bar-mode 0)
+(setq-default cursor-type 'bar)
+(setq-default cursor-in-non-selected-windows 'hollow)
 
 
 ;;; ### Easy switching between some fonts ###

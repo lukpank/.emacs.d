@@ -215,10 +215,10 @@
    ("C-s-p" . windmove-up)
    ("C-s-b" . windmove-left)
    ("C-s-f" . windmove-right)
-   ("s-J" . windmove-down)
-   ("s-K" . windmove-up)
-   ("s-H" . windmove-left)
-   ("s-L" . windmove-right))
+   ("C-s-j" . windmove-down)
+   ("C-s-k" . windmove-up)
+   ("C-s-h" . windmove-left)
+   ("C-s-l" . windmove-right))
   :config
   (windmove-default-keybindings))
 

@@ -695,11 +695,11 @@ inserted between the braces between the braces."
 ;;;    search for the package for your system or
 ;;;    see [Getting started](https://golang.org/doc/install).
 
-;;; 3. Install [gopls](https://github.com/golang/go/wiki/gopls) with
+;;; 3. Install [gopls](https://github.com/golang/tools/blob/master/gopls/README.md) with
 ;;;    (but in your home directory, not inside some Go module)
 
 ;;;    ```
-;;;    $ GO111MODULE=on go get golang.org/x/tools/cmd/gopls@latest
+;;;    $ GO111MODULE=on go get golang.org/x/tools/gopls@latest
 ;;;    ```
 
 ;;; 4. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)

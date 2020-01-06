@@ -1170,8 +1170,19 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 ;;; ### Toggle between dark and light themes with a key ###
 
-(setq my-dark-theme 'apropospriate-dark
-      my-light-theme 'apropospriate-light)
+;;; Toggle between [my own dark and light
+;;; themes](https://lupan.pl/lupan-themes/) if available in
+;;; `~/.emacs.d/lupan-themes` otherwise falls back to another themes.
+
+(let ((path (expand-file-name "~/.emacs.d/lupan-themes")))
+  (when (file-accessible-directory-p path)
+    (add-to-list 'load-path path t)))
+
+(if (require 'lupan-themes nil t)
+    (setq my-dark-theme 'lupan-dark
+	  my-light-theme 'lupan-light)
+  (setq my-dark-theme 'apropospriate-dark
+	my-light-theme 'apropospriate-light))
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
@@ -1184,8 +1195,11 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 
 (use-package apropospriate-theme
-  :config
-  (my-toggle-theme))
+  :defer)
+
+(if (or (require 'lupan-themes nil t)
+	(require 'apropospriate-theme nil t))
+    (my-toggle-theme))
 
 (defun my-frame-setup-fn (&optional frame)
   (unless (display-graphic-p frame)

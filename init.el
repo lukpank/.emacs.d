@@ -1179,13 +1179,16 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (setq my-dark-theme 'apropospriate-dark
 	my-light-theme 'apropospriate-light))
 
+(defun my-select-theme (theme)
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme theme t)
+  (my-helm-themes-after))
+
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
   (interactive)
   (let ((dark-p (custom-theme-enabled-p my-dark-theme)))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme (if dark-p my-light-theme my-dark-theme) t))
-  (my-helm-themes-after))
+    (my-select-theme (if dark-p my-light-theme my-dark-theme))))
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 

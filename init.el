@@ -108,13 +108,6 @@
   :config
   (which-key-mode))
 
-;;; Helm version for `C-h b`.
-
-(use-package helm-descbinds
-  :demand
-  :config
-  (helm-descbinds-mode))
-
 ;;; List of personal key bindings
 
 (global-set-key (kbd "C-c h b") 'describe-personal-keybindings)
@@ -126,44 +119,34 @@
 
 (global-set-key "\C-cq" #'bury-buffer)
 
-(use-package helm
-  :demand
+(use-package flx
+  :after ivy)
+
+(use-package counsel
   :init
-  (setq helm-split-window-default-side 'other
-	helm-split-window-inside-p t
-	helm-swoop-split-with-multiple-windows t	
-	helm-command-prefix-key "s-c")
+  (setq ivy-use-virtual-buffers t
+	ivy-re-builders-alist
+	'((counsel-git-grep . ivy--regex-plus)
+	  (counsel-rg . ivy--regex-plus)
+	  (swiper . ivy--regex-plus)
+	  (swiper-all . ivy--regex-plus)
+	  (t . ivy--regex-fuzzy)))
   :config
-  (require 'helm-config)	      ; required to setup "s-c" keymap
-  (helm-mode 1)
-  (helm-autoresize-mode 1)
-  ;; Only rebind M-x and C-x C-f on successful load of helm to remain
-  ;; this basic operations if helm is not installed.
-  (bind-key "M-x" #'helm-M-x)
-  (bind-key "C-x C-f" #'helm-find-files)
+  (counsel-mode 1)
   :bind
-  (("M-y" . helm-show-kill-ring)
-   ("C-c o" . helm-occur)
-   ("C-x b" . helm-mini)
-   ("C-x r b" . helm-bookmarks)
-   ("C-h a" . helm-apropos)
-   ("C-h d" . helm-info-at-point)
-   ("C-c a" . helm-all-mark-rings)
-   ("C-c h e" . helm-info-emacs)
-   ("C-c h g" . helm-info-gnus)
-   ("C-c R" . helm-register)
-   ("s-P" . helm-run-external-command)
-   ;; More key bindings in "s-c" keymap
-   :map helm-find-files-map
-   ("<backtab>" . helm-select-action)
-   ("C-i" . helm-execute-persistent-action)))
+  (("C-c E" . counsel-flycheck)
+   ("C-c f" . counsel-fzf)
+   ("C-c g" . counsel-git)
+   ("C-c j" . counsel-git-grep)
+   ("C-c L" . counsel-locate)
+   ("C-c o" . counsel-outline)
+   ("C-c r" . counsel-rg)
+   ("C-c R" . counsel-register)
+   ("C-c T" . counsel-load-theme)))
 
-;;; Install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg) and
-;;; add
+;; Install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg) for
+;; `counsel-rg` to work properly.
 
-(use-package helm-rg
-  :bind
-  (("C-c r" . helm-rg)))
 
 ;;; File explorer sidebar
 
@@ -176,34 +159,18 @@
 
 (use-package buffer-flip
   :bind
-  (("s-o" . buffer-flip)
+  (("H-f" . buffer-flip)
    :map buffer-flip-map
-   ("s-o" . buffer-flip-forward)
-   ("s-O" . buffer-flip-backward)
+   ("H-f" . buffer-flip-forward)
+   ("H-F" . buffer-flip-backward)
    ("C-g" . buffer-flip-abort)))
-
-;;; [fzf](https://github.com/junegunn/fzf) and
-;;; [lcd](https://github.com/lukpank/lcd) for finding files and
-;;; directories
-
-(defun my-lcd ()
-  (interactive)
-  (fzf/start default-directory
-             (fzf/grep-cmd "lcd" "-l %s")))
-
-(use-package fzf
-  :commands fzf/start
-  :bind
-  (("C-c f" . fzf)
-   ("C-c D" . my-lcd)))
 
 
 ;;; ### Window selection enhancements ###
 
-
 (use-package ace-window
   :init
-  (setq aw-scope 'frame ; limit to single frame (useful when using exwm)
+  (setq aw-scope 'frame ; limit to single frame
 	aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
   :bind
   ("C-x o" . ace-window))
@@ -211,22 +178,22 @@
 (use-package windmove
   :demand
   :bind
-  (("C-s-n" . windmove-down)
-   ("C-s-p" . windmove-up)
-   ("C-s-b" . windmove-left)
-   ("C-s-f" . windmove-right)
-   ("C-s-j" . windmove-down)
-   ("C-s-k" . windmove-up)
-   ("C-s-h" . windmove-left)
-   ("C-s-l" . windmove-right))
+  (("H-w j" . windmove-down)
+   ("H-w k" . windmove-up)
+   ("H-w h" . windmove-left)
+   ("H-w l" . windmove-right))
   :config
   (windmove-default-keybindings))
 
-;;; Switch between window configurations
-
-(use-package eyebrowse
+(use-package windswap
+  :demand
+  :bind
+  (("H-w J" . windswap-down)
+   ("H-w K" . windswap-up)
+   ("H-w H" . windswap-left)
+   ("H-w L" . windswap-right))
   :config
-  (eyebrowse-mode))
+  (windswap-default-keybindings))
 
 ;;; Allow for Undo/Redo of window manipulations (such as `C-x 1`)
 
@@ -237,17 +204,17 @@
 
 ;;; Improved in buffer search
 
-(use-package helm-swoop
+(use-package swiper
   :bind
-  (("C-s" . helm-swoop-without-pre-input)
-   ("C-S-s" . helm-swoop)))
+  (("C-s" . swiper)
+   ("C-S-s" . swiper-thing-at-point)))
 
 ;;; Type substring and wait to select one of its visible occurrences
 ;;; (even in other windows) with a single or two letters.
 
 (use-package avy
   :bind
-  ("s-." . avy-goto-char-timer))
+  ("H-." . avy-goto-char-timer))
 
 ;;; Bind key `o` to selection of a link in help or info buffers by a
 ;;; single or two letters.
@@ -317,20 +284,13 @@
   (setq shell-pop-full-span t)
   :bind (("C-c s" . shell-pop)))
 
-(use-package helm-mt
-  :bind (("C-c Z" . helm-mt))
-  ;; hooks for fish shell (term-mode for Emacs 26 and term-exec for
-  ;; Emacs 27)
-  :hook ((term-mode . toggle-truncate-lines)
-	 (term-exec . toggle-truncate-lines)))
-
 (use-package vterm
   :defer)
 
 (use-package vterm-toggle
-  :bind (("C-c z" . vterm-toggle)
-	 ("s-F" . vterm-toggle-forward)
-	 ("s-B" . vterm-toggle-backward)))
+  :bind (("H-z" . vterm-toggle)
+	 ("H-F" . vterm-toggle-forward)
+	 ("H-B" . vterm-toggle-backward)))
 
 
 ;;; ### Git ###
@@ -347,15 +307,6 @@
   :config
   (setq git-messenger:show-detail t
 	git-messenger:use-magit-popup t))
-
-(use-package helm-git-grep
-  :bind
-  (("C-c j" . helm-git-grep)
-   ("C-c J" . helm-git-grep-at-point)))
-
-(use-package helm-ls-git
-  :bind
-  (("C-c g" . helm-ls-git-ls)))
 
 
 ;;; ### Switching buffers ###
@@ -382,7 +333,7 @@ of the key binding used to execute this command."
   (define-key my-switch-to-register-map
     (char-to-string character) #'my-switch-to-register))
 
-(global-set-key (kbd "s-s") my-switch-to-register-map)
+(global-set-key (kbd "H-r") my-switch-to-register-map)
 
 
 ;;; ### Yasnippet and abbrev mode ###
@@ -399,9 +350,9 @@ of the key binding used to execute this command."
 (use-package yasnippet-snippets
   :defer)
 
-(use-package helm-c-yasnippet
+(use-package ivy-yasnippet
   :bind
-  (("C-c y" . helm-yas-complete)))
+  (("C-c y" . ivy-yasnippet)))
 
 
 ;;; Programming languages
@@ -422,7 +373,7 @@ of the key binding used to execute this command."
   :bind
   (:map prog-mode-map
 	("C-i" . company-indent-or-complete-common)
-	("C-M-i" . completion-at-point)))
+	("C-M-i" . counsel-company)))
 
 ;;; For modes that also use Language Server Protocol from
 ;;; [lsp-mode](https://github.com/emacs-lsp/lsp-mode) add
@@ -446,10 +397,6 @@ of the key binding used to execute this command."
 ;;; Compilation
 
 (global-set-key "\C-ck" #'compile)
-
-(use-package helm-make
-  :bind
-  (("C-c K" . helm-make)))
 
 
 ;;; [my common settings for programming modes]: #common-settings-for-programming-modes
@@ -553,16 +500,13 @@ of the key binding used to execute this command."
 (use-package paren-face
   :defer)
 
-;; I do not want completion in extra frame
-(setq helm-show-completion-display-function #'helm-default-display-buffer)
-
 (defun my-emacs-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function) #'lisp-indent-function)
   (paredit-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (local-set-key (kbd "C-c C-z")
 		 (lambda () (interactive) (switch-to-buffer "*scratch*")))
-  (local-set-key (kbd "C-M-i") #'helm-lisp-completion-at-point)
+  (local-set-key (kbd "C-M-i") #'counsel-company)
   (show-paren-mode 1)
   (paren-face-mode))
 
@@ -646,10 +590,7 @@ inserted between the braces between the braces."
 (defun my-godoc-package ()
   "Display godoc for given package (with completion)."
   (interactive)
-  (godoc (or (helm :sources (helm-build-sync-source "Go packages"
-			    :candidates (go-packages))
-		   :buffer "*godoc packages*")
-	     (signal 'quit nil))))
+  (godoc (ivy-read "Package: " (go-packages) :require-match t)))
 
 (use-package go-guru
   :after go-mode)
@@ -736,28 +677,6 @@ inserted between the braces between the braces."
   (local-set-key "\C-i" #'company-indent-or-complete-common))
 
 (add-hook 'python-mode-hook #'my-python-mode-hook-fn)
-
-
-;;; ### Nim ###
-
-(use-package lsp-mode
-  :commands lsp
-  :config
-  ;; Register `nimlsp` from https://github.com/PMunch/nimlsp
-  (add-to-list 'lsp-language-id-configuration '(nim-mode . "nim"))
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection '("nimlsp"))
-		    :major-modes '(nim-mode)
-		    :server-id 'nim-ls)))
-
-(use-package highlight-indent-guides
-  :defer
-  :init
-  (setq highlight-indent-guides-method 'character))
-
-(use-package nim-mode
-  :hook ((nim-mode . highlight-indent-guides-mode)
-	 (nim-mode . lsp)))
 
 
 ;;; ### Rust ###
@@ -987,12 +906,9 @@ inserted between the braces between the braces."
 	("EWW" . eww-browse-url)))
 
 (defun my-browse-url (&rest args)
-  "Select the prefered browser from a helm menu before opening the URL."
+  "Select the prefered browser from a menu before opening the URL."
   (interactive)
-  (let ((browser (or (helm :sources (helm-build-sync-source "WWW browsers"
-				   :candidates (mapcar 'car my-browsers))
-			   :buffer "*my browsers*")
-		     (signal 'quit nil))))
+  (let ((browser (ivy-read "WWW browser: " my-browsers :require-match t)))
     (apply (cdr (assoc browser my-browsers)) args)))
 
 (setq browse-url-browser-function #'my-browse-url)
@@ -1050,31 +966,13 @@ inserted between the braces between the braces."
   "Set font to one of the fonts from `my-font-list'
 Argument FRAMES has the same meaning as for `set-frame-font'"
   (interactive
-   (list (or (helm :prompt "Font name: "
-		   :resume 'noresume
-		   :sources (helm-build-sync-source "Fonts"
-			      :candidates my-font-list)
-		   :buffer "*font selection*")
-	     (signal 'quit nil))
+   (list (ivy-read "Font name: " my-font-list)
 	 (read-number "Font size: ")))
   (set-frame-font
    (format "%s:pixelsize=%d:antialias=true:autohint=true" font-name size)
    nil frames))
 
 (global-set-key (kbd "C-c F") #'my-set-frame-font)
-
-
-;;; ### Easy switching between themes ###
-
-(defun my-helm-themes-after ()
-  (set-face-background 'scroll-bar "#908070"))
-
-(use-package helm-themes
-  :bind
-  (("C-c T" . helm-themes))
-  :config
-  ;; need to update powerline after changing theme
-  (advice-add 'helm-themes :after #'my-helm-themes-after))
 
 
 ;;; ### Toggle between dark and light themes with a key ###
@@ -1095,8 +993,7 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 
 (defun my-select-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
-  (load-theme theme t)
-  (my-helm-themes-after))
+  (load-theme theme t))
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
@@ -1122,17 +1019,18 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
 (add-hook 'window-setup-hook #'my-frame-setup-fn)
 
 
-;;; ### My customization for some used themes ###
+;;; ### Hyper bindings
 
-(eval-after-load 'firebelly-theme
-  '(custom-theme-set-faces
-    'firebelly
-    '(font-lock-comment-delimiter-face ((t (:foreground "#505050"))))))
-
-(eval-after-load 'nimbus-theme
-  '(custom-theme-set-faces
-    'nimbus
-    '(region ((t (:background "#505050"))))))
+(dolist (k '(("H-1" . "C-x 1")
+	     ("H-2" . "C-x 2")
+	     ("H-3" . "C-x 3")
+	     ("H-0" . "C-x 0")
+	     ("H-b" . "C-x b")
+	     ("H-g" . "C-x g")
+	     ("H-k" . "C-x k")
+	     ("H-o" . "C-x o")))
+  (global-set-key (kbd (car k))
+		  (lookup-key (current-global-map) (kbd (cdr k)))))
 
 
 ;;; ### Use separate custom file ###

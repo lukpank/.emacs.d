@@ -44,10 +44,7 @@ inserted between the braces between the braces."
 (defun my-godoc-package ()
   "Display godoc for given package (with completion)."
   (interactive)
-  (godoc (or (helm :sources (helm-build-sync-source "Go packages"
-			    :candidates (go-packages))
-		   :buffer "*godoc packages*")
-	     (signal 'quit nil))))
+  (godoc (ivy-read "Package: " (go-packages) :require-match t)))
 
 (use-package flycheck
   :defer)

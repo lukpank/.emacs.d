@@ -51,6 +51,7 @@
       '(("gnu" . "https://elpa.gnu.org/packages/")
 	("melpa-stb" . "https://stable.melpa.org/packages/")
 	("melpa" . "https://melpa.org/packages/"))
+      package-user-dir (format "~/.emacs.d/elpa-%s" emacs-major-version)
       tls-checktrust t
       tls-program '("gnutls-cli --x509cafile %t -p %p %h")
       gnutls-verify-error t)

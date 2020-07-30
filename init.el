@@ -124,6 +124,7 @@
   :after ivy)
 
 (use-package counsel
+  :demand
   :init
   (setq ivy-use-virtual-buffers t
 	ivy-re-builders-alist
@@ -133,6 +134,7 @@
 	  (swiper-all . ivy--regex-plus)
 	  (t . ivy--regex-fuzzy)))
   :config
+  (ivy-mode 1)
   (counsel-mode 1)
   :bind
   (("C-c E" . counsel-flycheck)

@@ -145,9 +145,8 @@
    ("C-c R" . counsel-register)
    ("C-c T" . counsel-load-theme)))
 
-;; Install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg) for
-;; `counsel-rg` to work properly.
-
+;;; For `counsel-fzf` install [fzf](https://github.com/junegunn/fzf) and for
+;;; `counsel-rg`  install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg).
 
 ;;; File explorer sidebar
 
@@ -312,7 +311,7 @@
 
 ;;; ### Switching buffers ###
 
-;;; Bind keys from `s-s a` to `s-s z` to switch to buffers from a
+;;; Bind keys from `H-r a` to `H-r z` to switch to buffers from a
 ;;; register from `a` to `z`.
 
 (defalias 'pr #'point-to-register)
@@ -628,7 +627,7 @@ inserted between the braces between the braces."
 ;;;    Or just install [go-mode], [go-guru], [company-lsp].
 
 ;;; 2. Install Go compiler. Under Debian you may install `golang` package
-;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.13,
+;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.14,
 ;;;    so you may consider
 ;;;    [downloading the current version of Go](https://golang.org/dl/)). Otherwise
 ;;;    search for the package for your system or

@@ -744,6 +744,12 @@ inserted between the braces between the braces."
 
 ;;; ### Vala ###
 
+;;; You need to install
+;;; [vala-language-server](https://github.com/benwaffle/vala-language-server).
+
+;;; For **tab completion** and **lsp** support also add [my common
+;;; settings for programming modes].
+
 (use-package lsp-mode
   :commands lsp
   :config
@@ -754,16 +760,12 @@ inserted between the braces between the braces."
                     :major-modes '(vala-mode)
                     :server-id 'vala-ls)))
 
-(use-package dumb-jump
-  :defer)
-
 (defun my-vala-mode-hook-fn ()
   (setq c-basic-offset 4
 	tab-width 8
 	indent-tabs-mode nil)
   (set (make-local-variable 'company-backends) '(company-lsp))
   (company-mode 1)
-  (dumb-jump-mode)
   (local-set-key "\C-i" #'company-indent-or-complete-common)
   (lsp))
 

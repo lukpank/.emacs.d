@@ -51,19 +51,28 @@
       '(("gnu" . "https://elpa.gnu.org/packages/")
 	("melpa-stb" . "https://stable.melpa.org/packages/")
 	("melpa" . "https://melpa.org/packages/"))
-      package-user-dir (format "~/.emacs.d/elpa-%s" emacs-major-version)
       tls-checktrust t
       tls-program '("gnutls-cli --x509cafile %t -p %p %h")
       gnutls-verify-error t)
-
-(package-initialize)
-
-(setq use-package-always-ensure nil)
 
 ;;; This also turns on checking TLS certificates (in both possible
 ;;; modes) with `tls-program` set to only the first value from the
 ;;; default value (for more info see [Your Text Editor Is
 ;;; Malware](https://glyph.twistedmatrix.com/2015/11/editor-malware.html)).
+
+;;; We use major version specific package directory (but only if the
+;;; directory already exists, meaning you may be switching between
+;;; more than one version of Emacs).
+
+(let ((path (format "~/.emacs.d/elpa-%s" emacs-major-version)))
+  (if (file-accessible-directory-p path)
+      (setq package-user-dir path)))
+
+;;; Now we are ready to initialize package system.
+
+(package-initialize)
+
+(setq use-package-always-ensure nil)
 
 ;;; Now you can list available packages by running `M-x list-packages`.
 ;;; Mark packages you want to install by pressing `i` and later press `x`

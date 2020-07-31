@@ -113,6 +113,9 @@
 
 (global-set-key (kbd "C-c h b") 'describe-personal-keybindings)
 
+(use-package remind-bindings
+  :bind ("H-?" . remind-bindings-togglebuffer))
+
 
 ;;; ### More efficient buffer/file selection ###
 
@@ -134,6 +137,7 @@
 	  (swiper-all . ivy--regex-plus)
 	  (t . ivy--regex-fuzzy)))
   :config
+  (add-to-list 'ivy-ignore-buffers "\\`\\*remind-bindings\\*")
   (ivy-mode 1)
   (counsel-mode 1)
   :bind
@@ -216,7 +220,8 @@
 
 (use-package avy
   :bind
-  ("H-." . avy-goto-char-timer))
+  (("H-." . avy-goto-char-timer)
+   ("H-," . avy-goto-line)))
 
 ;;; Bind key `o` to selection of a link in help or info buffers by a
 ;;; single or two letters.
@@ -256,6 +261,13 @@
 
 (use-package ws-butler
   :hook (prog-mode . ws-butler-mode))
+
+
+;;; Expand region
+
+(use-package expand-region
+  :bind ("H-e" . er/expand-region)
+  :ensure t)
 
 
 ;;; ### Spell checking ###
@@ -496,15 +508,15 @@ of the key binding used to execute this command."
   (if (file-accessible-directory-p path)
       (setq common-lisp-hyperspec-root (concat "file://" path))))
 
-(use-package paredit
-  :hook (eval-expression-minibuffer-setup . paredit-mode))
+(use-package lispy
+  :hook (eval-expression-minibuffer-setup . lispy-mode))
 
 (use-package paren-face
   :defer)
 
 (defun my-emacs-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function) #'lisp-indent-function)
-  (paredit-mode 1)
+  (lispy-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (local-set-key (kbd "C-c C-z")
 		 (lambda () (interactive) (switch-to-buffer "*scratch*")))
@@ -523,7 +535,7 @@ of the key binding used to execute this command."
 (defun my-lisp-mode-hook-fn ()
   (set (make-local-variable 'lisp-indent-function)
        #'common-lisp-indent-function)
-  (paredit-mode 1)
+  (lispy-mode 1)
   (local-set-key (kbd "C-c S") (global-key-binding (kbd "M-s")))
   (show-paren-mode 1)
   (paren-face-mode)

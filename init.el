@@ -219,10 +219,9 @@
 
 ;;; Improved in buffer search
 
-(use-package swiper
-  :bind
-  (("C-s" . swiper)
-   ("C-S-s" . swiper-thing-at-point)))
+(use-package ctrlf
+  :config
+  (ctrlf-mode 1))
 
 ;;; Type substring and wait to select one of its visible occurrences
 ;;; (even in other windows) with a single or two letters.

@@ -162,7 +162,8 @@
 
 (use-package ivy-posframe
   :init
-  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  (setq ivy-posframe-display-functions-alist
+	'((t . ivy-posframe-display-at-frame-center)))
   :config
   (ivy-posframe-mode 1))
 

@@ -406,9 +406,6 @@ of the key binding used to execute this command."
 ;;; For modes that also use Language Server Protocol from
 ;;; [lsp-mode](https://github.com/emacs-lsp/lsp-mode) add
 
-(use-package company-lsp
-  :defer)
-
 (use-package lsp-mode
   :commands lsp
   ;; reformat code and add missing (or remove old) imports
@@ -652,7 +649,7 @@ inserted between the braces between the braces."
 
 ;;; 1. After adding above to your emacs config file see how to
 ;;;    [install from MELPA all required packages](#add-melpa-package-list).
-;;;    Or just install [go-mode], [go-guru], [company-lsp].
+;;;    Or just install [go-mode], [go-guru].
 
 ;;; 2. Install Go compiler. Under Debian you may install `golang` package
 ;;;    (but in Debian 10 Buster it is 1.11 compared to the current 1.14,
@@ -684,7 +681,6 @@ inserted between the braces between the braces."
 ;;; and [Writing Go in Emacs](http://dominik.honnef.co/posts/2013/03/writing_go_in_emacs/)
 ;;; for more info.
 
-;;; [company-lsp]: https://melpa.org/#/company-lsp
 ;;; [go-guru]: https://melpa.org/#/go-guru
 
 
@@ -791,10 +787,9 @@ inserted between the braces between the braces."
   (setq c-basic-offset 4
 	tab-width 8
 	indent-tabs-mode nil)
-  (set (make-local-variable 'company-backends) '(company-lsp))
   (company-mode 1)
   (local-set-key "\C-i" #'company-indent-or-complete-common)
-  (lsp))
+  (lsp 1))
 
 (use-package vala-mode
   :hook (vala-mode . my-vala-mode-hook-fn))

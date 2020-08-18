@@ -160,6 +160,12 @@
    ("C-c R" . counsel-register)
    ("C-c T" . counsel-load-theme)))
 
+(use-package ivy-posframe
+  :init
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+  :config
+  (ivy-posframe-mode 1))
+
 ;;; For `counsel-fzf` install [fzf](https://github.com/junegunn/fzf) and for
 ;;; `counsel-rg`  install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg).
 

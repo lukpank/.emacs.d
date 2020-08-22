@@ -167,6 +167,22 @@
   :config
   (ivy-posframe-mode 1))
 
+(use-package ivy-rich
+  :config
+  (setq ivy-rich-display-transformers-list
+	(plist-put ivy-rich-display-transformers-list
+		   'ivy-switch-buffer
+		   '(:columns
+		     ((ivy-switch-buffer-transformer (:width 40))
+		      (ivy-rich-switch-buffer-project
+		       (:width 15 :face success))
+		      (ivy-rich-switch-buffer-path
+		       (:width (lambda (x)
+				 (ivy-rich-switch-buffer-shorten-path
+				  x (ivy-rich-minibuffer-width 0.3))))))
+		     :predicate (lambda (cand) (get-buffer cand)))))
+  (ivy-rich-mode 1))
+
 ;;; For `counsel-fzf` install [fzf](https://github.com/junegunn/fzf) and for
 ;;; `counsel-rg`  install [ripgrep](https://github.com/BurntSushi/ripgrep) (rg).
 

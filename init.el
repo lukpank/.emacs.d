@@ -781,6 +781,9 @@ inserted between the braces between the braces."
   :init
   (setq meson-indent-basic 4))
 
+;;; To use `cmake-ide` with Meson build system
+;;; [see](https://github.com/atilaneves/cmake-ide/#non-cmake-projects).
+
 
 ;;; ### Vala ###
 
@@ -1001,8 +1004,8 @@ inserted between the braces between the braces."
 
 ;;; ### Easy switching between some fonts ###
 
-(setq my-font-list '("Fantasque Sans Mono" "Go mono" "IBM 3270"
-		     "Inconsolata" "Iosevka" "Monofur" "Monoid" "mononoki"))
+(setq my-font-list '("Fantasque Sans Mono" "Fira Code Light" "Go mono" "IBM 3270"
+		     "Inconsolata" "Iosevka Light" "Monofur" "Monoid" "mononoki"))
 
 (defun my-set-frame-font (font-name size &optional frames)
   "Set font to one of the fonts from `my-font-list'

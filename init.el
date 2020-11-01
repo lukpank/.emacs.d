@@ -469,17 +469,7 @@ of the key binding used to execute this command."
 ;;; For **tab completion** and **lsp** support also add [my common
 ;;; settings for programming modes].
 
-(defconst my-cc-style
-  '("k&r"
-    (c-offsets-alist . ((innamespace . [0])))))
-
-(c-add-style "my-cc-mode" my-cc-style)
-
 (setq-default c-basic-offset 8)
-(setq c-default-style '((java-mode . "java")
-			(awk-mode . "awk")
-			(c++-mode . "my-cc-mode")
-			(other . "k&r")))
 
 (defun my-c-c++-mode-hook-fn ()
   (lsp)

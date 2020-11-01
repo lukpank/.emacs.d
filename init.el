@@ -413,6 +413,7 @@ of the key binding used to execute this command."
   :init
   (setq company-idle-delay nil  ; avoid auto completion popup, use TAB
 				; to show it
+	company-async-timeout 15	; completion may be slow
 	company-tooltip-align-annotations t)
   :hook (after-init . global-company-mode)
   :bind
@@ -423,18 +424,37 @@ of the key binding used to execute this command."
 ;;; For modes that also use Language Server Protocol from
 ;;; [lsp-mode](https://github.com/emacs-lsp/lsp-mode) add
 
+(defun my-lsp-format-buffer ()
+  (if (eq major-mode 'go-mode)
+      (lsp-format-buffer)))
+
+(defun my-lsp-organize-imports ()
+  (if (eq major-mode 'go-mode)
+      (lsp-organize-imports)))
+
 (use-package lsp-mode
   :commands lsp
-  ;; reformat code and add missing (or remove old) imports
-  :hook ((before-save . lsp-format-buffer)
-	 (before-save . lsp-organize-imports))
-  :bind (("C-c d" . lsp-describe-thing-at-point)
+  :init
+  (setq lsp-keymap-prefix "H-l")
+  :config
+  (lsp-enable-which-key-integration t)
+  ;; reformat Go code and add missing (or remove old) imports
+  :hook ((before-save . my-lsp-format-buffer)
+	 (before-save . my-lsp-organize-imports))
+  :bind (("C-c d" . lsp-ui-doc-show)
+	 ("C-c i" . lsp-ui-imenu)
 	 ("C-c e n" . flymake-goto-next-error)
 	 ("C-c e p" . flymake-goto-prev-error)
 	 ("C-c e r" . lsp-find-references)
 	 ("C-c e R" . lsp-rename)
 	 ("C-c e i" . lsp-find-implementation)
 	 ("C-c e t" . lsp-find-type-definition)))
+
+(use-package lsp-ui
+  :init
+  (setq lsp-ui-doc-delay 1.0
+	lsp-ui-sideline-delay 5.0)
+  :defer)
 
 ;;; Compilation
 
@@ -446,14 +466,15 @@ of the key binding used to execute this command."
 
 ;;; ### C and C++ ###
 
-;;; The following Emacs packages [from MELPA](#add-melpa-package-list)
-;;; need to be installed: [cmake-ide](https://melpa.org/#/cmake-ide),
-;;; [company](https://melpa.org/#/company),
-;;; [rtags](https://melpa.org/#/rtags), and
-;;; [company-rtags](https://melpa.org/#/company-rtags).  Package
-;;; `cmake-ide` automatically configures other C++ Emacs packages
-;;; (here `company` and `rtags`) when you open a C/C++ file from a
-;;; project which uses [cmake](https://cmake.org) to build.
+;;; The following needs [clangd](https://clangd.llvm.org/) to be in
+;;; you PATH.  You also need to [provide compiler
+;;; flags](https://clangd.llvm.org/config.html#compileflags).  You may
+;;; also look at available
+;;; [keybindings](https://emacs-lsp.github.io/lsp-mode/page/keybindings/)
+;;; (I use `H-l` instead of `s-l` as the prefix).
+
+;;; For **tab completion** and **lsp** support also add [my common
+;;; settings for programming modes].
 
 (defconst my-cc-style
   '("k&r"
@@ -465,62 +486,16 @@ of the key binding used to execute this command."
 (setq c-default-style '((java-mode . "java")
 			(awk-mode . "awk")
 			(c++-mode . "my-cc-mode")
-			(other . "k&r"))
-      company-async-timeout 5		; completion may be slow
-      rtags-completions-enabled t)
-
-(use-package rtags
-  :defer
-  :config
-  (rtags-enable-standard-keybindings nil "C-c R"))
-
-(use-package company-rtags
-  :defer)
-
-(use-package cmake-ide
-  :after cc-mode
-  :config
-  (cmake-ide-setup))
+			(other . "k&r")))
 
 (defun my-c-c++-mode-hook-fn ()
-  (set (make-local-variable 'company-backends) '(company-rtags))
-  (company-mode)
-  (local-set-key (kbd "M-.") #'rtags-find-symbol-at-point)
-  (local-set-key (kbd "M-,") #'rtags-location-stack-back)
-  (local-set-key "\C-i" #'company-indent-or-complete-common)
-  (local-set-key (kbd "<tab>") #'company-indent-or-complete-common)
-  (local-set-key "\C-\M-i" #'company-indent-or-complete-common))
+  (lsp)
+  (lsp-headerline-breadcrumb-mode)
+  (smartparens-mode)
+  (local-set-key (kbd "<tab>") #'company-indent-or-complete-common))
 
 (add-hook 'c-mode-hook #'my-c-c++-mode-hook-fn)
 (add-hook 'c++-mode-hook #'my-c-c++-mode-hook-fn)
-
-;;; Now:
-
-;;; 1. Install [clang](http://clang.llvm.org/) compiler or more accurately
-;;;    `libclang` development package (package `libclang-dev` or may be newer
-;;;    `libclang-X-dev` under Debian) which is required by `rtags`.
-
-;;; 2. Under Emacs having `rtags` package installed press `M-:` and
-;;;    evaluate expression `(require 'rtags)` and then press `M-:` and
-;;;    evaluate expression `(rtags-install nil
-;;;    '("-DRTAGS_NO_ELISP_FILES=true"))` (should work if you have
-;;;    `llvm-config` or `llvm-config-X` in your `PATH`) and wait until
-;;;    it compiles to 100%.  The `rtags-install` command needs to be
-;;;    rerun if you install newer `rtags` from MELPA and the below
-;;;    commands do not work complaining about protocol mismatch.
-
-;;; 3. Usefull `rtags` functions (use `C-c R C-h` to see these and other key bindings)
-
-;;;    | Key       | Function
-;;;    |-----------|----------
-;;;    | `C-c R .` | `rtags-find-symbol-at-point`
-;;;    | `C-c R [` | `rtags-location-stack-back`
-;;;    | `C-c R ,` | `rtags-find-references-at-point`
-;;;    | `C-c R /` | `rtags-find-all-references-at-point`
-;;;    |           | `rtags-find-references-current-file`
-;;;    |           | `rtags-find-references-current-dir`
-;;;    | `C-c R v` | `rtags-find-virtuals-at-point`
-;;;    | `C-c R ;` | `rtags-find-file` (in the current project no metter in which directory)
 
 
 ;;; ### Lisp and Emacs lisp ###

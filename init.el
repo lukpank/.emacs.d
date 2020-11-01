@@ -160,13 +160,6 @@
    ("C-c R" . counsel-register)
    ("C-c T" . counsel-load-theme)))
 
-(use-package ivy-posframe
-  :init
-  (setq ivy-posframe-display-functions-alist
-	'((t . ivy-posframe-display-at-frame-center)))
-  :config
-  (ivy-posframe-mode 1))
-
 (use-package ivy-rich
   :config
   (setq ivy-rich-display-transformers-list

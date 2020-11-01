@@ -962,8 +962,9 @@ inserted between the braces between the braces."
 
 ;;; ### Easy switching between some fonts ###
 
-(setq my-font-list '("Fantasque Sans Mono" "Fira Code Light" "Go mono" "IBM 3270"
-		     "Inconsolata" "Iosevka Light" "Monofur" "Monoid" "mononoki"))
+(setq my-font-list
+      '("Fantasque Sans Mono" "Fira Code Light" "Go mono" "IBM 3270"
+	"Inconsolata" "Iosevka Light" "Monofur" "Monoid" "mononoki"))
 
 (defun my-set-frame-font (font-name size &optional frames)
   "Set font to one of the fonts from `my-font-list'

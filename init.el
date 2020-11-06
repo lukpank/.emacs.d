@@ -433,9 +433,7 @@ of the key binding used to execute this command."
   ;; reformat Go code and add missing (or remove old) imports
   :hook ((before-save . my-lsp-format-buffer)
 	 (before-save . my-lsp-organize-imports))
-  :bind (("C-c d" . lsp-ui-doc-show)
-	 ("C-c i" . lsp-ui-imenu)
-	 ("C-c e n" . flymake-goto-next-error)
+  :bind (("C-c e n" . flymake-goto-next-error)
 	 ("C-c e p" . flymake-goto-prev-error)
 	 ("C-c e r" . lsp-find-references)
 	 ("C-c e R" . lsp-rename)
@@ -444,9 +442,10 @@ of the key binding used to execute this command."
 
 (use-package lsp-ui
   :init
-  (setq lsp-ui-doc-delay 1.0
+  (setq lsp-ui-doc-enable nil
 	lsp-ui-sideline-delay 5.0)
-  :defer)
+  :bind (("C-c d" . lsp-ui-doc-show)
+	 ("C-c i" . lsp-ui-imenu)))
 
 ;;; Compilation
 

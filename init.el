@@ -290,8 +290,7 @@
 ;;; Expand region
 
 (use-package expand-region
-  :bind ("H-e" . er/expand-region)
-  :ensure t)
+  :bind ("H-e" . er/expand-region))
 
 
 ;;; ### Spell checking ###

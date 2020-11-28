@@ -660,6 +660,28 @@ inserted between the braces between the braces."
 ;;; {{old-go.el}}
 
 
+;;; <span id="d"></span>
+;;; ### D (Dlang) ###
+
+(defun my-d-mode-hook-fn ()
+  (setq c-basic-offset 4
+	indent-tabs-mode nil))
+
+(use-package d-mode
+  :init
+  (add-to-list 'c-default-style '(d-mode . "bsd"))
+  :bind
+  (:map d-mode-map
+	("M-." . company-dcd-goto-definition)
+	("M-," . company-dcd-goto-def-pop-marker)
+	("C-c d" . company-dcd-show-ddoc-with-buffer)
+	("C-i" . company-indent-or-complete-common)
+	("C-M-i" . counsel-company))
+  :hook (d-mode . my-d-mode-hook-fn))
+
+(use-package company-dcd
+  :hook (d-mode . company-dcd-mode))
+
 ;;; ### Python ###
 
 (use-package company-jedi

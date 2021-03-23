@@ -663,24 +663,45 @@ inserted between the braces between the braces."
 ;;; <span id="d"></span>
 ;;; ### D (Dlang) ###
 
+;;; Install [dcd](https://code.dlang.org/packages/dcd) and
+;;; [dtools](https://code.dlang.org/packages/dtools) (for `rdmd`)
+;;; either by following instructions on previous two links or on Arch
+;;; Linux you can also run
+
+;;; ```
+;;; $ sudo pacman -S dcd dtools
+;;; ```
+
+;;; And install [serve-d](https://code.dlang.org/packages/serve-d)
+;;; (but check the link for newer version) with
+
+;;; ```
+;;; $ dub fetch serve-d@0.7.0-beta.5
+;;; $ dub run serve-d --build=release
+;;; ```
+
+;;; For **tab completion** and **lsp** support also add [my common
+;;; settings for programming modes].
+
+(use-package lsp-mode
+  :commands lsp
+  :config
+  (add-to-list 'lsp-language-id-configuration '(vala-mode . "D"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("serve-d"))
+                    :major-modes '(d-mode)
+                    :server-id 'serve-d)))
+
 (defun my-d-mode-hook-fn ()
   (setq c-basic-offset 4
-	indent-tabs-mode nil))
+	indent-tabs-mode nil)
+  (company-mode 1)
+  (local-set-key "\C-i" #'company-indent-or-complete-common)
+  (lsp 1))
 
 (use-package d-mode
-  :init
-  (add-to-list 'c-default-style '(d-mode . "bsd"))
-  :bind
-  (:map d-mode-map
-	("M-." . company-dcd-goto-definition)
-	("M-," . company-dcd-goto-def-pop-marker)
-	("C-c d" . company-dcd-show-ddoc-with-buffer)
-	("C-i" . company-indent-or-complete-common)
-	("C-M-i" . counsel-company))
   :hook (d-mode . my-d-mode-hook-fn))
 
-(use-package company-dcd
-  :hook (d-mode . company-dcd-mode))
 
 ;;; ### Python ###
 

@@ -862,9 +862,15 @@ inserted between the braces between the braces."
   (flycheck-mode 1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode 1)
-  (company-mode 1))
+  (company-mode 1)
+  (if (string= (file-name-extension (or (buffer-file-name) "")) "tsx")
+      (rjsx-minor-mode)))
+
+(use-package rjsx-mode
+  :defer)
 
 (use-package typescript-mode
+  :mode "\\.tsx?\\'"
   :init
   (setq typescript-indent-level 2)
   :bind

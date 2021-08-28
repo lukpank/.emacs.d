@@ -857,26 +857,21 @@ inserted between the braces between the braces."
 
 ;;; ### TypeScript ###
 
+;;; For fully functional TypeScript support apart from below code
+;;; block you also need the content of [web-mode section] below.
+;;;
+;;; Your should have
+;;; [tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+;;; file in the root of your project.
+
 (defun my-setup-tide-mode ()
+  (interactive)
   (tide-setup)
   (flycheck-mode 1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode 1)
-  (company-mode 1)
-  (if (string= (file-name-extension (or (buffer-file-name) "")) "tsx")
-      (rjsx-minor-mode)))
-
-(use-package rjsx-mode
-  :defer)
-
-(use-package typescript-mode
-  :mode "\\.tsx?\\'"
-  :init
-  (setq typescript-indent-level 2)
-  :bind
-  (:map typescript-mode-map
-   ("C-i" . company-indent-or-complete-common)
-   ("C-M-i" . company-indent-or-complete-common)))
+  (tide-hl-identifier-mode +1)
+  (company-mode 1))
 
 (use-package tide
   :after typescript-mode
@@ -893,18 +888,25 @@ inserted between the braces between the braces."
 
 ;;; ### Web mode ###
 
-(defun my-web-mode-hook-fn()
+;;; For **tab completion** support also add first code block with
+;;; `use-package company` from [my common settings for programming
+;;; modes] (the second code block with `use-package lsp` is not
+;;; required for Web mode).
+
+(defun my-web-mode-hook-fn ()
   (cond
    ((string= web-mode-engine "php")
-    (my-php-mode-hook-fn))))
+    (my-php-mode-hook-fn))
+   ((string= (file-name-extension (or (buffer-file-name) "")) "tsx")
+    (my-setup-tide-mode))))
 
 (use-package web-mode
+  :mode "\\.\\(php\\|tsx\\)\\'"
   :init
-  (add-hook 'web-mode-hook #'my-web-mode-hook-fn)
-  (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-  :bind
-  (:map web-mode-map
-	("C-i" . company-indent-or-complete-common)))
+  (add-hook 'web-mode-hook #'my-web-mode-hook-fn))
+
+
+;;; [web-mode section]: #web-mode
 
 
 ;;; ### CSS ###

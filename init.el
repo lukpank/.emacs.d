@@ -839,6 +839,9 @@ inserted between the braces between the braces."
 
 ;;; ### PHP ###
 
+;;; For fully functional PHP support apart from below code
+;;; block you also need the content of [web-mode section] below.
+
 (use-package php-mode
   :defer)
 

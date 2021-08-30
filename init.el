@@ -533,6 +533,9 @@ of the key binding used to execute this command."
 
 ;;; ### JavaScript ###
 
+;;; See also [TypeScript](#typescript) section below where
+;;; [tide](https://melpa.org/#/tide) is enabled for javascript files.
+
 (setq js-indent-level 8)
 
 
@@ -877,9 +880,10 @@ inserted between the braces between the braces."
   (company-mode 1))
 
 (use-package tide
-  :after typescript-mode
+  :after (:any js typescript-mode)
   :hook ((before-save . tide-format-before-save)
-	 (typescript-mode . my-setup-tide-mode)))
+	 (typescript-mode . my-setup-tide-mode)
+	 (js-mode . my-setup-tide-mode)))
 
 (use-package ng2-mode
   :defer)
@@ -900,11 +904,11 @@ inserted between the braces between the braces."
   (cond
    ((string= web-mode-engine "php")
     (my-php-mode-hook-fn))
-   ((string= (file-name-extension (or (buffer-file-name) "")) "tsx")
+   ((string-match-p "^[jt]sx$" (file-name-extension (or (buffer-file-name) "")))
     (my-setup-tide-mode))))
 
 (use-package web-mode
-  :mode "\\.\\(php\\|tsx\\)\\'"
+  :mode "\\.\\(jsx\\|php\\|tsx\\)\\'"
   :init
   (add-hook 'web-mode-hook #'my-web-mode-hook-fn))
 

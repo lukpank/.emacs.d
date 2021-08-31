@@ -879,8 +879,20 @@ inserted between the braces between the braces."
   (tide-hl-identifier-mode +1)
   (company-mode 1))
 
+(defun my-tide-jump-to-type-definiton ()
+  (interactive)
+  (tide-jump-to-definition 1))
+
 (use-package tide
   :after (:any js typescript-mode)
+  :bind (:map tide-mode-map
+	      ("C-c e n" . flycheck-next-error)
+	      ("C-c e p" . flycheck-prev-error)
+	      ("C-c e L" . tide-project-errors)
+	      ("C-c e r" . tide-references)
+	      ("C-c e R" . tide-rename-symbol)
+	      ("C-c e i" . tide-jump-to-implementation)
+	      ("C-c e t" . my-tide-jump-to-type-definiton))
   :hook ((before-save . tide-format-before-save)
 	 (typescript-mode . my-setup-tide-mode)
 	 (js-mode . my-setup-tide-mode)))

@@ -708,18 +708,10 @@ inserted between the braces between the braces."
 
 ;;; ### Python ###
 
-(use-package company-jedi
-  :defer)
+;;; Install [pylsp](https://pypi.org/project/python-lsp-server/).
 
-(defun my-python-mode-hook-fn ()
-  (set (make-local-variable 'company-backends) '(company-jedi))
-  (company-mode)
-  (smartparens-mode 1)
-  (local-set-key (kbd "M-.") #'jedi:goto-definition)
-  (local-set-key (kbd "M-,") #'jedi:goto-definition-pop-marker)
-  (local-set-key "\C-i" #'company-indent-or-complete-common))
-
-(add-hook 'python-mode-hook #'my-python-mode-hook-fn)
+(use-package python
+  :hook (python-mode . lsp))
 
 
 ;;; ### Rust ###

@@ -536,7 +536,7 @@ of the key binding used to execute this command."
 ;;; See also [TypeScript](#typescript) section below where
 ;;; [tide](https://melpa.org/#/tide) is enabled for javascript files.
 
-(setq js-indent-level 8)
+(setq js-indent-level 4)
 
 
 ;;; <span id="go"></span>
@@ -638,7 +638,7 @@ inserted between the braces between the braces."
 ;;;    (but in your home directory, not inside some Go module)
 
 ;;;    ```
-;;;    $ GO111MODULE=on go get golang.org/x/tools/gopls@latest
+;;;    $ go install golang.org/x/tools/gopls@latest
 ;;;    ```
 
 ;;; 4. Install [guru](https://godoc.org/golang.org/x/tools/cmd/guru)
@@ -1024,7 +1024,7 @@ inserted between the braces between the braces."
 
 (setq my-font-list
       '("Fantasque Sans Mono" "Fira Code Light" "Go mono" "IBM 3270"
-	"Inconsolata" "Iosevka Light" "Monofur" "Monoid" "mononoki"))
+	"Inconsolata" "Iosevka Light" "Iosevka Slab Light" "Monofur" "Monoid" "mononoki"))
 
 (defun my-set-frame-font (font-name size &optional frames)
   "Set font to one of the fonts from `my-font-list'

@@ -1049,21 +1049,40 @@ Argument FRAMES has the same meaning as for `set-frame-font'"
   (when (file-accessible-directory-p path)
     (add-to-list 'load-path path t)))
 
-(if (require 'lupan-themes nil t)
-    (setq my-dark-theme 'lupan-dark
-	  my-light-theme 'lupan-light)
-  (setq my-dark-theme 'apropospriate-dark
-	my-light-theme 'apropospriate-light))
+(defun my-preferred-theme (themes)
+  (let ((theme (car themes)))
+    (cond
+     ((symbolp theme) theme)
+     ((require (car theme) nil t) (cdr theme))
+     ((cdr themes) (my-select-theme (cdr themes))))))
+
+(setq my-dark-theme
+      (my-preferred-theme
+       '((undersea-theme . undersea)
+	 (lupan-themes . lupan-dark)
+	 (apropospriate-theme . apropospriate-dark)
+	 deeper-blue))
+      my-light-theme
+      (my-preferred-theme
+       '((cloud-theme . cloud)
+	 (lupan-themes . lupan-light)
+	 (apropospriate-theme . apropospriate-light)
+	 adwaita)))
 
 (defun my-select-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
-  (load-theme theme t))
+  (load-theme  (cond
+		((eq theme 'dark) my-dark-theme)
+		((eq theme 'light) my-light-theme)
+		(t theme))
+	       t))
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes"
   (interactive)
-  (let ((dark-p (custom-theme-enabled-p my-dark-theme)))
-    (my-select-theme (if dark-p my-light-theme my-dark-theme))))
+  (my-select-theme (if (custom-theme-enabled-p my-dark-theme)
+		       my-light-theme
+		     my-dark-theme)))
 
 (global-set-key (kbd "C-S-<f6>") #'my-toggle-theme)
 

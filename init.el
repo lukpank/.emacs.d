@@ -372,7 +372,7 @@
 ;;; and [rust-analyzer].
 
 ;;; [Rustup]: https://www.rust-lang.org/learn/get-started
-;;; [rust-analyzer]: (https://rust-analyzer.github.io/manual.html#installation).
+;;; [rust-analyzer]: https://rust-analyzer.github.io/manual.html#installation
 
 (use-package rustic
   :defer)

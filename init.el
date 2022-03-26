@@ -198,6 +198,14 @@
 (global-set-key (kbd "H-r") my-switch-to-register-map)
 
 
+;;; ### Switching tabs ###
+
+(dolist (i (number-sequence 1 9))
+  (global-set-key (format "\C-c%d" i) `(lambda () (interactive) (tab-select ,i))))
+
+(tab-bar-mode 1)
+
+
 ;;; ### Yasnippet and abbrev mode ###
 
 (setq-default abbrev-mode 1)

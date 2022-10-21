@@ -257,8 +257,10 @@
 (use-package lsp-ui
   :init
   (setq lsp-ui-doc-position 'at-point
-	lsp-ui-doc-show-with-mouse nil)
-  :bind (("C-c d" . lsp-ui-doc-show)
+	lsp-ui-doc-show-with-mouse nil
+	lsp-ui-sideline-show-code-actions t)
+  :bind (("C-c A" . lsp-execute-code-action)
+	 ("C-c d" . lsp-ui-doc-show)
 	 ("C-c I" . lsp-ui-imenu)))
 
 (use-package flycheck

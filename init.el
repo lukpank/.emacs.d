@@ -483,23 +483,24 @@
 (use-package smart-mode-line
   :config
   (setq sml/no-confirm-load-theme t
+	sml/shorten-directory t
+	sml/shorten-modes t
+	sml/name-width 50
+	sml/mode-width 'full
 	sml/theme 'respectful)
   (sml/setup))
 
 
 ;;; ### Switching themes ###
 
-(use-package zenburn-theme
-  :defer)
-
-(use-package apropospriate-theme
+(use-package base16-theme
   :defer)
 
 (use-package faff-theme
   :defer)
 
-(setq my-dark-theme 'zenburn
-      my-light-theme 'apropospriate-light)
+(setq my-dark-theme 'base16-espresso
+      my-light-theme 'base16-mexico-light)
 
 (defun my-select-theme (theme)
   (mapc #'disable-theme custom-enabled-themes)
@@ -509,6 +510,16 @@
 	       (t theme))
 	      t)
   (sml/setup))
+
+(defun my-select-theme-if-none-selected (frame)
+  (if (and (eq 'x (window-system frame))
+	   (null (seq-filter (lambda (theme)
+			       (not (string-prefix-p "smart-mode-line-" (symbol-name theme))))
+			     custom-enabled-themes)))
+      (my-select-theme 'dark)))
+
+(my-select-theme-if-none-selected nil)
+(add-to-list 'after-make-frame-functions #'my-select-theme-if-none-selected)
 
 (defun my-toggle-theme ()
   "Toggle between dark and light themes."

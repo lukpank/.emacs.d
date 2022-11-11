@@ -361,6 +361,34 @@
 
 (use-package kotlin-mode)
 
+;;; ### Lisp ###
+
+(use-package sly
+  :defer
+  :config
+  (setq inferior-lisp-program "sbcl"
+	sly-mrepl-pop-sylvester nil)
+  :custom-face
+  (sly-mrepl-output-face ((t (:foreground "sienna")))))
+
+(use-package paren-face
+  :defer)
+
+(use-package paredit
+  :defer)
+
+(use-package highlight-parentheses
+  :defer)
+
+(defun my-lisp-mode-hook-fn ()
+  (smartparens-mode 0)
+  (paredit-mode 1)
+  (paren-face-mode 1)
+  (highlight-parentheses-mode 1)
+  (company-mode 1))
+
+(add-hook 'lisp-mode-hook 'my-lisp-mode-hook-fn)
+(add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-hook-fn)
 
 ;;; ### Meson build system ###
 

@@ -245,8 +245,8 @@
 ;;; add
 
 (use-package lsp-mode
-  :hook ((c-mode c++-mode d-mode go-mode js-mode kotlin-mode python-mode typescript-mode
-          vala-mode web-mode)
+  :hook ((c-mode c++-mode d-mode elm-mode go-mode js-mode kotlin-mode python-mode
+	  typescript-mode vala-mode web-mode)
 	 . lsp)
   :init
   (setq lsp-keymap-prefix "H-l"
@@ -318,6 +318,13 @@
   :hook (dart-mode . lsp)
   :bind (:map lsp-mode
          ("C-M-x" . lsp-dart-dap-flutter-hot-reload)))
+
+
+;;; ### Elm ###
+
+;;; Requires: [company and lsp-mode].
+(use-package elm-mode
+  :hook (elm-mode . elm-indent-mode))
 
 
 ;;; ### Emacs lisp ###

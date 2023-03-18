@@ -549,7 +549,8 @@
 (defun my-select-theme-if-none-selected (frame)
   (if (and (eq 'x (window-system frame))
 	   (null (seq-filter (lambda (theme)
-			       (not (string-prefix-p "smart-mode-line-" (symbol-name theme))))
+			       (not (string-prefix-p "smart-mode-line-"
+						     (symbol-name theme))))
 			     custom-enabled-themes)))
       (my-select-theme 'dark)))
 
